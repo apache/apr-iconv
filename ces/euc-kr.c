@@ -51,7 +51,7 @@ static struct iconv_ces_euc_ccs ccsattr[2] = {
 static const struct iconv_module_depend iconv_module_depend[] = {
 	{ICMOD_UC_CCS, "us-ascii", ccsattr + 0},
 	{ICMOD_UC_CCS, "ksx1001", ccsattr + 1},
-	{}
+	NULL
 };
 
 static const struct iconv_ces_desc iconv_ces_desc =  {

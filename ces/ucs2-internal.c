@@ -43,15 +43,15 @@ ucs2_names(struct iconv_ces *ces)
 	return names;
 }
 
-static __inline int
+static APR_INLINE int
 ucs2_nbytes(struct iconv_ces *ces)
 {
 	return sizeof(ucs2_t);
 }
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft)
+	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
@@ -66,7 +66,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 
 static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
-	const unsigned char **inbuf, size_t *inbytesleft)
+	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	if (*inbytesleft < sizeof(ucs2_t))
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
