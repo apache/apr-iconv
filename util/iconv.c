@@ -30,7 +30,8 @@
  *	iconv (Charset Conversion Library) v0.3
  */
 
-#include <err.h>	/* err, errx, warn */
+#include "apr.h"
+
 #include <stdarg.h>	/* va_end, va_list, va_start */
 #include <stdio.h>	/* FILE, fclose, ferror, fopen, fread, stdin,
                            vfprintf */
@@ -43,14 +44,18 @@ static void
 convert_stream(FILE *in, iconv_stream *out)
 {
 	static char buffer[4096];
-	size_t size;
+	apr_size_t size;
 
 	while ((size = fread(buffer, 1, sizeof(buffer), in))) {
-    		if (iconv_bwrite(out, buffer, size) <= 0)
-			errx(2, "convert_stream: conversion stream writing error");
+    		if (iconv_bwrite(out, buffer, size) <= 0) {
+			fprintf(stderr, "convert_stream: conversion stream writing error\n");
+			exit(2);
+		}
 	}
-	if (ferror(in))
-		err(1, "convert_stream: input file reading error");
+	if (ferror(in)) {
+		fprintf(stderr, "convert_stream: input file reading error\n");
+		exit(1);
+	}
 }
 
 static void
@@ -60,12 +65,17 @@ convert_file(const char *name, iconv_stream *is)
 	FILE *fp = std ? stdin : fopen(name, "r");
 
 	if (fp == NULL) {
-		warn("cannot open file %s", name);
+		fprintf(stderr, "cannot open file %s\n", name);
 		return;
 	}
 	convert_stream(fp, is);
 	if (!std)
     		fclose(fp);
+}
+
+static void closeapr(void)
+{
+    apr_terminate();
 }
 
 int
@@ -75,6 +85,8 @@ main(int argc, char * const *argv)
 	iconv_stream *is;
 	char *from = NULL, *to = NULL, *input = NULL;
 	int opt;
+	apr_pool_t *ctx; 
+	apr_status_t status;
 
 	while ((opt = getopt(argc, argv, "f:s:t:")) > 0) {
 		switch (opt) {
@@ -88,15 +100,31 @@ main(int argc, char * const *argv)
 			input = optarg;
 		}
 	}
-	if (from == NULL)
-		errx(4, "missing source charset (-f <name>)");
-	if (to == NULL)
-		errx(5, "missing destination charset (-t <name>)");
-	cd = iconv_open(to, from);
-	if ((int)cd < 0)
-		err(6, "unable to open specified convertor");
+	if (from == NULL) {
+		fprintf(stderr, "missing source charset (-f <name>)\n");
+		exit(4);
+	}
+	if (to == NULL) {
+		fprintf(stderr, "missing destination charset (-t <name>)\n");
+		exit(5);
+	}
+
+	/* Initialize APR */
+	apr_initialize();
+	atexit(closeapr);
+	if (apr_pool_create(&ctx, NULL) != APR_SUCCESS) {
+		fprintf(stderr, "Couldn't allocate context.\n");
+		exit(-1);
+	}
+
+	/* Use it */
+	status = apr_iconv_open(to, from,ctx, &cd);
+	if (status) {
+		fprintf(stderr, "unable to open specified convertor\n");
+		exit(6);
+		}
 	if (!(is = iconv_ostream_fopen(cd, stdout))) {
-		iconv_close(cd);
+		apr_iconv_close(cd,ctx);
 		exit(7);
 	}
 	if (input) {
@@ -110,6 +138,6 @@ main(int argc, char * const *argv)
 	if (iconv_write(is, NULL, 0) < 0)
 		exit(9);
 	iconv_stream_close(is);
-	iconv_close(cd);
+	apr_iconv_close(cd,ctx);
 	return 0;
 }

@@ -30,16 +30,15 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
 #include <stdlib.h>	/* free, malloc */
-#include <string.h>	/* bzero, memcmp, memcpy */
+#include <string.h>	/* memset, memcmp, memcpy */
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 typedef struct {
 	const char	*sequence;
-	size_t		length;
+	apr_size_t	length;
 	int		prefix_type;
 } iconv_ces_iso2022_shift;
 
@@ -67,14 +66,14 @@ typedef struct iconv_ces_iso2022_state {
 	const struct iconv_module *ccsmod[1];
 } iconv_ces_iso2022_state_t;
 
-int
-iconv_iso2022_open(struct iconv_ces *ces)
+apr_status_t
+iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	const iconv_ces_iso2022_ccs_t *ccsattr;
 	const struct iconv_ccs_desc *ccs;
 	iconv_ces_iso2022_state_t *state;
 	struct iconv_module *depmod;
-	size_t stsz, shiftsz;
+	apr_size_t stsz, shiftsz;
 	int i;
 
 	shiftsz = SHIFT_LEN;
@@ -82,8 +81,8 @@ iconv_iso2022_open(struct iconv_ces *ces)
 	    sizeof(struct iconv_module *) * (ces->mod->im_depcnt - 1);
 	state = (iconv_ces_iso2022_state_t *)malloc(stsz + shiftsz);
 	if (state == NULL)
-		return errno;
-	bzero(state, stsz + shiftsz);
+		return APR_ENOMEM;
+	memset(state, 0, stsz + shiftsz);
 	ces->data = state;
 	state->shift_tab = (int*)((char*)state + stsz);
 	state->org_shift_tab = ces->desc->data;
@@ -99,7 +98,7 @@ iconv_iso2022_open(struct iconv_ces *ces)
 		if (ccsattr->shift >= 0)
 			state->prefix[(int)(iso_shift[ccsattr->shift].sequence[0])] = 1;
 	}
-	return 0;
+	return APR_SUCCESS;
 }
 
 int
@@ -129,7 +128,7 @@ static void
 update_shift_state(const struct iconv_ces *ces, ucs_t ch)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
-	size_t i;
+	apr_size_t i;
 
 	if (ch == '\n' && iso_state->previous_char == '\r') {
 		for (i = 0; i < shift_num; i ++) {
@@ -142,15 +141,15 @@ update_shift_state(const struct iconv_ces *ces, ucs_t ch)
 
 #define is_7_14bit(ccs) ((ccs)->nbits & 7)
 
-static ssize_t
+static apr_ssize_t
 cvt_ucs2iso(const struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft, int cs)
+	unsigned char **outbuf, apr_size_t *outbytesleft, int cs)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
 	const struct iconv_ces_iso2022_ccs *ccsattr;
 	const struct iconv_ccs_desc *ccs;
 	ucs_t res;
-	size_t len = 0;
+	apr_size_t len = 0;
 	int need_designator, need_shift;
 
 	ccs = MODTOCCS(iso_state->ccsmod[cs]);
@@ -199,12 +198,12 @@ cvt_ucs2iso(const struct iconv_ces *ces, ucs_t in,
 	return 1;
 }
 
-ssize_t
+apr_ssize_t
 iconv_iso2022_convert_from_ucs(struct iconv_ces *ces,
-	ucs_t in, unsigned char **outbuf, size_t *outbytesleft)
+	ucs_t in, unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
-	ssize_t res;
+	apr_ssize_t res;
 	int cs, i;
 
 	if (in == UCS_CHAR_NONE)
@@ -227,9 +226,9 @@ iconv_iso2022_convert_from_ucs(struct iconv_ces *ces,
 
 static ucs_t
 cvt_iso2ucs(const struct iconv_ccs_desc *ccs, const unsigned char **inbuf,
-	size_t *inbytesleft, int prefix_type)
+	apr_size_t *inbytesleft, int prefix_type)
 {
-	size_t bytes = ccs->nbits > 8 ? 2 : 1;
+	apr_size_t bytes = ccs->nbits > 8 ? 2 : 1;
 	ucs_t ch = **inbuf;
 
 	if (*inbytesleft < bytes)
@@ -247,14 +246,14 @@ cvt_iso2ucs(const struct iconv_ccs_desc *ccs, const unsigned char **inbuf,
 
 ucs_t
 iconv_iso2022_convert_to_ucs(struct iconv_ces *ces,
-	const unsigned char **inbuf, size_t *inbytesleft)
+	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
 	const struct iconv_ces_iso2022_ccs *ccsattr;
 	ucs_t res;
 	const unsigned char *ptr = *inbuf;
 	unsigned char byte;
-	size_t len, left = *inbytesleft;
+	apr_size_t len, left = *inbytesleft;
 	int i;
 
 	while (left) {

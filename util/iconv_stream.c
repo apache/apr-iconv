@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <err.h>	/* warnx */
 #include <errno.h>	/* E2BIG, EINVAL, errno */
 #include <stdio.h>	/* FILE, ferror, fwrite */
 #include <stdlib.h>	/* free, malloc */
@@ -63,23 +62,25 @@ void iconv_stream_close(iconv_stream *stream)
     free(stream);
 }
 
-ssize_t iconv_write(void *handle, const void *buf, size_t insize)
+apr_ssize_t iconv_write(void *handle, const void *buf, apr_size_t insize)
 {
 #define stream ((iconv_stream *)handle)
     char buffer[4096];
-    size_t outsize = sizeof(buffer), size;
+    apr_size_t outsize = sizeof(buffer), size;
     char *outbuf = buffer;
     const char *inbuf = buf;
-    size_t chars;
+    apr_size_t chars;
+    apr_status_t status;
+
     if (!buf)
         insize = 0;
-    chars = iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize);
+    status = apr_iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize, &chars);
     if ((int)chars < 0)
         return -1;
     stream->chars += chars;
     size = outbuf - buffer;
     if (size) {
-        ssize_t r;
+        apr_ssize_t r;
         outbuf = buffer;
         while ((r = stream->method(stream->handle, outbuf, size)) < size) {
             if (r < 0)
@@ -96,18 +97,17 @@ ssize_t iconv_write(void *handle, const void *buf, size_t insize)
 #undef stream
 }
 
-ssize_t iconv_bwrite(void *handle, const void *buf, size_t insize)
+apr_ssize_t iconv_bwrite(void *handle, const void *buf, apr_size_t insize)
 {
 #define stream ((iconv_stream *)handle)
-    ssize_t res = 0;
-    size_t left, size = insize;
+    apr_ssize_t res = 0;
+    apr_size_t left, size = insize;
     if (!buf)
         return iconv_write(handle, NULL, 0);
     if (stream->buffer && stream->buf_ptr > stream->buffer) {
         do {
             left = stream->buffer + buf_size - stream->buf_ptr;
             if (!left) {
-        	warnx("iconv_bwrite: lack of space in the output buffer");
         	errno = E2BIG;
                 return -1;
             }
@@ -158,9 +158,9 @@ ssize_t iconv_bwrite(void *handle, const void *buf, size_t insize)
 #undef stream
 }
 
-static ssize_t fwrite_wrapper(void *handle, void *buf, size_t size)
+static apr_ssize_t fwrite_wrapper(void *handle, void *buf, apr_size_t size)
 {
-    size_t res = fwrite(buf, 1, size, (FILE *)handle);
+    apr_size_t res = fwrite(buf, 1, size, (FILE *)handle);
     return (res && !ferror((FILE *)handle)) ? res : -1;
 }
 
