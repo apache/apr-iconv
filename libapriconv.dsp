@@ -53,8 +53,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EC0000" /subsystem:windows /dll /map /machine:I386
-# ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EC0000" /subsystem:windows /dll /map /machine:I386
+# ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /map /machine:I386
+# ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /map /machine:I386
 
 !ELSEIF  "$(CFG)" == "libapriconv - Win32 Debug"
 
@@ -79,8 +79,8 @@ BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EC0000" /subsystem:windows /dll /incremental:no /map /debug /machine:I386
-# ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EC00000" /subsystem:windows /dll /incremental:no /map /debug /machine:I386
+# ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /map /debug /machine:I386
+# ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /map /debug /machine:I386
 
 !ENDIF 
 
