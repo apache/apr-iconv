@@ -32,9 +32,11 @@
 
 #include "iconv.h"
 #include "apr_file_io.h"
+#include "apr_file_info.h"
 #include "apr_pools.h"
 #include "apr_dso.h"
 #include "apr_strings.h"
+#include "apr_tables.h"
 #include "apr_lib.h"
 
 #include <string.h>
@@ -75,6 +77,7 @@ static apr_status_t
 iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
 {
 	char buffer[APR_PATH_MAX];
+        apr_array_header_t *pathelts;
         apr_pool_t *subpool;
         apr_status_t status;
 	char *ptr;
@@ -88,15 +91,18 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
         ptr = buffer;
         while (0 != (*ptr++ = apr_tolower(*name++)))
             ;
-        ptr = getenv("APR_ICONV_PATH");
-        if (ptr != NULL)
+
+        /* FIXME: Should use apr_env_get instead, to get correct path
+                  encoding on Windows. */
+        status = apr_filepath_list_split(&pathelts, getenv("APR_ICONV_PATH"),
+                                         subpool);
+        if (!status)
         {
-            char *dir, *last;
-            for (ptr = apr_pstrdup(subpool, ptr);
-                 (dir = apr_strtok(ptr, API_PATH_SEPARATOR, &last));
-                 ptr = NULL)
+            int i;
+            char **elts = (char **)pathelts->elts;
+            for (i = 0; i < pathelts->nelts; ++i)
             {
-                if (iconv_getpathname(buf, dir, buffer, subpool) == 0)
+                if (iconv_getpathname(buf, elts[i], buffer, subpool) == 0)
                 {
                     apr_pool_destroy(subpool);
                     return APR_SUCCESS;
