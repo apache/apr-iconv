@@ -120,7 +120,7 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 		return error;
 	if (modtype != ICMOD_ANY && mdesc->imd_type != modtype) {
 		apr_dso_unload(handle);
-		return APR_ICONV_EFTYPE;
+		return APR_EFTYPE;
 	}
 	mod = malloc(sizeof(*mod));
 	if (mod == NULL) {
