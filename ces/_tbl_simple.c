@@ -35,8 +35,6 @@
 #define ICONV_INTERNAL
 #include "iconv.h"
 
-#include <errno.h>
-
 static int
 table_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
@@ -118,23 +116,23 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 	return res;
 }
 
-static int
+static apr_status_t
 table_load_ccs(struct iconv_module *mod, apr_pool_t *ctx)
 {
 	struct iconv_module *ccsmod;
 	int error;
 
 	if (mod->im_args == NULL)
-		return EINVAL;
+		return APR_EINVAL;
 	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
 	if (error)
 		return error;
 	ccsmod->im_next = mod->im_deplist;
 	mod->im_deplist = ccsmod;
-	return 0;
+	return APR_SUCCESS;
 }
 
-static int
+static apr_status_t
 table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 	switch (event) {
@@ -144,9 +142,9 @@ table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 	    case ICMODEV_DYNDEPS:
 		return table_load_ccs(mod,ctx);
 	    default:
-		return EINVAL;
+		return APR_EINVAL;
 	}
-	return 0;
+	return APR_SUCCESS;
 }
 
 static const struct iconv_ces_desc iconv_ces_desc = {

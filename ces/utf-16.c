@@ -30,9 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
-#include <stdlib.h>	/* free, malloc */
-
 #define ICONV_INTERNAL
 #include <iconv.h>
 

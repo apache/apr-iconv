@@ -70,9 +70,11 @@ ssize_t iconv_write(void *handle, const void *buf, size_t insize)
     char *outbuf = buffer;
     const char *inbuf = buf;
     size_t chars;
+    apr_status_t status;
+
     if (!buf)
         insize = 0;
-    chars = apr_iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize);
+    status = apr_iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize, &chars);
     if ((int)chars < 0)
         return -1;
     stream->chars += chars;

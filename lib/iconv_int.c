@@ -31,7 +31,6 @@
  */
 
 #include <ctype.h>	/* tolower */
-#include <errno.h>	/* errno */
 #include <stdio.h>	/* snprintf */
 #include <stdlib.h>
 #include <string.h>	/* strdup, strlen */
@@ -39,16 +38,16 @@
 #define ICONV_INTERNAL
 #include "iconv.h"
 
-int
+apr_status_t
 iconv_malloc(size_t size, void **pp)
 {
 	void *p = malloc(size);
 
 	if (p == NULL)
-		return errno;
+		return APR_ENOMEM;
 	memset(p, 0, size);
 	*pp = p;
-	return 0;
+	return APR_SUCCESS;
 }
 
 #ifdef ICONV_DEBUG

@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>	/* errno */
 #include <limits.h>	/* PATH_MAX */
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
@@ -38,35 +37,35 @@
 #define ICONV_INTERNAL
 #include "iconv.h"	/* iconv_ccs_desc, iconv_ccs */
 
-int
+apr_status_t
 iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)
 {
 	struct iconv_module *mod;
 	struct iconv_ces *ces;
-	int error;
+	apr_status_t error;
 
 	error = iconv_mod_load(cesname, ICMOD_UC_CES, NULL, &mod, ctx);
-	if (error == APR_ICONV_EFTYPE)
+	if (APR_STATUS_IS_EFTYPE(error))
 		error = iconv_mod_load("_tbl_simple", ICMOD_UC_CES, cesname, &mod, ctx);
-	if (error)
-		return (error == APR_ICONV_EFTYPE) ? EINVAL : error;
+	if (error != APR_SUCCESS)
+		return (APR_STATUS_IS_EFTYPE(error)) ? APR_EINVAL : error;
 	ces = malloc(sizeof(*ces));
 	if (ces == NULL) {
 		iconv_mod_unload(mod, ctx);
-		return ENOMEM;
+		return APR_ENOMEM;
 	}
 	memset(ces,0, sizeof(*ces));
 	ces->desc = (struct iconv_ces_desc*)mod->im_desc->imd_data;
 	ces->data = mod->im_data;
 	ces->mod = mod;
 	error = ICONV_CES_OPEN(ces,ctx);
-	if (error) {
+	if (error != APR_SUCCESS) {
 		free(ces);
 		iconv_mod_unload(mod, ctx);
 		return error;
 	}
 	*cespp = ces;
-	return 0;
+	return APR_SUCCESS;
 }
 
 int
