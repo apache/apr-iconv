@@ -96,7 +96,7 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 		/Fd"$(OBJ_DIR)\$(@B)_src" $< \
 		/link $(ALL_LDFLAGS) /out:$@ \
 		/base:@"..\build\BaseAddr.ref",$(@F) \
-		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
+		"$(API_LIB_PFX)apriconv-1.lib" "$(APR_LIB_PFX)apr-1.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
