@@ -1,6 +1,8 @@
+Changes with APR-ICONV 0.9.4
+
+  *) A third pass at a build system. [Justin Erenkrantz]
+
 Changes with APR-ICONV 0.9.3
-
-
 
 Changes with APR-ICONV 0.9.2
 

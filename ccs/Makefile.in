@@ -1,3 +1,6 @@
+VPATH = @srcdir@
+INCLUDES = @API_INCLUDES@ @APR_INCLUDES@
+
 CHARSETS_ISO8859 = iso-8859-1.la iso-8859-2.la iso-8859-4.la iso-8859-5.la \
                    iso-8859-15.la
 CHARSETS_PC =      cp775.la cp850.la cp852.la cp855.la cp866.la
@@ -51,9 +54,10 @@ RFC1345_IR =       iso-ir-2.la iso-ir-4.la iso-ir-8-1.la iso-ir-8-2.la \
 RFC1345_MISC =     dec-mcs.la hp-roman8.la iso646-dk.la iso646-kr.la macintosh.la
 RFC1345_ALL =      ${RFC1345_PC} ${RFC1345_EBCDIC} ${RFC1345_IR} ${RFC1345_MISC}
 
-MODULES =          ${CHARSETS_ALL} ${EXTRA_ALL} ${RFC1345_ALL}
-
-all:            ${MODULES}
+TARGETS =          ${CHARSETS_ALL} ${EXTRA_ALL} ${RFC1345_ALL}
 
 # bring in rules.mk for standard functionality
 @INCLUDE_RULES@
+
+%.la: %.lo
+	$(LIBTOOL) --mode=link $(COMPILE) -module -avoid-version -rpath @iconv_libdir@ $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@ $<

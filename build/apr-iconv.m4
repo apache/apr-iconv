@@ -1,43 +1,36 @@
-
 dnl
 dnl custom autoconf rules for APRICONV
 dnl
 
 dnl
-dnl APU_FIND_APR: figure out where APR is located
-dnl that a copy from apr-util...
+dnl API_FIND_APR: figure out where APR is located
 dnl
-AC_DEFUN(APU_FIND_APR,[
+AC_DEFUN(API_FIND_APR,[
 
-AC_MSG_CHECKING(for APR)
-AC_ARG_WITH(apr,
-[  --with-apr=DIR          path to APR source or the APR includes],
-[
-    if test "$withval" = "yes"; then
-        AC_MSG_ERROR(You need to specify a directory with --with-apr)
-    fi
-    absdir="`cd $withval ; pwd`"
-    if test -f "$absdir/apr_pools.h"; then
-	APR_INCLUDES="$absdir"
-    elif test -f "$absdir/include/apr_pools.h"; then
-	APR_SOURCE_DIR="$absdir"
-    fi
-],[
-    dnl see if we can find APR
-    if test -f "$srcdir/apr/include/apr_pools.h"; then
-	APR_SOURCE_DIR="$srcdir/apr"
-    elif test -f "$srcdir/../apr/include/apr_pools.h"; then
-	APR_SOURCE_DIR="`cd $srcdir/../apr ; pwd`"
-    fi
-])
-if test -n "$APR_SOURCE_DIR"; then
-    APR_INCLUDES="$APR_SOURCE_DIR/include"
-fi
-if test -z "$APR_INCLUDES"; then
-    AC_MSG_RESULT(not found)
+  dnl use the find_apr.m4 script to locate APR. sets apr_found and apr_config
+  APR_FIND_APR
+  if test "$apr_found" = "no"; then
     AC_MSG_ERROR(APR could not be located. Please use the --with-apr option.)
-fi
-AC_MSG_RESULT($APR_INCLUDES)
+  fi
 
-AC_SUBST(APR_SOURCE_DIR)
+  APR_BUILD_DIR="`$apr_config --installbuilddir`"
+
+  dnl make APR_BUILD_DIR an absolute directory (we'll need it in the
+  dnl sub-projects in some cases)
+  APR_BUILD_DIR="`cd $APR_BUILD_DIR && pwd`"
+
+  APR_INCLUDES="`$apr_config --includes`"
+  APR_LIBS="`$apr_config --link-libtool --libs`"
+  APR_SO_EXT="`$apr_config --apr-so-ext`"
+  APR_LIB_TARGET="`$apr_config --apr-lib-target`"
+
+  AC_SUBST(APR_INCLUDES)
+  AC_SUBST(APR_LIBS)
+  AC_SUBST(APR_SO_EXT)
+  AC_SUBST(APR_LIB_TARGET)
+
+  dnl ### would be nice to obsolete these
+  APR_SOURCE_DIR="`$apr_config --srcdir`"
+  AC_SUBST(APR_BUILD_DIR)
+  AC_SUBST(APR_SOURCE_DIR)
 ])
