@@ -153,9 +153,9 @@ main(int argc, const char **argv)
 	if (input) {
 		if (iconv_bwrite(is, input, strlen(input)) <= 0)
 			exit(8);
-	} else if (optind < argc) {
-		for (opt = optind; opt < argc; opt ++)
-			convert_file(argv[opt], is);
+	} else if (options->ind < options->argc) {
+		for (opt = options->ind; opt < options->argc; opt ++)
+			convert_file(options->argv[opt], is);
 	} else
 		convert_file("-", is);
 	if (iconv_write(is, NULL, 0) < 0)
