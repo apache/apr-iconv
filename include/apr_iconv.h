@@ -95,9 +95,34 @@ typedef void *apr_iconv_t;
 
 /* __BEGIN_DECLS */
 
-API_DECLARE(apr_status_t) apr_iconv_open(const char *, const char *, apr_pool_t *, apr_iconv_t *);
-API_DECLARE(apr_status_t) apr_iconv(apr_iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
-API_DECLARE(apr_status_t) apr_iconv_close(apr_iconv_t, apr_pool_t *);
+/**
+ * Create a conversion descriptor.
+ * @param to name of charset to convert to.
+ * @param from name of charset of the input bytes.
+ * @param pool pool to alloc memory.
+ * @param cd conversion descriptor created in pool.
+ */
+API_DECLARE(apr_status_t) apr_iconv_open(const char *to, const char *from,
+                                         apr_pool_t *pool, apr_iconv_t *cd);
+/**
+ * Perform character set conversion.
+ * @param cd conversion descriptor created by apr_iconv_open().
+ * @param inbuf input buffer.
+ * @param inbytesleft bytes to convert.
+ * @param outbuf output buffer.
+ * @param outbytesleft space (in bytes) available in outbuf.
+ * @param translated number of input bytes converted.
+ */
+API_DECLARE(apr_status_t) apr_iconv(apr_iconv_t cd,
+                          const char **inbuf, apr_size_t *inbytesleft,
+                          char **outbuf, apr_size_t *outbytesleft,
+                          apr_size_t *translated);
+/**
+ * Deallocate descriptor for character set conversion.
+ * @param cd conversion descriptor.
+ * @param pool pool used in the apr_iconv_open().
+ */
+API_DECLARE(apr_status_t) apr_iconv_close(apr_iconv_t cd, apr_pool_t *pool);
 
 /* __END_DECLS */
 

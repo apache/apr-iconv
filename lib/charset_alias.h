@@ -17,6 +17,30 @@ static struct charset_alias {
 } const charset_alias_list[] = {
     {"424", "cp424"},
     {"437", "cp437"},
+    {"646", "us-ascii"},	/* OSD_POSIX Alias */
+    {"646ca", "iso-ir-121"},	/* OSD_POSIX Alias */
+    {"646ca2", "iso-ir-122"},	/* OSD_POSIX Alias */
+    {"646cu", "iso-ir-151"},	/* OSD_POSIX Alias */
+    {"646de", "iso-ir-21"},	/* OSD_POSIX Alias */
+    {"646dk", "iso646-dk"},	/* OSD_POSIX Alias */
+    {"646es", "iso-ir-17"},	/* OSD_POSIX Alias */
+    {"646es2", "iso-ir-85"},	/* OSD_POSIX Alias */
+    {"646fi", "iso-ir-10"},	/* OSD_POSIX Alias */
+    {"646fr", "iso-ir-69"},	/* OSD_POSIX Alias */
+    {"646fr1", "iso-ir-25"},	/* OSD_POSIX Alias */
+    {"646gb", "iso-ir-4"},	/* OSD_POSIX Alias */
+    {"646hu", "iso-ir-86"},	/* OSD_POSIX Alias */
+    {"646it", "iso-ir-15"},	/* OSD_POSIX Alias */
+    {"646jp", "iso-ir-14"},	/* OSD_POSIX Alias */
+    {"646kr", "iso646-kr"},	/* OSD_POSIX Alias */
+    {"646no", "iso-ir-60"},	/* OSD_POSIX Alias */
+    {"646no2", "iso-ir-61"},	/* OSD_POSIX Alias */
+    {"646pt", "iso-ir-16"},	/* OSD_POSIX Alias */
+    {"646pt2", "iso-ir-84"},	/* OSD_POSIX Alias */
+    {"646se", "iso-ir-10"},	/* OSD_POSIX Alias */
+    {"646se2", "iso-ir-11"},	/* OSD_POSIX Alias */
+    {"646us", "us-ascii"},	/* OSD_POSIX Alias */
+    {"646yu", "iso-ir-141"},	/* OSD_POSIX Alias */
     {"850", "cp850"},
     {"851", "cp851"},
     {"852", "cp852"},
@@ -29,6 +53,7 @@ static struct charset_alias {
     {"865", "cp865"},
     {"866", "cp866"},
     {"869", "cp869"},
+    {"8859", "iso-8859-1"},
     {"904", "cp904"},
     {"ansi_x3.110-1983", "iso-ir-99"},
     {"ansi_x3.4-1968", "us-ascii"},
@@ -147,6 +172,9 @@ static struct charset_alias {
     {"ecma-114", "iso-8859-6"},
     {"ecma-118", "iso-8859-7"},
     {"ecma-cyrillic", "iso-ir-111"},
+    {"edf04", "osd_ebcdic_df04_1"},
+    {"edf04-1", "osd_ebcdic_df04_1"},
+    {"edf04-15", "osd_ebcdic_df04_15"},
     {"elot_928", "iso-8859-7"},
     {"es", "iso-ir-17"},
     {"es2", "iso-ir-85"},
@@ -248,6 +276,19 @@ static struct charset_alias {
     {"iso646-se2", "iso-ir-11"},
     {"iso646-us", "us-ascii"},
     {"iso646-yu", "iso-ir-141"},
+    {"iso8859-1", "iso-8859-1"}, /*name "ISO8859-1" is used by httpd-2.0*/
+    {"iso8859-10", "iso-8859-10"},
+    {"iso8859-13", "iso-8859-13"},
+    {"iso8859-14", "iso-8859-14"},
+    {"iso8859-15", "iso-8859-15"},
+    {"iso8859-2", "iso-8859-2"},
+    {"iso8859-3", "iso-8859-3"},
+    {"iso8859-4", "iso-8859-4"},
+    {"iso8859-5", "iso-8859-5"},
+    {"iso8859-6", "iso-8859-6"},
+    {"iso8859-7", "iso-8859-7"},
+    {"iso8859-8", "iso-8859-8"},
+    {"iso8859-9", "iso-8859-9"},
     {"iso_10367-box", "iso-ir-155"},
     {"iso_2033-1983", "iso-ir-98"},
     {"iso_5427", "iso-ir-37"},

@@ -1,4 +1,6 @@
-Changes with APR-ICONV 1.0
+Changes with APR-ICONV 1.0.1
+
+Changes with APR-ICONV 1.0.0
 
   *) Add the possiblity of a DESTDIR prefix to Makefile.in to make it
      consistent with the behaviour of apr and apr-util. [Graham Leggett]
