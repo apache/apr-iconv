@@ -183,7 +183,7 @@ ALL_TARGETS = \
 	$(OUTPUT_DIR)\mac-ukraine.so \
 	$(OUTPUT_DIR)\macintosh.so \
 	$(OUTPUT_DIR)\osd_ebcdic_df04_1.so \
-        $(OUTPUT_DIR)\osd_ebcdic_df04_15.so \
+	$(OUTPUT_DIR)\osd_ebcdic_df04_15.so \
 	$(OUTPUT_DIR)\shift_jis.so \
 	$(OUTPUT_DIR)\us-ascii.so \
 	$(OUTPUT_DIR)\windows-1250.so \
