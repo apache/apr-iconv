@@ -34,7 +34,8 @@ RFC1345_PC =       cp851.la cp868.la cp038.la cp273.la cp274.la cp275.la cp277.l
 RFC1345_EBCDIC =   ebcdic-at-de.la ebcdic-at-de-a.la ebcdic-ca-fr.la \
                    ebcdic-dk-no.la ebcdic-dk-no-a.la ebcdic-es.la ebcdic-es-a.la \
                    ebcdic-es-s.la ebcdic-fi-se.la ebcdic-fi-se-a.la ebcdic-fr.la \
-                   ebcdic-it.la ebcdic-pt.la ebcdic-uk.la ebcdic-us.la
+                   ebcdic-it.la ebcdic-pt.la ebcdic-uk.la ebcdic-us.la \
+		   osd_ebcdic_df04_1.la osd_ebcdic_df04_15.la
 RFC1345_IR =       iso-ir-2.la iso-ir-4.la iso-ir-8-1.la iso-ir-8-2.la \
                    iso-ir-9-1.la iso-ir-9-2.la iso-ir-10.la iso-ir-11.la \
                    iso-ir-13.la iso-ir-14.la iso-ir-15.la iso-ir-16.la \
