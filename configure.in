@@ -67,11 +67,6 @@ iconv_libdir=$prefix/lib/iconv
 AC_SUBST(iconv_libdir)
 
 dnl
-dnl The path separator character, for APR_ICONV_PATH
-dnl
-AC_DEFINE_UNQUOTED(API_PATH_SEPARATOR,":",[ Separator in APR_ICONV_PATH ])
-
-dnl
 dnl BSD/OS (BSDi) needs to use a different include syntax in the Makefiles
 dnl
 case "$host_alias" in
