@@ -34,11 +34,11 @@ iconv_uc_open(const char *to, const char *from, void **data, apr_pool_t *ctx)
 	if (ic == NULL)
 		return APR_ENOMEM;
 	memset(ic, 0, sizeof(*ic));
-	error = iconv_ces_open(from, &ic->from, ctx);
+	error = apr_iconv_ces_open(from, &ic->from, ctx);
 	if (error!=APR_SUCCESS) {
 		goto bad;
 	}
-	error = iconv_ces_open(to, &ic->to, ctx);
+	error = apr_iconv_ces_open(to, &ic->to, ctx);
 	if (error!=APR_SUCCESS) {
 		goto bad;
 	}
@@ -59,9 +59,9 @@ iconv_uc_close(void *data, apr_pool_t *ctx)
 	if (ic == NULL)
 		return APR_EBADF;
 	if (ic->from)
-		iconv_ces_close(ic->from, ctx);
+		apr_iconv_ces_close(ic->from, ctx);
 	if (ic->to)
-		iconv_ces_close(ic->to, ctx);
+		apr_iconv_ces_close(ic->to, ctx);
 	free(ic);
 	return APR_SUCCESS;
 }

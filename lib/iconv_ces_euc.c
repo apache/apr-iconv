@@ -45,8 +45,8 @@ typedef struct {
 	const struct iconv_module *ccs[1];
 } iconv_ces_euc_state_t;
 
-apr_status_t
-iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
+API_DECLARE_NONSTD(apr_status_t)
+apr_iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	struct iconv_module *depmod = ces->mod->im_deplist;
 	iconv_ces_euc_state_t *state;
@@ -66,8 +66,8 @@ iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	return APR_SUCCESS;
 }
 
-apr_status_t
-iconv_euc_close(struct iconv_ces *ces)
+API_DECLARE_NONSTD(apr_status_t)
+apr_iconv_euc_close(struct iconv_ces *ces)
 {
 	free(CESTOSTATE(ces));
 	return APR_SUCCESS;
@@ -76,8 +76,8 @@ iconv_euc_close(struct iconv_ces *ces)
 #define is_7_14bit(data) ((data)->nbits & 7)
 #define is_7bit(data) ((data)->nbits & 1)
 
-apr_ssize_t
-iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,
+API_DECLARE_NONSTD(apr_ssize_t)
+apr_iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	iconv_ces_euc_state_t *euc_state = CESTOSTATE(ces);
@@ -143,8 +143,8 @@ cvt2ucs(const struct iconv_ccs_desc *ccs, const unsigned char *inbuf,
 	return ICONV_CCS_CONVERT_TO_UCS(ccs, ch);
 }
 
-ucs_t
-iconv_euc_convert_to_ucs(struct iconv_ces *ces,
+API_DECLARE_NONSTD(ucs_t)
+apr_iconv_euc_convert_to_ucs(struct iconv_ces *ces,
 	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	iconv_ces_euc_state_t *euc_state = CESTOSTATE(ces);

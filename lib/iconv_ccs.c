@@ -33,8 +33,8 @@
 #define ICONV_INTERNAL
 #include "iconv.h"	/* iconv_ccs_desc, iconv_ccs_module */
 
-apr_status_t
-iconv_ccs_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
+API_DECLARE_NONSTD(int)
+apr_iconv_ccs_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 /*	struct iconv_ccs_desc *desc =
 	    (struct iconv_ccs_desc *)mod->im_desc->imd_data;*/
@@ -49,7 +49,7 @@ iconv_ccs_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 	    case ICMODEV_UNLOAD:
 		break;
 	    default:
-		return APR_EINVAL;
+		return EINVAL;
 	}
-	return APR_SUCCESS;
+	return 0;
 }

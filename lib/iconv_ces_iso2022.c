@@ -66,8 +66,8 @@ typedef struct iconv_ces_iso2022_state {
 	const struct iconv_module *ccsmod[1];
 } iconv_ces_iso2022_state_t;
 
-apr_status_t
-iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
+API_DECLARE_NONSTD(apr_status_t)
+apr_iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	const iconv_ces_iso2022_ccs_t *ccsattr;
 	const struct iconv_ccs_desc *ccs;
@@ -86,7 +86,7 @@ iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	ces->data = state;
 	state->shift_tab = (int*)((char*)state + stsz);
 	state->org_shift_tab = ces->desc->data;
-	iconv_iso2022_reset(ces);
+	apr_iconv_iso2022_reset(ces);
 	state->nccs = ces->mod->im_depcnt;
 	depmod = ces->mod->im_deplist;
 	for (i = ces->mod->im_depcnt; i; i--, depmod = depmod->im_next) {
@@ -101,27 +101,21 @@ iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	return APR_SUCCESS;
 }
 
-int
-iconv_iso2022_close(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_iso2022_close(struct iconv_ces *ces)
 {
 	free(ces->data);
 	return 0;
 }
 
-void
-iconv_iso2022_reset(struct iconv_ces *ces)
+API_DECLARE_NONSTD(void)
+apr_iconv_iso2022_reset(struct iconv_ces *ces)
 {
 	struct iconv_ces_iso2022_state *state = CESTOSTATE(ces);
 
 	memcpy(state->shift_tab, ces->desc->data, SHIFT_LEN);
 	state->shift_index = 0;
 	state->previous_char = UCS_CHAR_NONE;
-}
-
-int
-iconv_iso2022_nbits(struct iconv_ces *ces)
-{
-	return 7;
 }
 
 static void
@@ -198,8 +192,8 @@ cvt_ucs2iso(const struct iconv_ces *ces, ucs_t in,
 	return 1;
 }
 
-apr_ssize_t
-iconv_iso2022_convert_from_ucs(struct iconv_ces *ces,
+API_DECLARE_NONSTD(apr_ssize_t)
+apr_iconv_iso2022_convert_from_ucs(struct iconv_ces *ces,
 	ucs_t in, unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
@@ -244,8 +238,8 @@ cvt_iso2ucs(const struct iconv_ccs_desc *ccs, const unsigned char **inbuf,
 	return ICONV_CCS_CONVERT_TO_UCS(ccs, ch);
 }
 
-ucs_t
-iconv_iso2022_convert_to_ucs(struct iconv_ces *ces,
+API_DECLARE_NONSTD(ucs_t)
+apr_iconv_iso2022_convert_to_ucs(struct iconv_ces *ces,
 	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	struct iconv_ces_iso2022_state *iso_state = CESTOSTATE(ces);
