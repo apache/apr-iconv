@@ -34,6 +34,7 @@
 
 #include "apr.h"
 #include "apr_pools.h"
+#include "apr_iconv.h"
 #ifdef WIN32
 #define ICONV_DEFAULT_PATH "iconv"
 #else
@@ -45,72 +46,6 @@
 /* apr additions */
 #define issetugid() 0
 /* apr additions */
-
-/**
- * API_DECLARE_EXPORT is defined when building the libapriconv dynamic 
- * library, so that all public symbols are exported.
- *
- * API_DECLARE_STATIC is defined when including the apriconv public headers, 
- * to provide static linkage when the dynamic library may be unavailable.
- *
- * API_DECLARE_STATIC and API_DECLARE_EXPORT are left undefined when
- * including the apr-iconv public headers, to import and link the symbols 
- * from the dynamic libapriconv library and assure appropriate indirection 
- * and calling conventions at compile time.
- */
-
-#if !defined(WIN32)
-/**
- * The public apr-iconv functions are declared with API_DECLARE(), so they 
- * use the most portable calling convention.  Public apr-iconv functions 
- * with variable arguments must use API_DECLARE_NONSTD().
- *
- * @deffunc API_DECLARE(rettype) apr_func(args);
- */
-#define API_DECLARE(type)            type
-/**
- * The private apr-iconv functions are declared with API_DECLARE_NONSTD(), 
- * so they use the most optimal C language calling conventions.
- *
- * @deffunc API_DECLARE(rettype) apr_func(args);
- */
-#define API_DECLARE_NONSTD(type)     type
-/**
- * All exported apr-iconv variables are declared with API_DECLARE_DATA
- * This assures the appropriate indirection is invoked at compile time.
- *
- * @deffunc API_DECLARE_DATA type apr_variable;
- * @tip extern API_DECLARE_DATA type apr_variable; syntax is required for
- * declarations within headers to properly import the variable.
- */
-#define API_DECLARE_DATA
-#elif defined(API_DECLARE_STATIC)
-#define API_DECLARE(type)            type __stdcall
-#define API_DECLARE_NONSTD(type)     type
-#define API_DECLARE_DATA
-#elif defined(API_DECLARE_EXPORT)
-#define API_DECLARE(type)            __declspec(dllexport) type __stdcall
-#define API_DECLARE_NONSTD(type)     __declspec(dllexport) type
-#define API_DECLARE_DATA             __declspec(dllexport)
-#else
-#define API_DECLARE(type)            __declspec(dllimport) type __stdcall
-#define API_DECLARE_NONSTD(type)     __declspec(dllimport) type
-#define API_DECLARE_DATA             __declspec(dllimport)
-#endif
-
-/*
- * iconv_t:	charset conversion descriptor type
- */
-typedef void *iconv_t;
-
-/* __BEGIN_DECLS */
-
-API_DECLARE(apr_status_t) apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
-API_DECLARE(apr_status_t) apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
-API_DECLARE(apr_status_t) apr_iconv_close(iconv_t, apr_pool_t *);
-
-/* __END_DECLS */
-
 
 #ifdef ICONV_INTERNAL
 
