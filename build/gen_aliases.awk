@@ -63,6 +63,20 @@ END {
     print "{";
     print "    struct charset_alias key;";
     print "    struct charset_alias *alias;";
+    print "#if 'A' == '\\xC1' /* if EBCDIC host */";
+    print "    /* The table is sorted in ASCII collation order, not in EBCDIC order.";
+    print "     * At the first access, we sort it automatically";
+    print "     * Criterion for the 1st time initialization is the fact that the";
+    print "     * 1st name in the list starts with a digit (in ASCII, numbers";
+    print "     * have a lower ordinal value than alphabetic characters; while";
+    print "     * in EBCDIC, their ordinal value is higher)";
+    print "     */";
+    print "    if (isdigit(charset_alias_list[0].name[0]))  {";
+    print "        qsort((void *)charset_alias_list, charset_alias_count,";
+    print "              sizeof(charset_alias_list[0]),";
+    print "              charset_alias_compare);";
+    print "    }";
+#endif
     print "    key.name = name;";
     print "    alias = bsearch(&key, charset_alias_list, charset_alias_count,";
     print "                    sizeof(charset_alias_list[0]),";
