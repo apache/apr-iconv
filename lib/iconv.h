@@ -46,6 +46,48 @@
 #define issetugid() 0
 /* apr additions */
 
+/**
+ * APR_DECLARE_EXPORT is defined when building the APR dynamic library,
+ * so that all public symbols are exported.
+ *
+ * APR_DECLARE_STATIC is defined when including the APR public headers,
+ * to provide static linkage when the dynamic library may be unavailable.
+ *
+ * APR_DECLARE_STATIC and APR_DECLARE_EXPORT are left undefined when
+ * including the APR public headers, to import and link the symbols from the 
+ * dynamic APR library and assure appropriate indirection and calling 
+ * conventions at compile time.
+ */
+
+#if !defined(WIN32)
+/**
+ * The public APR functions are declared with APR_DECLARE(), so they may
+ * use the most appropriate calling convention.  Public APR functions with 
+ * variable arguments must use APR_DECLARE_NONSTD().
+ *
+ * @deffunc APR_DECLARE(rettype) apr_func(args);
+ */
+#define API_DECLARE(type)            type
+/**
+ * The public APR variables are declared with AP_MODULE_DECLARE_DATA.
+ * This assures the appropriate indirection is invoked at compile time.
+ *
+ * @deffunc APR_DECLARE_DATA type apr_variable;
+ * @tip extern APR_DECLARE_DATA type apr_variable; syntax is required for
+ * declarations within headers to properly import the variable.
+ */
+#define API_DECLARE_DATA
+#elif defined(API_DECLARE_STATIC)
+#define API_DECLARE(type)            type __stdcall
+#define API_DECLARE_DATA
+#elif defined(API_DECLARE_EXPORT)
+#define API_DECLARE(type)            __declspec(dllexport) type __stdcall
+#define API_DECLARE_DATA             __declspec(dllexport)
+#else
+#define API_DECLARE(type)            __declspec(dllimport) type __stdcall
+#define API_DECLARE_DATA             __declspec(dllimport)
+#endif
+
 /*
  * iconv_t:	charset conversion descriptor type
  */
@@ -53,9 +95,9 @@ typedef void *iconv_t;
 
 /* __BEGIN_DECLS */
 
-apr_status_t	apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
-apr_status_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
-apr_status_t	apr_iconv_close(iconv_t, apr_pool_t *);
+API_DECLARE(apr_status_t) apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
+API_DECLARE(apr_status_t) apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
+API_DECLARE(apr_status_t) apr_iconv_close(iconv_t, apr_pool_t *);
 
 /* __END_DECLS */
 

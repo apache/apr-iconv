@@ -51,7 +51,7 @@ static struct iconv_converter_desc *converters[] = {
  * APR_BADARG: The ouput arguments are not valid.
  */
 
-apr_status_t
+API_DECLARE(apr_status_t)
 apr_iconv(iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
 	char **outbuf, apr_size_t *outbytesleft, apr_size_t *result)
 {
@@ -71,7 +71,7 @@ apr_iconv(iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
 	    (unsigned char**)outbuf, outbytesleft, result));
 }
 
-apr_status_t
+API_DECLARE(apr_status_t)
 apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, iconv_t *res)
 {
 	struct iconv_converter_desc **idesc;
@@ -99,7 +99,7 @@ apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, iconv_t *res)
 	return(APR_SUCCESS);
 }
 
-apr_status_t
+API_DECLARE(apr_status_t)
 apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
