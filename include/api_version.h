@@ -63,7 +63,7 @@ extern "C" {
 #define API_MINOR_VERSION       9
 
 /** patch level */
-#define API_PATCH_VERSION       6
+#define API_PATCH_VERSION       7
 
 /** 
  *  This symbol is defined for internal, "development" copies of API. This
