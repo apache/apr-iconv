@@ -20,7 +20,8 @@ EXTRACLEAN_TARGETS = configure libtool aclocal.m4
 ### install location
 prefix=@prefix@
 exec_prefix=@prefix@/bin
-libdir=@libdir@
+lib_prefix=@prefix@/lib
+libdir=@iconv_libdir@
 includedir=@includedir@
 
 
@@ -39,15 +40,15 @@ install: $(TARGET_LIB)
 	    @APR_SOURCE_DIR@/build/mkdir.sh $(includedir); \
 	fi; \
 	cp lib/*.h $(includedir); \
+	if [ ! -d $(lib_prefix) ]; then \
+	    @APR_SOURCE_DIR@/build/mkdir.sh $(lib_prefix); \
+	fi; \
+	$(LIBTOOL) --mode=install cp $(TARGET_LIB) $(lib_prefix)
 	if [ ! -d $(libdir) ]; then \
 	    @APR_SOURCE_DIR@/build/mkdir.sh $(libdir); \
 	fi; \
-	$(LIBTOOL) --mode=install cp $(TARGET_LIB) $(libdir)
-	if [ ! -d $(libdir)/iconv ]; then \
-	    @APR_SOURCE_DIR@/build/mkdir.sh $(libdir)/iconv; \
-	fi; \
-	(cd ccs; $(LIBTOOL) --mode=install cp *.la $(libdir)/iconv)
-	(cd ces; $(LIBTOOL) --mode=install cp *.la $(libdir)/iconv)
+	(cd ccs; $(LIBTOOL) --mode=install cp *.la $(libdir))
+	(cd ces; $(LIBTOOL) --mode=install cp *.la $(libdir))
 	if [ ! -d $(exec_prefix) ]; then \
 	    @APR_SOURCE_DIR@/build/mkdir.sh $(exec_prefix); \
 	fi; \
