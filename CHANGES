@@ -1,3 +1,8 @@
+Changes with APR-ICONV a15
+
+  *) First set of changes for APR compatibility (eliminated __inline).
+     [jean-frederic clere <jfrederic.clere@fujitsu-siemens.com>]
+
 Changes with APR-ICONV a9
 
   *) Source moved from the apr library into it's own repository

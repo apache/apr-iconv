@@ -47,7 +47,7 @@ utf7_names(struct iconv_ces *ces)
 	return names;
 }
 
-static inline int
+static APR_INLINE int
 lackofbytes(int bytes, size_t *bytesleft)
 {
 	if (bytes > *bytesleft)
@@ -62,7 +62,7 @@ static const char *base64_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 #define base64(ch) (base64_str[(ch) & 0x3F])
 
-static inline int output(char ch, unsigned char **outbuf)
+static APR_INLINE int output(char ch, unsigned char **outbuf)
 {
 	*(*outbuf)++ = ch;
 	return 1;

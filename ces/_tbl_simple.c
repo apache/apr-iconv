@@ -47,7 +47,7 @@ table_names(struct iconv_ces *ces)
 	return ((struct iconv_ccs_desc *)(ces->data))->names;
 }
 
-static __inline int
+static APR_INLINE int
 table_nbits(struct iconv_ces *ces)
 {
 	return ((struct iconv_ccs_desc *)(ces->data))->nbits;
