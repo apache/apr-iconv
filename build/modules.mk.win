@@ -91,7 +91,7 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 	$(SILENT)echo Compiling $@...
 	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
-		/link $(ALL_LDFLAGS) /out:$@ /base:@"..\build\BaseAddr.ref",$@ \
+		/link $(ALL_LDFLAGS) /out:$@ /base:@"..\build\BaseAddr.ref",$(@F) \
 		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
