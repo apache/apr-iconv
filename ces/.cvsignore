@@ -1,7 +1,0 @@
-.libs
-*.la
-*.lo
-*.slo
-Debug
-Release
-libapriconv_ces_modules.plg

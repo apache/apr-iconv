@@ -1,8 +1,0 @@
-.libs
-*.la
-*.lo
-*.slo
-apriconv.exports
-exports.c
-apr_iconv_private.h.in
-apr_iconv_private.h
