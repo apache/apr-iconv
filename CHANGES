@@ -1,5 +1,10 @@
 Changes with APR-ICONV 1.1
 
+  *) APR_ICONV1_PATH distinguishes between our apr-iconv 0.9 and 1.x
+     flavors (changed pool arguments to several internal functions, so the
+     loadable charset modules are not binary compatible.)  The older 0.9
+     flavor APR_ICONV_PATH won't be searched.  [William Rowe]
+
 Changes with APR-ICONV 1.0.2
 
   *) Fix libapriconv.rc for Win32 builds [William Rowe, Justin Erenkrantz]
