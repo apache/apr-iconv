@@ -30,12 +30,15 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
+#include "apr.h"
+
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
+
 #include <errno.h>
 
 static int
-table_open(struct iconv_ces *ces)
+table_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	ces->data = (void *)(ces->mod->im_deplist->im_desc->imd_data);
 	return 0;
@@ -116,14 +119,14 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 }
 
 static int
-table_load_ccs(struct iconv_module *mod)
+table_load_ccs(struct iconv_module *mod, apr_pool_t *ctx)
 {
 	struct iconv_module *ccsmod;
 	int error;
 
 	if (mod->im_args == NULL)
 		return EINVAL;
-	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod);
+	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
 	if (error)
 		return error;
 	ccsmod->im_next = mod->im_deplist;
@@ -132,14 +135,14 @@ table_load_ccs(struct iconv_module *mod)
 }
 
 static int
-table_event(struct iconv_module *mod, int event)
+table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 	switch (event) {
 	    case ICMODEV_LOAD:
 	    case ICMODEV_UNLOAD:
 		break;
 	    case ICMODEV_DYNDEPS:
-		return table_load_ccs(mod);
+		return table_load_ccs(mod,ctx);
 	    default:
 		return EINVAL;
 	}

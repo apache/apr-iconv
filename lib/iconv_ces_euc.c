@@ -35,7 +35,7 @@
 #include <string.h>
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 #define	CESTOSTATE(ces)		((iconv_ces_euc_state_t *)(ces)->data)
 #define	MODTOCCS(mod)		((struct iconv_ccs_desc *)(mod)->im_desc->imd_data)
@@ -47,7 +47,7 @@ typedef struct {
 } iconv_ces_euc_state_t;
 
 int
-iconv_euc_open(struct iconv_ces *ces)
+iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	struct iconv_module *depmod = ces->mod->im_deplist;
 	iconv_ces_euc_state_t *state;

@@ -35,7 +35,7 @@
 #include <string.h>
 
 #define ICONV_INTERNAL
-#include <iconv.h>	/* iconv_ccs_desc, iconv_ccs_module */
+#include "iconv.h"	/* iconv_ccs_desc, iconv_ccs_module */
 
 int
 iconv_ccs_event(struct iconv_module *mod, int event)

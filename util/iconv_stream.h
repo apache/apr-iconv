@@ -3,7 +3,7 @@
 
 #include <sys/types.h>	/* size_t, ssize_t */
 #include <stdio.h>	/* FILE */
-#include <iconv.h>	/* iconv_t */
+#include "iconv.h"	/* iconv_t */
 
 typedef ssize_t (*iconv_stream_func)(void *d, void *buf, size_t nbytes);
 
