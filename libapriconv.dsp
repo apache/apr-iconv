@@ -58,8 +58,9 @@ LINK32=link.exe
 InputPath=.\Release\libapriconv.dll
 SOURCE="$(InputPath)"
 
-".\Release\libapriconv.dbg" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+".\Release\libapriconv.dbgmark" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	rebase -q -b 0x6EE50000 -x ".\Release" $(InputPath)
+	echo rebased > ".\Release\libapriconv.dbgmark"
 
 # End Custom Build
 
