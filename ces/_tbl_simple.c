@@ -84,6 +84,9 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 		return 1;	/* No state reinitialization for table charsets */
 	if (iconv_char32bit(in))
 		return -1;
+        /* This cast to ucs2_t silences a MSVC argument conversion warning.
+           It's safe because we've just checked that 'in' is a 16-bit
+           (or shorter) character. */
 	res = ICONV_CCS_CONVERT_FROM_UCS(ccsd, (ucs2_t)in);
 	if (res == UCS_CHAR_INVALID)
 		return -1;	/* No character in output charset */
@@ -108,6 +111,8 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 
 	if (*inbytesleft < bytes)
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
+        /* This cast to ucs2_t silences a MSVC argument conversion warning.
+           It's safe because we're creating s 16-bit char from two bytes. */
 	if (bytes == 2)
     		res = ICONV_CCS_CONVERT_TO_UCS(ccsd,
 		    (ucs2_t)((byte << 8) | (* ++(*inbuf))));
