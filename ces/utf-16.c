@@ -30,9 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
-#include <stdlib.h>	/* free, malloc */
-
 #define ICONV_INTERNAL
 #include <iconv.h>
 
@@ -46,9 +43,9 @@ utf16_names(struct iconv_ces *ces)
 	return names;
 }
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	    unsigned char **outbuf, size_t *outbytesleft)
+	    unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	unsigned char *cp;
 	int *state = (int *)ces->data;
@@ -81,7 +78,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	return 1;
 }
 
-static __inline ucs_t
+static APR_INLINE ucs_t
 msb(const unsigned char *buf)
 {
 	return (buf[0] << 8) | buf[1];
@@ -89,7 +86,7 @@ msb(const unsigned char *buf)
 
 static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
-	const unsigned char **inbuf, size_t *inbytesleft)
+	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	ucs_t res, res2;
 	int *state = (int *)ces->data;

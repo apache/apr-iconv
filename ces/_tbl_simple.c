@@ -30,12 +30,13 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
+#include "apr.h"
+
 #define ICONV_INTERNAL
-#include <iconv.h>
-#include <errno.h>
+#include "iconv.h"
 
 static int
-table_open(struct iconv_ces *ces)
+table_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	ces->data = (void *)(ces->mod->im_deplist->im_desc->imd_data);
 	return 0;
@@ -47,7 +48,7 @@ table_names(struct iconv_ces *ces)
 	return ((struct iconv_ccs_desc *)(ces->data))->names;
 }
 
-static __inline int
+static APR_INLINE int
 table_nbits(struct iconv_ces *ces)
 {
 	return ((struct iconv_ccs_desc *)(ces->data))->nbits;
@@ -71,13 +72,13 @@ ces_nbytes(struct iconv_ces *ces)
 	return res == 16 ? 0 : (res > 8 ? 2 : 1);
 }
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft)
+	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	struct iconv_ccs_desc *ccsd = ces->data;
 	ucs_t res;
-	size_t bytes;
+	apr_size_t bytes;
 
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
@@ -98,12 +99,12 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 
 static ucs_t
 convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
-	size_t *inbytesleft)
+	apr_size_t *inbytesleft)
 {
 	struct iconv_ccs_desc *ccsd = ces->data;
 	unsigned char byte = *(*inbuf);
 	ucs_t res = ICONV_CCS_CONVERT_TO_UCS(ccsd, byte);
-	size_t bytes = (res == UCS_CHAR_INVALID && table_nbits(ces) > 8) ? 2 : 1;
+	apr_size_t bytes = (res == UCS_CHAR_INVALID && table_nbits(ces) > 8) ? 2 : 1;
 
 	if (*inbytesleft < bytes)
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
@@ -115,35 +116,35 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 	return res;
 }
 
-static int
-table_load_ccs(struct iconv_module *mod)
+static apr_status_t
+table_load_ccs(struct iconv_module *mod, apr_pool_t *ctx)
 {
 	struct iconv_module *ccsmod;
 	int error;
 
 	if (mod->im_args == NULL)
-		return EINVAL;
-	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod);
+		return APR_EINVAL;
+	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
 	if (error)
 		return error;
 	ccsmod->im_next = mod->im_deplist;
 	mod->im_deplist = ccsmod;
-	return 0;
+	return APR_SUCCESS;
 }
 
-static int
-table_event(struct iconv_module *mod, int event)
+static apr_status_t
+table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 	switch (event) {
 	    case ICMODEV_LOAD:
 	    case ICMODEV_UNLOAD:
 		break;
 	    case ICMODEV_DYNDEPS:
-		return table_load_ccs(mod);
+		return table_load_ccs(mod,ctx);
 	    default:
-		return EINVAL;
+		return APR_EINVAL;
 	}
-	return 0;
+	return APR_SUCCESS;
 }
 
 static const struct iconv_ces_desc iconv_ces_desc = {
