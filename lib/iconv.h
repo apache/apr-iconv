@@ -40,6 +40,9 @@
 #define API_USE_BUILTIN_ALIASES /* Use the built-in charset alias table */
 #else
 #include "apr_iconv_private.h"  /* contains ICONV_DEFAULT_PATH */
+#ifdef _OSD_POSIX
+#define API_USE_BUILTIN_ALIASES /* Use the built-in charset alias table */
+#endif
 #endif
 
 #include <stddef.h>
