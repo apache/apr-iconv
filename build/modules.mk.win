@@ -9,79 +9,75 @@ rmdir=deltree /y
 
 SILENT=@
 
-# Default build type: Release, static APR, static APR-iconv
-BUILD_TYPE = RDD
+# Default build and bind modes
+BUILD_MODE = release
+BIND_MODE  = shared
 
-!IF "$(BUILD_TYPE)" == "RDD"
-# Release: dynamic APR, dynamic APR-iconv
-APR_LIB_PFX = Release/lib
-API_LIB_PFX = Release/lib
-INT_CFLAGS  = /MD /O2
-INT_DEFINES = /D "NDEBUG"
-OUTPUT_DIR  = Release
-
-!ELSE
-!IF "$(BUILD_TYPE)" == "DDD"
-# Debug: dynamic APR, dynamic APR-iconv
-APR_LIB_PFX = Debug/lib
-API_LIB_PFX = Debug/lib
-INT_CFLAGS  = /MDd /Zi /Od
-INT_DEFINES = /D "_DEBUG"
-INT_LDFLAGS = /DEBUG
-OUTPUT_DIR  = Debug
+!IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
+!IF "$(BIND_MODE)" == "shared"
+# release shared
+APR_LIB_PFX = $(APR_SOURCE)\Release\lib
+API_LIB_PFX = $(API_SOURCE)\Release\lib
+CFG_CFLAGS  = /MD /O2
+CFG_DEFINES = /D "NDEBUG"
+CFG_OUTPUT  = Release\iconv
 
 !ELSE
-!IF "$(BUILD_TYPE)" == "RSS"
-# Release: static APR, static APR-iconv
-APR_LIB_PFX = LibR/
-API_LIB_PFX = LibR/
-INT_CFLAGS  = /MD /O2
-INT_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC"
-OUTPUT_DIR  = LibR
+!IF "$(BIND_MODE)" == "static"
+# release static
+APR_LIB_PFX = $(APR_SOURCE)\LibR\	# no line continuation
+API_LIB_PFX = $(API_SOURCE)\LibR\	# no line continuation
+CFG_CFLAGS  = /MD /O2
+CFG_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
+CFG_OUTPUT  = LibR\iconv
 
 !ELSE
-!IF "$(BUILD_TYPE)" == "DSS"
-# Debug: static APR, static APR-iconv
-APR_LIB_PFX = LibD/
-API_LIB_PFX = LibD/
-INT_CFLAGS  = /MDd /Zi /Od
-INT_DEFINES = /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-OUTPUT_DIR  = LibD
-
-!ELSE
-!IF "$(BUILD_TYPE)" == "RDS"
-# Release: dynamic APR, static APR-iconv
-APR_LIB_PFX = Release/lib
-API_LIB_PFX = DynLibR/
-INT_CFLAGS  = /MD /O2
-INT_DEFINES = /D "NDEBUG" /D "API_DECLARE_STATIC"
-OUTPUT_DIR  = DynLibR
-
-!ELSE
-!IF "$(BUILD_TYPE)" == "DDS"
-# Debug: dynamic APR, static APR-iconv
-APR_LIB_PFX = Debug/lib
-API_LIB_PFX = DynLibD/
-INT_CFLAGS  = /MDd /Zi /Od
-INT_DEFINES = /D "_DEBUG" /D "API_DECLARE_STATIC"
-OUTPUT_DIR  = DynLibD
-
-!ELSE
-!ERROR Wups, unknown build type!
-
+!ERROR Unknown bind mode "$(BIND_MODE)"
 !ENDIF
 !ENDIF
+
+!ELSE
+!IF "$(BUILD_MODE)" == "debug" || "$(BUILD_MODE)" == "Debug"
+!IF "$(BIND_MODE)" == "shared"
+# debug shared
+APR_LIB_PFX = $(APR_SOURCE)\Debug\lib
+API_LIB_PFX = $(API_SOURCE)\Debug\lib
+CFG_CFLAGS  = /MDd /Zi /Od
+CFG_DEFINES = /D "_DEBUG"
+CFG_LDFLAGS = /DEBUG
+CFG_OUTPUT  = Debug\iconv
+
+!ELSE
+!IF "$(BIND_MODE)" == "static"
+# debug static
+APR_LIB_PFX = $(APR_SOURCE)\LibD\	# no line continuation
+API_LIB_PFX = $(API_SOURCE)\LibD\	# no line continuation
+CFG_CFLAGS  = /MDd /Zi /Od
+CFG_DEFINES = /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
+CFG_LDFLAGS = /DEBUG
+CFG_OUTPUT  = LibD\iconv
+
+!ELSE
+!ERROR Unknown bind mode "$(BIND_MODE)"
 !ENDIF
 !ENDIF
+
+!ELSE
+!ERROR Unknown build mode "$(BUILD_MODE)"
 !ENDIF
 !ENDIF
 
 
-APR_SOURCE   = ../../apr
-INT_CFLAGS   = /nologo $(INT_CFLAGS) /Fp"$(OUTPUT_DIR)/iconv.pch" /YX"iconv.h"
-INT_INCLUDES = /I ../lib /I $(APR_SOURCE)/include /I ../include
-INT_DEFINES  = /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" $(INT_DEFINES)
-INT_LDFLAGS  = /nologo /dll /incremental:no /subsystem:windows /export:iconv_module,DATA
+APR_SOURCE   = ..\..\apr
+API_SOURCE   = ..
+OUTPUT_DIR   = $(API_SOURCE)\$(CFG_OUTPUT)
+
+INT_CFLAGS   = /nologo $(CFG_CFLAGS) /Fp"$(OUTPUT_DIR)\iconv.pch" /YX"iconv.h"
+INT_INCLUDES = /I "$(API_SOURCE)\include" /I "$(API_SOURCE)\lib" \
+		/I "$(APR_SOURCE)\include"
+INT_DEFINES  = /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" $(CFG_DEFINES)
+INT_LDFLAGS  = /nologo /dll /incremental:no /subsystem:windows \
+		/export:iconv_module,DATA $(CFG_LDFLAGS)
 
 CFLAGS       = /W3
 ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
@@ -90,12 +86,12 @@ LDFLAGS      = /WARN:0
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
 .c{$(OUTPUT_DIR)}.so:
-	-$(SILENT)if not exist "$(OUTPUT_DIR)/$(NULL)" mkdir "$(OUTPUT_DIR)"
+	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 	$(SILENT)echo Compiling and linking $@...
 	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*" $< \
 		/link $(ALL_LDFLAGS) /out:$@ \
-		../$(API_LIB_PFX)apriconv.lib \
-		$(APR_SOURCE)/$(APR_LIB_PFX)apr.lib \
+		"$(API_LIB_PFX)apriconv.lib" \
+		"$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
@@ -109,3 +105,9 @@ rebase:
 clean:
 	-$(SILENT)if exist "$(OUTPUT_DIR)/$(NULL)" $(rmdir) $(OUTPUT_DIR)
 
+install:
+	@echo Copying apr-iconv modules from $(OUTPUT_DIR) to $(INSTALL_DIR)
+	-$(SILENT)mkdir "$(INSTALL_DIR)"
+	$(SILENT)copy $(OUTPUT_DIR)\*.so "$(INSTALL_DIR)" < <<
+A
+<<
