@@ -47,7 +47,7 @@ RSC=rc.exe
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
-# ADD RSC /l 0x409 /d "NDEBUG"
+# ADD RSC /l 0x409 /d "NDEBUG" /d "API_VERSION_ONLY" /I "./include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -73,7 +73,7 @@ LINK32=link.exe
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
-# ADD RSC /l 0x409 /d "_DEBUG"
+# ADD RSC /l 0x409 /d "_DEBUG" /d "API_VERSION_ONLY" /I "./include"
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
@@ -147,36 +147,6 @@ SOURCE=.\lib\iconv.h
 
 SOURCE=.\libapriconv.rc
 # End Source File
-# Begin Source File
 
-SOURCE=..\apr\build\win32ver.awk
-
-!IF  "$(CFG)" == "libapriconv - Win32 Release"
-
-# PROP Ignore_Default_Tool 1
-USERDEP__WIN32="./include/api_version.h"	
-# Begin Custom Build - Creating Version Resource
-InputPath=..\apr\build\win32ver.awk
-
-".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ./include/api_version.h > .\libapriconv.rc
-
-# End Custom Build
-
-!ELSEIF  "$(CFG)" == "libapriconv - Win32 Debug"
-
-# PROP Ignore_Default_Tool 1
-USERDEP__WIN32="./include/api_version.h"	
-# Begin Custom Build - Creating Version Resource
-InputPath=..\apr\build\win32ver.awk
-
-".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ./include/api_version.h > .\libapriconv.rc
-
-# End Custom Build
-
-!ENDIF 
-
-# End Source File
 # End Target
 # End Project

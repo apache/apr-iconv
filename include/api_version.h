@@ -16,18 +16,9 @@
 #ifndef API_VERSION_H
 #define API_VERSION_H
 
-#include "apr.h"
-#include "apr_version.h"
-
-#include "apr_iconv.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 /**
  * @file api_version.h
- * @brief 
+ * @brief APR-iconv Versioning Interface
  * 
  * APR-iconv's Version
  *
@@ -45,6 +36,7 @@ extern "C" {
  *     http://apr.apache.org/versioning.html
  */
 
+
 /* The numeric compile-time version constants. These constants are the
  * authoritative version numbers for API. 
  */
@@ -56,31 +48,72 @@ extern "C" {
  */
 #define API_MAJOR_VERSION       1
 
-/** 
+/** minor version
  * Minor API changes that do not cause binary compatibility problems.
- * Should be reset to 0 when upgrading API_MAJOR_VERSION
+ * Reset to 0 when upgrading API_MAJOR_VERSION
  */
-#define API_MINOR_VERSION       0
+#define API_MINOR_VERSION       1
 
-/** patch level */
-#define API_PATCH_VERSION       1
+/** patch level 
+ * The Patch Level never includes API changes, simply bug fixes.
+ * Reset to 0 when upgrading API_MINOR_VERSION
+ */
+#define API_PATCH_VERSION       0
 
 /** 
- *  This symbol is defined for internal, "development" copies of API. This
- *  symbol will be #undef'd for releases. 
+ * The symbol API_IS_DEV_VERSION is only defined for internal,
+ * "development" copies of API.  It is undefined for released versions
+ * of API.
  */
 #define API_IS_DEV_VERSION
 
 
+#if defined(API_IS_DEV_VERSION) || defined(DOXYGEN)
+/** Internal: string form of the "is dev" flag */
+#define API_IS_DEV_STRING "-dev"
+#else
+#define API_IS_DEV_STRING ""
+#endif
+
+#ifndef API_STRINGIFY
+/** Properly quote a value as a string in the C preprocessor */
+#define API_STRINGIFY(n) API_STRINGIFY_HELPER(n)
+/** Helper macro for API_STRINGIFY */
+#define API_STRINGIFY_HELPER(n) #n
+#endif
+
 /** The formatted string of API's version */
 #define API_VERSION_STRING \
-     APR_STRINGIFY(API_MAJOR_VERSION) "." \
-     APR_STRINGIFY(API_MINOR_VERSION) "." \
-     APR_STRINGIFY(API_PATCH_VERSION) \
+     API_STRINGIFY(API_MAJOR_VERSION) "." \
+     API_STRINGIFY(API_MINOR_VERSION) "." \
+     API_STRINGIFY(API_PATCH_VERSION) \
      API_IS_DEV_STRING
 
+/** An alternative formatted string of APR's version */
+/* macro for Win32 .rc files using numeric csv representation */
+#define API_VERSION_STRING_CSV API_MAJOR_VERSION ##, \
+                             ##API_MINOR_VERSION ##, \
+                             ##API_PATCH_VERSION
+
+
+#ifndef API_VERSION_ONLY
+
+/* The C language API to access the version at run time, 
+ * as opposed to compile time.  API_VERSION_ONLY may be defined 
+ * externally when preprocessing apr_version.h to obtain strictly 
+ * the C Preprocessor macro declarations.
+ */
+
+#include "apr_version.h"
+
+#include "apr_iconv.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
- * Return APR-util's version information information in a numeric form.
+ * Return APR-iconv's version information information in a numeric form.
  *
  *  @param pvsn Pointer to a version structure for returning the version
  *              information.
@@ -90,16 +123,10 @@ API_DECLARE(void) api_version(apr_version_t *pvsn);
 /** Return API's version information as a string. */
 API_DECLARE(const char *) api_version_string(void);
 
-
-/** Internal: string form of the "is dev" flag */
-#ifdef API_IS_DEV_VERSION
-#define API_IS_DEV_STRING "-dev"
-#else
-#define API_IS_DEV_STRING ""
-#endif
-
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* API_VERSION_H */
+#endif /* ndef API_VERSION_ONLY */
+
+#endif /* ndef API_VERSION_H */
