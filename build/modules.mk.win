@@ -94,15 +94,11 @@ ALL_REBASE = -d -b $(REBASE_TOP)
 !ENDIF
 REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
 
-.c{$(OUTPUT_DIR)}.obj:
+.c{$(OUTPUT_DIR)}.so:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 	$(SILENT)echo Compiling $@...
-	$(SILENT)cl $(ALL_CFLAGS) /Fo"$@" /Fd"$*_src" $< \
-		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
-
-{$(OUTPUT_DIR)}.obj{$(OUTPUT_DIR)}.so:
-	$(SILENT)echo Linking $@...
-	$(SILENT)link $(ALL_LDFLAGS) /out:$@ $< \
+	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
+		/link $(ALL_LDFLAGS) /out:$@ \
 		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
