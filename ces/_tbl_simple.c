@@ -124,7 +124,7 @@ table_load_ccs(struct iconv_module *mod, apr_pool_t *ctx)
 
 	if (mod->im_args == NULL)
 		return APR_EINVAL;
-	error = iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
+	error = apr_iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
 	if (error)
 		return error;
 	ccsmod->im_next = mod->im_deplist;
@@ -149,8 +149,8 @@ table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 
 static const struct iconv_ces_desc iconv_ces_desc = {
 	table_open,
-	iconv_ces_zero,
-	iconv_ces_no_func,
+	apr_iconv_ces_zero,
+	apr_iconv_ces_no_func,
 	table_names,
 	ces_nbits,
 	ces_nbytes,
