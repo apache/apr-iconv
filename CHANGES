@@ -1,4 +1,12 @@
+Changes with APR-ICONV 0.9.5
+
 Changes with APR-ICONV 0.9.4
+
+  *) Add -v option to iconv program. [Justin Erenkrantz]
+
+  *) Add api_version.h. [Justin Erenkrantz]
+
+  *) A fourth pass at a build system. [Justin Erenkrantz]
 
   *) A third pass at a build system. [Justin Erenkrantz]
 
