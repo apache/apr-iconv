@@ -88,9 +88,9 @@ LDFLAGS      = /WARN:0
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
 !IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
-ALL_REBASE = -d -b $(REBASE_TOP) -x $(OUTPUT_DIR)
+ALL_REBASE = -d -p -b $(REBASE_TOP) -x $(OUTPUT_DIR)
 !ELSE
-ALL_REBASE = -d -b $(REBASE_TOP)
+ALL_REBASE = -d -p -b $(REBASE_TOP)
 !ENDIF
 REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
 
