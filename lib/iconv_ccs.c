@@ -34,7 +34,7 @@
 #include "iconv.h"	/* iconv_ccs_desc, iconv_ccs_module */
 
 apr_status_t
-iconv_ccs_event(struct iconv_module *mod, int event)
+iconv_ccs_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 /*	struct iconv_ccs_desc *desc =
 	    (struct iconv_ccs_desc *)mod->im_desc->imd_data;*/

@@ -67,24 +67,24 @@ iconv_uc_close(void *data, apr_pool_t *ctx)
 }
 
 apr_status_t
-iconv_uc_conv(void *data, const unsigned char **inbuf, size_t *inbytesleft,
-	unsigned char **outbuf, size_t *outbytesleft, size_t *res)
+iconv_uc_conv(void *data, const unsigned char **inbuf, apr_size_t *inbytesleft,
+	unsigned char **outbuf, apr_size_t *outbytesleft, apr_size_t *res)
 {
 	struct iconv_uc *ic = (struct iconv_uc *)data;
 	const unsigned char *ptr;
 	ucs_t ch;
-        ssize_t size;
+        apr_ssize_t size;
 
-	*res = (size_t)(0);
+	*res = (apr_size_t)(0);
 	if (data == NULL) {
-		*res = (size_t) -1;
+		*res = (apr_size_t) -1;
 		return APR_EBADF;
 	}
 
 	if (inbuf == NULL || *inbuf == NULL) {
 		if (ICONV_CES_CONVERT_FROM_UCS(ic->to, UCS_CHAR_NONE,
 		    outbuf, outbytesleft) <= 0) {
-			*res = (size_t) -1;
+			*res = (apr_size_t) -1;
 			return APR_BADARG; /* too big */
 		}
 		ICONV_CES_RESET(ic->from);

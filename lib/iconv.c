@@ -45,25 +45,25 @@ static struct iconv_converter_desc *converters[] = {
 };
 
 /* 
- * size_t *result is what the iconv() returns but it is cleaner to return
+ * apr_size_t *result is what the iconv() returns but it is cleaner to return
  * a status.
  * APR_EBADF:   cd is not valid.
  * APR_BADARG: The ouput arguments are not valid.
  */
 
 apr_status_t
-apr_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
-	char **outbuf, size_t *outbytesleft, size_t *result)
+apr_iconv(iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
+	char **outbuf, apr_size_t *outbytesleft, apr_size_t *result)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 
 	if (icp == NULL) {
-		*result = (size_t) -1;
+		*result = (apr_size_t) -1;
 		return(APR_EBADF);
 	}
 	if (outbytesleft == NULL || *outbytesleft == 0 ||
 	    outbuf == NULL || *outbuf == 0) {
-		*result = (size_t) -1;
+		*result = (apr_size_t) -1;
 		return(APR_BADARG);
 	}
 	return ( icp->ic_desc->icd_conv(icp->ic_data,
@@ -123,17 +123,17 @@ apr_status_t apr_iconv_open(const char *to_charset,
             const char *from_charset, apr_pool_t *ctx, iconv_t **res)
 {
 	*res = iconv_open(to_charset, from_charset);
-	if (*res == (size_t) -1)
+	if (*res == (apr_size_t) -1)
 		return apr_get_os_error();
 	return APR_SUCCESS;
 }
 
 apr_status_t apr_iconv(iconv_t cd, const char **inbuf,
-            size_t *inbytesleft, char **outbuf,
-            size_t *outbytesleft, size_t *result)
+            apr_size_t *inbytesleft, char **outbuf,
+            apr_size_t *outbytesleft, apr_size_t *result)
 {
 	*result = iconv(cd , inbuf, inbytesleft, outbuf, outbytesleft);
-	if (*result == (size_t) -1)
+	if (*result == (apr_size_t) -1)
 		return apr_get_os_error();
 	return APR_SUCCESS;
 }

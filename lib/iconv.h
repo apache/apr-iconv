@@ -34,7 +34,11 @@
 
 #include "apr.h"
 #include "apr_pools.h"
+#ifdef WIN32
+#define ICONV_DEFAULT_PATH "iconv"
+#else
 #include "apr_iconv_private.h" /* contains ICONV_DEFAULT_PATH */
+#endif
 
 #include <stddef.h>
 
@@ -50,7 +54,7 @@ typedef void *iconv_t;
 /* __BEGIN_DECLS */
 
 apr_status_t	apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
-apr_status_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, size_t *);
+apr_status_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
 apr_status_t	apr_iconv_close(iconv_t, apr_pool_t *);
 
 /* __END_DECLS */
@@ -88,7 +92,7 @@ struct iconv_module;
 
 /* _tbl_simple.c table_load_ccs() calls iconv_mod_load(...ctx) */
 
-typedef int iconv_mod_event_t(struct iconv_module *, int, apr_pool_t *ctx );
+typedef int iconv_mod_event_t(struct iconv_module *, int, apr_pool_t *ctx);
 
 struct iconv_module_desc {
 	int		imd_type;
@@ -248,7 +252,7 @@ typedef	const char * const *iconv_ces_names_t(struct iconv_ces *);
 typedef	int  iconv_ces_nbits_t(struct iconv_ces *);
 typedef	int  iconv_ces_nbytes_t(struct iconv_ces *);
 
-typedef ssize_t iconv_ces_convert_from_ucs_t
+typedef apr_ssize_t iconv_ces_convert_from_ucs_t
     (struct iconv_ces *data, ucs_t in,
     unsigned char **outbuf, apr_size_t *outbytesleft);
 
