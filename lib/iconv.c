@@ -100,7 +100,7 @@ apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, apr_iconv_t *r
 }
 
 API_DECLARE(apr_status_t)
-apr_iconv_close(apr_iconv_t *cd, apr_pool_t *ctx)
+apr_iconv_close(apr_iconv_t cd, apr_pool_t *ctx)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	int error = 0;
