@@ -84,7 +84,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 		return 1;	/* No state reinitialization for table charsets */
 	if (iconv_char32bit(in))
 		return -1;
-	res = ICONV_CCS_CONVERT_FROM_UCS(ccsd, in);
+	res = ICONV_CCS_CONVERT_FROM_UCS(ccsd, (ucs2_t)in);
 	if (res == UCS_CHAR_INVALID)
 		return -1;	/* No character in output charset */
 	bytes = res & 0xFF00 ? 2 : 1;
@@ -110,7 +110,7 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
 	if (bytes == 2)
     		res = ICONV_CCS_CONVERT_TO_UCS(ccsd,
-		    (byte << 8) | (* ++(*inbuf)));
+		    (ucs2_t)((byte << 8) | (* ++(*inbuf))));
 	(*inbuf) ++;
 	*inbytesleft -= bytes;
 	return res;
