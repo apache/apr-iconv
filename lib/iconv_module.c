@@ -29,6 +29,7 @@
  */
 
 #define ICONV_INTERNAL
+
 #include "iconv.h"
 #include "apr_file_io.h"
 #include "apr_pools.h"
@@ -119,7 +120,7 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 		return error;
 	if (modtype != ICMOD_ANY && mdesc->imd_type != modtype) {
 		apr_dso_unload(handle);
-		return EFTYPE;
+		return APR_ICONV_EFTYPE;
 	}
 	mod = malloc(sizeof(*mod));
 	if (mod == NULL) {
