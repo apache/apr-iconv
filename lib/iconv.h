@@ -150,18 +150,17 @@ struct iconv_converter {
 
 typedef apr_uint16_t ucs2_t;	/* Unicode character [D5] */
 typedef apr_uint32_t ucs4_t;	/* Unicode scalar character [D28] */
-typedef apr_uint16_t uint16_t;
 #define ucs_t    ucs4_t
 
 /*
  * one-level coded character set conversion tables
  */
 typedef struct {
-	uint16_t	data[128];
+	apr_uint16_t	data[128];
 } iconv_ccs_convtable_7bit;	/* 7-bit charset to Unicode */
 
 typedef struct {
-	uint16_t	data[256];
+	apr_uint16_t	data[256];
 } iconv_ccs_convtable_8bit;	/* 8-bit charset to Unicode */
 
 /*
