@@ -38,7 +38,8 @@
 static int
 table_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
-	ces->data = (void *)(ces->mod->im_deplist->im_desc->imd_data);
+        struct iconv_module *ccsmod = ces->mod->im_private;
+        ces->data = (void *)(ccsmod->im_desc->imd_data);
 	return 0;
 }
 
@@ -129,12 +130,23 @@ table_load_ccs(struct iconv_module *mod, apr_pool_t *ctx)
 
 	if (mod->im_args == NULL)
 		return APR_EINVAL;
+        if (mod->im_private != NULL)
+            return APR_EINVAL;
 	error = apr_iconv_mod_load(mod->im_args, ICMOD_UC_CCS, NULL, &ccsmod, ctx);
 	if (error)
 		return error;
-	ccsmod->im_next = mod->im_deplist;
-	mod->im_deplist = ccsmod;
+        mod->im_private = ccsmod;
 	return APR_SUCCESS;
+}
+
+static apr_status_t
+table_unload_ccs(struct iconv_module *mod, apr_pool_t *ctx)
+{
+    struct iconv_module *ccsmod = mod->im_private;
+    if (ccsmod == NULL)
+        return APR_EINVAL;
+    mod->im_private = NULL;
+    return apr_iconv_mod_unload(ccsmod, ctx);
 }
 
 static apr_status_t
@@ -144,8 +156,10 @@ table_event(struct iconv_module *mod, int event, apr_pool_t *ctx)
 	    case ICMODEV_LOAD:
 	    case ICMODEV_UNLOAD:
 		break;
-	    case ICMODEV_DYNDEPS:
+            case ICMODEV_DYN_LOAD:
 		return table_load_ccs(mod,ctx);
+            case ICMODEV_DYN_UNLOAD:
+                return table_unload_ccs(mod,ctx);
 	    default:
 		return APR_EINVAL;
 	}

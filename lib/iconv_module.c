@@ -172,7 +172,7 @@ apr_iconv_mod_load(const char *modname, int modtype, const void *args,
 			depend++;
 		}
 	}
-	error = ICONV_MOD_DYNDEPS(mod,ctx);
+	error = ICONV_MOD_DYN_LOAD(mod,ctx);
 	if (error)
 		goto bad;
 	depmod = mod->im_deplist;
@@ -201,6 +201,7 @@ apr_iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
 		return -1;
 	if (mod->im_flags & ICMODF_LOADED)
 		error = ICONV_MOD_UNLOAD(mod,ctx);
+	error = ICONV_MOD_DYN_UNLOAD(mod,ctx);
 	deplist = mod->im_deplist;
 	while (deplist) {
 		tmp = deplist->im_next;
@@ -209,7 +210,7 @@ apr_iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
 	}
 	if (mod->im_handle != NULL)
 		if (apr_dso_unload(mod->im_handle) != APR_SUCCESS)
-			error = EINVAL;
+			error = APR_EINVAL;
 	free(mod);
 	return error;
 }
@@ -220,10 +221,11 @@ apr_iconv_mod_noevent(struct iconv_module *mod, int event, apr_pool_t *ctx)
 	switch (event) {
 	    case ICMODEV_LOAD:
 	    case ICMODEV_UNLOAD:
-	    case ICMODEV_DYNDEPS:
+	    case ICMODEV_DYN_LOAD:
+	    case ICMODEV_DYN_UNLOAD:
 		break;
 	    default:
-		return EINVAL;
+		return APR_EINVAL;
 	}
 	return 0;
 }
