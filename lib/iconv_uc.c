@@ -32,7 +32,7 @@ iconv_uc_open(const char *to, const char *from, void **data)
 	ic = malloc(sizeof(*ic));
 	if (ic == NULL)
 		return ENOMEM;
-	bzero(ic, sizeof(*ic));
+	memset(ic, 0, sizeof(*ic));
 	error = iconv_ces_open(from, &ic->from);
 	if (error)
 		goto bad;

@@ -92,11 +92,11 @@ main(int argc, char * const *argv)
 		errx(4, "missing source charset (-f <name>)");
 	if (to == NULL)
 		errx(5, "missing destination charset (-t <name>)");
-	cd = iconv_open(to, from);
+	cd = apr_iconv_open(to, from);
 	if ((int)cd < 0)
 		err(6, "unable to open specified convertor");
 	if (!(is = iconv_ostream_fopen(cd, stdout))) {
-		iconv_close(cd);
+		apr_iconv_close(cd);
 		exit(7);
 	}
 	if (input) {
@@ -110,6 +110,6 @@ main(int argc, char * const *argv)
 	if (iconv_write(is, NULL, 0) < 0)
 		exit(9);
 	iconv_stream_close(is);
-	iconv_close(cd);
+	apr_iconv_close(cd);
 	return 0;
 }

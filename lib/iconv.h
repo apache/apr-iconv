@@ -34,9 +34,17 @@
 
 #include <sys/types.h>	/* size_t */
 #include <stddef.h>	/* NULL */
-#include <inttypes.h>
 
 #include "apr.h"
+
+/* To be processed by configure */
+#define ICONV_DEFAULT_PATH "/usr/local/lib/iconv"
+#define EFTYPE -1234
+/* To be processed by configure */
+
+/* apr additions */
+#define issetugid() 0
+/* apr additions */
 
 /*
  * iconv_t:	charset conversion descriptor type
@@ -45,9 +53,9 @@ typedef void *iconv_t;
 
 /* __BEGIN_DECLS */
 
-iconv_t	iconv_open(const char *, const char *);
-size_t	iconv(iconv_t, const char **, size_t *, char **, size_t *);
-int	iconv_close(iconv_t);
+iconv_t	apr_iconv_open(const char *, const char *);
+size_t	apr_iconv(iconv_t, const char **, size_t *, char **, size_t *);
+int	apr_iconv_close(iconv_t);
 
 /* __END_DECLS */
 
@@ -138,8 +146,9 @@ struct iconv_converter {
 #define UCS_CHAR_INVALID	 0xFFFE
 #define UCS_CHAR_NONE		 0xFFFF
 
-typedef uint16_t ucs2_t;	/* Unicode character [D5] */
-typedef uint32_t ucs4_t;	/* Unicode scalar character [D28] */
+typedef apr_uint16_t ucs2_t;	/* Unicode character [D5] */
+typedef apr_uint32_t ucs4_t;	/* Unicode scalar character [D28] */
+typedef apr_uint16_t uint16_t;
 #define ucs_t    ucs4_t
 
 /*

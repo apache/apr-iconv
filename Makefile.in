@@ -2,8 +2,8 @@
 # Top-level Makefile for APRICONV
 #
 
-TARGET_LIB = libapriconv.la
-TARGET_EXPORTS = apriconv.exports
+TARGET_LIB = lib/libapriconv.la
+TARGET_EXPORTS = lib/apriconv.exports
 
 TARGETS = delete-lib $(TARGET_LIB) delete-exports $(TARGET_EXPORTS)
 
@@ -32,13 +32,11 @@ delete-lib:
 	fi
 
 $(TARGET_LIB):
-	@objects="`find $(SUBDIRS) -name '*.lo'`" ; \
-	    echo $(LINK) $$objects ; \
-	    $(LINK) -rpath $(libdir) $$objects
+	(cd lib; make)
 
 delete-exports:
 	@if test -f $(TARGET_EXPORTS); then \
-	    headers="`find include/*.h -newer $(TARGET_EXPORTS)`" ; \
+	    headers="`find lib/*.h -newer $(TARGET_EXPORTS)`" ; \
 	    if test -n "$$headers"; then \
 		echo Found newer headers. Will rebuild $(TARGET_EXPORTS). ; \
 		echo $(RM) -f $(TARGET_EXPORTS) ; \
@@ -47,11 +45,11 @@ delete-exports:
 	fi
 
 $(TARGET_EXPORTS):
-	$(AWK) -f @APR_SOURCE_DIR@/build/make_export.awk include/*.h > $@ ;
+	$(AWK) -f @APR_SOURCE_DIR@/build/make_export.awk lib/*.h > $@ ;
 
 docs:
 	mkdir ./docs
-	perl @APR_SOURCE_DIR@/build/scandoc.pl -i./build/default.pl -p./docs/ ./include/*.h
+	perl @APR_SOURCE_DIR@/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
 
 
 .PHONY: delete-lib delete-exports

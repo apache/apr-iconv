@@ -30,7 +30,8 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <err.h>	/* warnx */
+#ifndef HAVE_ICONV
+
 #include <errno.h>	/* errno */
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
@@ -45,20 +46,18 @@ static struct iconv_converter_desc *converters[] = {
 };
 
 size_t
-iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
+apr_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
 	char **outbuf, size_t *outbytesleft)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	ssize_t res = -1;
 
 	if (icp == NULL) {
-		iconv_warnx("iconv: invalid open conversion descriptor");
 		errno = EBADF;
 		return (size_t)(-1);
 	}
 	if (outbytesleft == NULL || *outbytesleft == 0 ||
 	    outbuf == NULL || *outbuf == 0) {
-		iconv_warnx("iconv: lack of space in the output buffer");
 		errno = E2BIG;
 		return (size_t)(-1);
 	}
@@ -69,7 +68,7 @@ iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
 }
 
 iconv_t
-iconv_open(const char *to, const char *from)
+apr_iconv_open(const char *to, const char *from)
 {
 	struct iconv_converter_desc **idesc;
 	struct iconv_converter *icp;
@@ -96,13 +95,12 @@ iconv_open(const char *to, const char *from)
 }
 
 int
-iconv_close(iconv_t cd)
+apr_iconv_close(iconv_t cd)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	int error = 0;
 
 	if (icp == NULL) {
-		iconv_warnx("iconv_close: invalid handle");
 		errno = EBADF;
 		return -1;
 	}
@@ -112,3 +110,26 @@ iconv_close(iconv_t cd)
 	free(icp);
 	return error;
 }
+
+#else
+
+#include <iconv.h>
+
+iconv_t apr_iconv_open(const char *to_charset,
+            const char *from_charset)
+{
+	return (iconv_open(to_charset, from_charset));
+}
+
+size_t apr_iconv(iconv_t cd, const char **inbuf,
+            size_t *inbytesleft, char **outbuf,
+            size_t *outbytesleft)
+{
+	return (iconv(cd , inbuf, inbytesleft, outbuf, outbytesleft));
+}
+int apr_iconv_close(iconv_t cd)
+{
+	return (iconv_close(cd));
+}
+
+#endif /* !defined(HAVE_ICONV) */

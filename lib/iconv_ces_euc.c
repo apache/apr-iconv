@@ -59,7 +59,7 @@ iconv_euc_open(struct iconv_ces *ces)
 	state = (iconv_ces_euc_state_t *)malloc(stsz);
 	if (state == NULL)
 		return errno;
-	bzero(state, stsz);
+	memset(state, 0, stsz);
 	state->nccs = ces->mod->im_depcnt;
 	for (i = ces->mod->im_depcnt; i; i--, depmod = depmod->im_next)
 		state->ccs[i - 1] = depmod;

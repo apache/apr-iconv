@@ -64,7 +64,6 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 		n = 4;
 	} else
 		return -1;
-iconv_warnx("ch=%08X, n=%d, left=%d", in, n, *outbytesleft);
 	if (*outbytesleft < n)
 		return 0;
 	cp = *outbuf;

@@ -1,5 +1,9 @@
 Changes with APR-ICONV a15
 
+  *) A second pass at a working build system - now builds on linux,
+     some namespace protection added.
+     [jean-frederic clere <jfrederic.clere@fujitsu-siemens.com>]
+
   *) A first blush at a working build system.
      [jean-frederic clere <jfrederic.clere@fujitsu-siemens.com>]
 
