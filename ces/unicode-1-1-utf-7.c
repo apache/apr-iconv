@@ -47,8 +47,8 @@ utf7_names(struct iconv_ces *ces)
 	return names;
 }
 
-static inline int
-lackofbytes(int bytes, size_t *bytesleft)
+static APR_INLINE int
+lackofbytes(int bytes, apr_size_t *bytesleft)
 {
 	if (bytes > *bytesleft)
 	    return 1;
@@ -62,7 +62,7 @@ static const char *base64_str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 #define base64(ch) (base64_str[(ch) & 0x3F])
 
-static inline int output(char ch, unsigned char **outbuf)
+static APR_INLINE int output(char ch, unsigned char **outbuf)
 {
 	*(*outbuf)++ = ch;
 	return 1;
@@ -120,9 +120,9 @@ static int char_type(ucs_t ch)
 			utf7_encoded;
 }
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *module, ucs_t in,
-                 unsigned char **outbuf, size_t *outbytesleft)
+                 unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 #define utf7_state ((char *)(module->data))
     int ch = char_type(in), needbytes = 3;
@@ -229,7 +229,7 @@ static ucs_t decode(char *state, const unsigned char **inbuf)
 }
 
 static ucs_t convert_to_ucs(struct iconv_ces *module,
-                            const unsigned char **inbuf, size_t *inbytesleft)
+                            const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 #define utf7_state ((char *)(module->data))
     int ch = char_type(*(unsigned char *)*inbuf), needbytes = 0;
