@@ -35,6 +35,7 @@
 #include "apr_file_info.h"
 #include "apr_pools.h"
 #include "apr_dso.h"
+#include "apr_env.h"
 #include "apr_strings.h"
 #include "apr_tables.h"
 #include "apr_lib.h"
@@ -92,10 +93,7 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
         while (0 != (*ptr++ = apr_tolower(*name++)))
             ;
 
-        /* FIXME: Should use apr_env_get instead, to get correct path
-                  encoding on Windows. */
-        ptr = getenv("APR_ICONV_PATH");
-        if (ptr != NULL
+        if (!apr_env_get(&ptr, "APR_ICONV_PATH", subpool)
             && !apr_filepath_list_split(&pathelts, ptr, subpool))
         {
             int i;
