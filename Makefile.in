@@ -1,0 +1,78 @@
+#
+# Top-level Makefile for APRICONV
+#
+TARGET_LIB = lib/libapriconv.la
+TARGET_EXPORTS = lib/apriconv.exports
+
+TARGETS = delete-lib $(TARGET_LIB) delete-exports $(TARGET_EXPORTS)
+
+# bring in rules.mk for standard functionality
+@INCLUDE_RULES@
+
+SUBDIRS = lib ccs ces util
+CLEAN_SUBDIRS = . lib ccs ces util
+
+CLEAN_TARGETS = $(TARGET_EXPORTS)
+DISTCLEAN_TARGETS = config.cache config.log config.status \
+	export_vars.sh
+EXTRACLEAN_TARGETS = configure libtool aclocal.m4
+
+### install location
+prefix=@prefix@
+exec_prefix=@prefix@/bin
+lib_prefix=@prefix@/lib
+libdir=@iconv_libdir@
+includedir=@includedir@
+
+
+delete-lib:
+	@if test -f $(TARGET_LIB); then \
+	    objects="`find $(SUBDIRS) -name '*.lo' -a -newer $(TARGET_LIB)`" ; \
+	    if test -n "$$objects"; then \
+		echo Found newer objects. Will relink $(TARGET_LIB). ; \
+		echo $(RM) -f $(TARGET_LIB) ; \
+		$(RM) -f $(TARGET_LIB) ; \
+	    fi \
+	fi
+
+install: $(TARGET_LIB)
+	if [ ! -d $(includedir) ]; then \
+	    @APR_SOURCE_DIR@/build/mkdir.sh $(includedir); \
+	fi; \
+	cp lib/*.h $(includedir); \
+	if [ ! -d $(lib_prefix) ]; then \
+	    @APR_SOURCE_DIR@/build/mkdir.sh $(lib_prefix); \
+	fi; \
+	$(LIBTOOL) --mode=install cp $(TARGET_LIB) $(lib_prefix)
+	if [ ! -d $(libdir) ]; then \
+	    @APR_SOURCE_DIR@/build/mkdir.sh $(libdir); \
+	fi; \
+	(cd ccs; $(LIBTOOL) --mode=install cp *.la $(libdir))
+	(cd ces; $(LIBTOOL) --mode=install cp *.la $(libdir))
+	if [ ! -d $(exec_prefix) ]; then \
+	    @APR_SOURCE_DIR@/build/mkdir.sh $(exec_prefix); \
+	fi; \
+	(cd util/.libs; $(LIBTOOL) --mode=install cp iconv $(exec_prefix))
+
+$(TARGET_LIB):
+	(cd lib; make)
+
+delete-exports:
+	@if test -f $(TARGET_EXPORTS); then \
+	    headers="`find lib/*.h -newer $(TARGET_EXPORTS)`" ; \
+	    if test -n "$$headers"; then \
+		echo Found newer headers. Will rebuild $(TARGET_EXPORTS). ; \
+		echo $(RM) -f $(TARGET_EXPORTS) ; \
+		$(RM) -f $(TARGET_EXPORTS) ; \
+	    fi \
+	fi
+
+$(TARGET_EXPORTS):
+	$(AWK) -f @APR_SOURCE_DIR@/build/make_export.awk lib/*.h > $@ ;
+
+docs:
+	mkdir ./docs
+	perl @APR_SOURCE_DIR@/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
+
+
+.PHONY: delete-lib delete-exports
