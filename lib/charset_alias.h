@@ -394,6 +394,20 @@ static const char *charset_alias_find (const char *name)
 {
     struct charset_alias key;
     struct charset_alias *alias;
+#if 'A' == '\xC1' /* if EBCDIC host */
+    /* The table is sorted in ASCII collation order, not in EBCDIC order.
+     * At the first access, we sort it automatically
+     * Criterion for the 1st time initialization is the fact that the
+     * 1st name in the list starts with a digit (in ASCII, numbers
+     * have a lower ordinal value than alphabetic characters; while
+     * in EBCDIC, their ordinal value is higher)
+     */
+    if (isdigit(charset_alias_list[0].name[0]))  {
+        qsort((void *)charset_alias_list, charset_alias_count,
+	      sizeof(charset_alias_list[0]),
+	      charset_alias_compare);
+    }
+#endif
     key.name = name;
     alias = bsearch(&key, charset_alias_list, charset_alias_count,
                     sizeof(charset_alias_list[0]),
