@@ -81,7 +81,7 @@ static void closeapr(void)
 int
 main(int argc, char * const *argv)
 {
-	iconv_t cd;
+	apr_iconv_t cd;
 	iconv_stream *is;
 	char *from = NULL, *to = NULL, *input = NULL;
 	int opt;
@@ -98,6 +98,10 @@ main(int argc, char * const *argv)
 			break;
 		    case 's':
 			input = optarg;
+			break;
+		    default:
+			fprintf(stderr, "Usage: iconv -f <name> -t <name> [-s <input>]\n");
+			exit(3);
 		}
 	}
 	if (from == NULL) {
@@ -118,9 +122,9 @@ main(int argc, char * const *argv)
 	}
 
 	/* Use it */
-	status = apr_iconv_open(to, from,ctx, &cd);
+	status = apr_iconv_open(to, from, ctx, &cd);
 	if (status) {
-		fprintf(stderr, "unable to open specified convertor\n");
+		fprintf(stderr, "unable to open specified converter\n");
 		exit(6);
 		}
 	if (!(is = iconv_ostream_fopen(cd, stdout))) {

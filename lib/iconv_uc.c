@@ -131,7 +131,7 @@ iconv_uc_conv(void *data, const unsigned char **inbuf, apr_size_t *inbytesleft,
  *  2: 2/1
  */
 int
-iconv_byteratio(iconv_t cd)
+iconv_byteratio(apr_iconv_t cd)
 {
 	iconv_data *idata = (iconv_data *)cd;
 	int from, to;
