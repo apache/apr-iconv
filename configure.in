@@ -34,7 +34,7 @@ dnl copy apr's rules.mk into our build directory.
 if test ! -d $api_builddir/build ; then
   mkdir $api_builddir/build
 fi
-dnl cp $APR_BUILD_DIR/apr_rules.mk $api_builddir/build/rules.mk
+cp $APR_BUILD_DIR/apr_rules.mk $api_builddir/build/rules.mk
 
 dnl
 dnl set up the compilation flags and stuff
