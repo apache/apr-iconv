@@ -87,30 +87,34 @@ ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
 LDFLAGS      = /WARN:0
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
-!IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
-ALL_REBASE = -d -p -b $(REBASE_TOP) -x $(OUTPUT_DIR)
-!ELSE
-ALL_REBASE = -d -p -b $(REBASE_TOP)
-!ENDIF
-REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
-
 .c{$(OUTPUT_DIR)}.so:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 	$(SILENT)echo Compiling $@...
 	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
-		/link $(ALL_LDFLAGS) /out:$@ \
+		/link $(ALL_LDFLAGS) /out:$@ /base:@"..\build\BaseAddr.ref",$@ \
 		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
 	$(SILENT)del "$*.lib"
 
-all: $(ALL_TARGETS) $(REBASE_STAMP)
+all: $(ALL_TARGETS)
 
-$(REBASE_STAMP): $(ALL_TARGETS) 
+
+# The rebase target below is used only to *regenerate* the BaseAddr.ref file
+# if the module list or sizes change considerably.  Use the rebase target to
+
+# to create the BaseAddr.0xNNNNNNNN.txt file of the rebase results, 
+# then remerge it back into the explicit build/BaseAddr.ref file.
+#
+BASE_REF = $(OUTPUT_DIR)\BaseAddr.$(REBASE_TOP).txt
+ALL_REBASE = -d -p -b $(REBASE_TOP) -C $(BASE_REF) 
+
+rebase: $(ALL_TARGETS) 
 	$(SILENT)echo Extracting .dbg symbols and rebasing all modules...
-	$(SILENT)rebase $(ALL_REBASE) $(ALL_TARGETS) >$(REBASE_STAMP)
+	$(SILENT)rebase $(ALL_REBASE) $(ALL_TARGETS)
 	$(SILENT)echo.
+
 
 clean:
 	-$(SILENT)if exist "$(OUTPUT_DIR)/$(NULL)" $(rmdir) $(OUTPUT_DIR)
@@ -121,15 +125,7 @@ install:
 	$(SILENT)copy $(OUTPUT_DIR)\*.so "$(INSTALL_DIR)" < <<
 A
 <<
-
-symbols:
 	@echo Copying apr-iconv pdb debugging symbols from $(OUTPUT_DIR) to $(INSTALL_DIR)
 	$(SILENT)copy $(OUTPUT_DIR)\*.pdb "$(INSTALL_DIR)" < <<
 A
 <<
-!IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
-	@echo Copying apr-iconv dbg debugging symbols from $(OUTPUT_DIR) to $(SYMBOLS_DIR)
-	$(SILENT)copy $(OUTPUT_DIR)\*.dbg "$(SYMBOLS_DIR)\so" < <<
-A
-<<
-!ENDIF
