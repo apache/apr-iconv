@@ -1,8 +1,10 @@
 # -*- Makefile -*-
 !IF "$(OS)" == "Windows_NT"
 NULL=
+rmdir=rd /s /q
 !ELSE
 NULL=nul
+rmdir=deltree /y
 !ENDIF
 
 SILENT=@
@@ -99,7 +101,11 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 	$(SILENT)del "$*.exp"
 	$(SILENT)del "$*.lib"
 
-all: $(ALL_TARGETS)
+all: $(ALL_TARGETS) rebase
+
+rebase:
+	$(SILENT)rebase -d -b $(REBASE_TOP) -q $(ALL_TARGETS)
 
 clean:
-	-$(SILENT)del *.exp *.lib *.obj *.so
+	-$(SILENT)if exist "$(OUTPUT_DIR)/$(NULL)" $(rmdir) $(OUTPUT_DIR)
+
