@@ -1,25 +1,14 @@
-LIB=		iconv
-SHLIB_MAJOR=	1
-SHLIB_MINOR=	0
-SRCS=		iconv_module.c iconv.c iconv_int.c iconv_uc.c \
-		iconv_ces.c iconv_ces_euc.c iconv_ces_iso2022.c
+# Generated automatically from Makefile.in by configure.
+libdir = /usr/local/lib
+TARGET_LIB = libapriconv.la
+TARGET_EXPORTS = apriconv.exports
+OBJECTS=        iconv_module.lo iconv.lo iconv_int.lo iconv_uc.lo \
+                iconv_ces.lo iconv_ces_euc.lo iconv_ces_iso2022.lo
 
-LIBDIR=		${PREFIX}/lib
+$(TARGET_LIB):	$(OBJECTS)
+	$(LINK) -rpath $(libdir) $(OBJECTS)                                     
 
-INCDIR=		${PREFIX}/include
-INCS=		iconv.h
-
-CFLAGS+=	-DICONV_DEFAULT_PATH=\"${MODULEDIR}\"
-MAN3=		iconv.3 iconv_open.3 iconv_close.3
-
-iconv.3:	iconv.3.in
-		sed "s|@@MODULE_DIR@@|${MODULEDIR}|" ${.ALLSRC} > ${.TARGET}
-
-iconv_open.3:	iconv_open.3.in
-		sed "s|@@MODULE_DIR@@|${MODULEDIR}|" ${.ALLSRC} > ${.TARGET}
-
-CLEANFILES=	lib${LIB}.a ${SHLIB_NAME} ${SHLIB_LINK} ${SOBJS} ${OBJS} \
-		iconv.3 iconv_open.3
-
+all:		$(TARGET_LIB)
+ 
 # bring in rules.mk for standard functionality                                  
 @INCLUDE_RULES@

@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <err.h>	/* warnx */
 #include <errno.h>	/* errno */
 #include <limits.h>	/* PATH_MAX */
 #include <stdlib.h>	/* free, malloc */
@@ -56,7 +55,7 @@ iconv_ces_open(const char *cesname, struct iconv_ces **cespp)
 		iconv_mod_unload(mod);
 		return ENOMEM;
 	}
-	bzero(ces, sizeof(*ces));
+	memset(ces,0, sizeof(*ces));
 	ces->desc = (struct iconv_ces_desc*)mod->im_desc->imd_data;
 	ces->data = mod->im_data;
 	ces->mod = mod;
@@ -100,7 +99,7 @@ iconv_ces_close_func(struct iconv_ces *ces)
 void
 iconv_ces_reset_func(struct iconv_ces *ces)
 {
-	bzero(ces->data, sizeof(int));
+	memset(ces->data, 0, sizeof(int));
 }
 
 /*ARGSUSED*/

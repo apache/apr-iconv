@@ -46,7 +46,7 @@ iconv_malloc(size_t size, void **pp)
 
 	if (p == NULL)
 		return errno;
-	bzero(p, size);
+	memset(p, 0, size);
 	*pp = p;
 	return 0;
 }

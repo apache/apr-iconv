@@ -78,6 +78,7 @@ iconv_getpath(char *buf, const char *name)
 					return 0;
 				}
 			}
+			free(ptr); /* otherwise memory leak */
 		}
 	}
 	return iconv_getpathname(buf, ICONV_DEFAULT_PATH, buffer);
@@ -90,7 +91,6 @@ iconv_dlopen(const char *name, const char *symbol, void **hpp, void **dpp)
 
 	handle = dlopen(name, RTLD_LAZY);
 	if (handle == NULL) {
-		warnx("cannot dlopen file %s: %s", name, dlerror());
 		return EINVAL;
 	}
 	data = dlsym(handle, symbol);
@@ -100,7 +100,6 @@ iconv_dlopen(const char *name, const char *symbol, void **hpp, void **dpp)
 		return 0;
 	}
 	dlclose(handle);
-	iconv_warnx("invalid file %s: no external symbol %s", name, symbol);
 	return EINVAL;
 }
 
@@ -129,7 +128,7 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 		dlclose(handle);
 		return ENOMEM;
 	}
-	bzero(mod, sizeof(*mod));
+	memset(mod, 0, sizeof(*mod));
 	mod->im_handle = handle;
 	mod->im_desc = mdesc;
 	mod->im_args = args;

@@ -32,7 +32,7 @@
 
 #include <errno.h>
 #include <stdlib.h>	/* free, malloc */
-#include <string.h>	/* bzero, memcmp, memcpy */
+#include <string.h>	/* memset, memcmp, memcpy */
 
 #define ICONV_INTERNAL
 #include <iconv.h>
@@ -83,7 +83,7 @@ iconv_iso2022_open(struct iconv_ces *ces)
 	state = (iconv_ces_iso2022_state_t *)malloc(stsz + shiftsz);
 	if (state == NULL)
 		return errno;
-	bzero(state, stsz + shiftsz);
+	memset(state, 0, stsz + shiftsz);
 	ces->data = state;
 	state->shift_tab = (int*)((char*)state + stsz);
 	state->org_shift_tab = ces->desc->data;

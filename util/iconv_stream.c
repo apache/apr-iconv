@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <err.h>	/* warnx */
 #include <errno.h>	/* E2BIG, EINVAL, errno */
 #include <stdio.h>	/* FILE, ferror, fwrite */
 #include <stdlib.h>	/* free, malloc */
@@ -73,7 +72,7 @@ ssize_t iconv_write(void *handle, const void *buf, size_t insize)
     size_t chars;
     if (!buf)
         insize = 0;
-    chars = iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize);
+    chars = apr_iconv(stream->cd, (const char **)&buf, &insize, &outbuf, &outsize);
     if ((int)chars < 0)
         return -1;
     stream->chars += chars;
@@ -107,7 +106,6 @@ ssize_t iconv_bwrite(void *handle, const void *buf, size_t insize)
         do {
             left = stream->buffer + buf_size - stream->buf_ptr;
             if (!left) {
-        	warnx("iconv_bwrite: lack of space in the output buffer");
         	errno = E2BIG;
                 return -1;
             }

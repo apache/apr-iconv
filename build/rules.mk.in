@@ -132,7 +132,7 @@ all-recursive depend-recursive clean-recursive distclean-recursive \
 	fi
 
 local-clean:
-	$(RM) -f *.o *.lo *.a *.la *.so $(CLEAN_TARGETS) $(PROGRAMS)
+	$(RM) -f *.o *.lo *.a *.la *.so *.slo $(CLEAN_TARGETS) $(PROGRAMS)
 	$(RM) -rf .libs
 
 local-distclean: local-clean
