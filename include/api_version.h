@@ -65,13 +65,6 @@ extern "C" {
 /** patch level */
 #define API_PATCH_VERSION       0
 
-/** 
- *  This symbol is defined for internal, "development" copies of API. This
- *  symbol will be #undef'd for releases. 
- */
-#define API_IS_DEV_VERSION
-
-
 /** The formatted string of API's version */
 #define API_VERSION_STRING \
      APR_STRINGIFY(API_MAJOR_VERSION) "." \
