@@ -8,7 +8,7 @@ AC_INIT(build/rules.mk.in)
 AC_CONFIG_AUX_DIR(../apr/build)
 AC_CONFIG_HEADER(lib/apr_iconv_private.h)
 AC_PREFIX_DEFAULT(/usr/local/apache2)
-test "$prefix" = "NONE" && prefix='/usr/local/apache2'
+#test "$prefix" = "NONE" && prefix='/usr/local/apache2'
 
 AC_PROG_CC
 AC_PROG_AWK
@@ -62,6 +62,8 @@ AC_SUBST(APRUTIL_EXPORT_LIBS)
 # Adds in config *.h file
 AC_DEFINE_UNQUOTED(ICONV_DEFAULT_PATH,"$prefix/lib/iconv",
 	[ Directory where the *.so tables are stored ] )
+iconv_libdir=$prefix/lib/iconv
+AC_SUBST(iconv_libdir)
 
 dnl
 dnl BSD/OS (BSDi) needs to use a different include syntax in the Makefiles
