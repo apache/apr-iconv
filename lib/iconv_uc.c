@@ -1,10 +1,8 @@
-#include <err.h>
-#include <errno.h>
+#define ICONV_INTERNAL
+#include "iconv.h"
+
 #include <stdlib.h>
 #include <string.h>
-
-#define ICONV_INTERNAL
-#include <iconv.h>
 
 struct iconv_uc {
 	struct iconv_ces *	from;
@@ -23,86 +21,89 @@ struct iconv_converter_desc iconv_uc_desc = {
 	iconv_uc_conv
 };
 
-int
-iconv_uc_open(const char *to, const char *from, void **data)
+/*
+ * It is call by apr_iconv_open: (*idesc)->icd_open()
+ */
+apr_status_t
+iconv_uc_open(const char *to, const char *from, void **data, apr_pool_t *ctx)
 {
 	struct iconv_uc *ic;
 	int error;
 
 	ic = malloc(sizeof(*ic));
 	if (ic == NULL)
-		return ENOMEM;
-	bzero(ic, sizeof(*ic));
-	error = iconv_ces_open(from, &ic->from);
-	if (error)
+		return APR_ENOMEM;
+	memset(ic, 0, sizeof(*ic));
+	error = iconv_ces_open(from, &ic->from, ctx);
+	if (error!=APR_SUCCESS) {
 		goto bad;
-	error = iconv_ces_open(to, &ic->to);
-	if (error)
+	}
+	error = iconv_ces_open(to, &ic->to, ctx);
+	if (error!=APR_SUCCESS) {
 		goto bad;
+	}
 	ic->ignore_ilseq = 0;
 	ic->missing = '_';
 	*data = (void*)ic;
-	return 0;
+	return APR_SUCCESS;
 bad:
-	iconv_uc_close(ic);
+	iconv_uc_close(ic,ctx);
 	return error;
 }
 
-int
-iconv_uc_close(void *data)
+apr_status_t
+iconv_uc_close(void *data, apr_pool_t *ctx)
 {
 	struct iconv_uc *ic = (struct iconv_uc *)data;
 
 	if (ic == NULL)
-		return EBADF;
+		return APR_EBADF;
 	if (ic->from)
-		iconv_ces_close(ic->from);
+		iconv_ces_close(ic->from, ctx);
 	if (ic->to)
-		iconv_ces_close(ic->to);
+		iconv_ces_close(ic->to, ctx);
 	free(ic);
-	return 0;
+	return APR_SUCCESS;
 }
 
-size_t
-iconv_uc_conv(void *data, const unsigned char **inbuf, size_t *inbytesleft,
-	unsigned char **outbuf, size_t *outbytesleft)
+apr_status_t
+iconv_uc_conv(void *data, const unsigned char **inbuf, apr_size_t *inbytesleft,
+	unsigned char **outbuf, apr_size_t *outbytesleft, apr_size_t *res)
 {
 	struct iconv_uc *ic = (struct iconv_uc *)data;
 	const unsigned char *ptr;
 	ucs_t ch;
-        ssize_t size;
-	size_t res = 0;
+        apr_ssize_t size;
 
+	*res = (apr_size_t)(0);
 	if (data == NULL) {
-		errno = EBADF;
-		return (size_t)(-1);
+		*res = (apr_size_t) -1;
+		return APR_EBADF;
 	}
+
 	if (inbuf == NULL || *inbuf == NULL) {
 		if (ICONV_CES_CONVERT_FROM_UCS(ic->to, UCS_CHAR_NONE,
 		    outbuf, outbytesleft) <= 0) {
-			errno = E2BIG;
-			return (size_t)(-1);
+			*res = (apr_size_t) -1;
+			return APR_BADARG; /* too big */
 		}
 		ICONV_CES_RESET(ic->from);
 		ICONV_CES_RESET(ic->to);
-		return res;
+		return APR_SUCCESS;
 	}
 	if (inbytesleft == NULL || *inbytesleft == 0)
-		return 0;
+		return APR_SUCCESS;
 	while (*inbytesleft > 0 && *outbytesleft > 0) {
 		ptr = *inbuf;
 		ch = ICONV_CES_CONVERT_TO_UCS(ic->from, inbuf, inbytesleft);
-		if (ch == UCS_CHAR_NONE) {
-			errno = EINVAL;
-			return res;
-		}
+		if (ch == UCS_CHAR_NONE)
+			return APR_EINVAL;
 		if (ch == UCS_CHAR_INVALID) { /* Invalid character in source buffer */
 			if (ic->ignore_ilseq)
 				continue;
 			*inbytesleft += *inbuf - ptr;
 			*inbuf = ptr;
-			errno = EILSEQ;
-			return res;
+			return APR_BADCH; /* eilseq invalid */
 		}
 		size = ICONV_CES_CONVERT_FROM_UCS(ic->to, ch,
 		    outbuf, outbytesleft);
@@ -110,16 +111,15 @@ iconv_uc_conv(void *data, const unsigned char **inbuf, size_t *inbytesleft,
 			size = ICONV_CES_CONVERT_FROM_UCS(ic->to, ic->missing,
 			    outbuf, outbytesleft);
 			if (size)
-				res ++;
+				*res ++;
 		}
 		if (!size) {		 /* No space to write to */
 			*inbytesleft += *inbuf - ptr;
 			*inbuf = ptr; 
-			errno = E2BIG;
-			return res;
+			return APR_BADARG; /* too big */
 		}
 	}
-	return res;
+	return APR_SUCCESS;
 }
 
 #if 0
