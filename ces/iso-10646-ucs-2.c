@@ -70,7 +70,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	return 1;
 }
 
-static __inline ucs_t
+static APR_INLINE ucs_t
 msb(const unsigned char *buf)
 {
 	return (buf[0] << 8) | buf[1];

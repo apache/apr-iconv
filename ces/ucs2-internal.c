@@ -43,7 +43,7 @@ ucs2_names(struct iconv_ces *ces)
 	return names;
 }
 
-static __inline int
+static APR_INLINE int
 ucs2_nbytes(struct iconv_ces *ces)
 {
 	return sizeof(ucs2_t);

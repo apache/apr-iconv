@@ -34,19 +34,22 @@
 
 #include <sys/types.h>	/* size_t */
 #include <stddef.h>	/* NULL */
+#include <inttypes.h>
+
+#include "apr.h"
 
 /*
  * iconv_t:	charset conversion descriptor type
  */
 typedef void *iconv_t;
 
-__BEGIN_DECLS
+/* __BEGIN_DECLS */
 
 iconv_t	iconv_open(const char *, const char *);
 size_t	iconv(iconv_t, const char **, size_t *, char **, size_t *);
 int	iconv_close(iconv_t);
 
-__END_DECLS
+/* __END_DECLS */
 
 
 #ifdef ICONV_INTERNAL
@@ -192,19 +195,19 @@ struct iconv_ccs_desc {
 /*
  * inline functions for use in charset conversion modules
  */
-static __inline ucs2_t
+static APR_INLINE ucs2_t
 iconv_ccs_convert_7bit(const iconv_ccs_convtable *table, ucs2_t ch)
 {
 	return ch & 0x80 ? UCS_CHAR_INVALID : table->_7bit.data[ch];
 }
 
-static __inline ucs2_t
+static APR_INLINE ucs2_t
 iconv_ccs_convert_8bit(const iconv_ccs_convtable *table, ucs2_t ch)
 {
 	return table->_8bit.data[ch];
 }
 
-static __inline ucs2_t
+static APR_INLINE ucs2_t
 iconv_ccs_convert_14bit(const iconv_ccs_convtable *table, ucs2_t ch)
 {
 	const iconv_ccs_convtable_7bit *sub_table;
@@ -213,7 +216,7 @@ iconv_ccs_convert_14bit(const iconv_ccs_convtable *table, ucs2_t ch)
 	return sub_table ? sub_table->data[ch & 0x7F] : UCS_CHAR_INVALID;
 }
 
-static __inline ucs2_t
+static APR_INLINE ucs2_t
 iconv_ccs_convert_16bit(const iconv_ccs_convtable *table, ucs2_t ch)
 {
 	const iconv_ccs_convtable_8bit *sub_table;
@@ -325,19 +328,6 @@ typedef struct {
 
 ICONV_CES_DRIVER_DECL(iso2022);
 
-
-#ifdef ICONV_DEBUG
-void iconv_debug(const char *file, int line, const char *function,
-	const char *format, ...);
-#define idebug(format, args...) \
-		iconv_debug(__FILE__, __LINE__, __FUNCTION__, format , ## args)
-#include <err.h>
-#define iconv_warnx(format, args...) \
-		warnx(__FUNCTION__ # format , ## args)
-#else
-#define idebug(format, args...)
-#define iconv_warnx(format, args...)
-#endif
 
 int  iconv_mod_load(const char *, int, const void *, struct iconv_module **);
 int  iconv_mod_unload(struct iconv_module *);
