@@ -32,10 +32,8 @@
 #ifndef _ICONV_H_
 #define _ICONV_H_
 
-#include <sys/types.h>	/* size_t */
-#include <stddef.h>	/* NULL */
-
 #include "apr.h"
+#include "apr_pools.h"
 
 /* To be processed by configure */
 #define ICONV_DEFAULT_PATH "/usr/local/lib/iconv"
@@ -53,9 +51,9 @@ typedef void *iconv_t;
 
 /* __BEGIN_DECLS */
 
-iconv_t	apr_iconv_open(const char *, const char *);
-size_t	apr_iconv(iconv_t, const char **, size_t *, char **, size_t *);
-int	apr_iconv_close(iconv_t);
+iconv_t	apr_iconv_open(const char *, const char *, apr_pool_t *);
+apr_size_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *);
+int	apr_iconv_close(iconv_t, apr_pool_t *);
 
 /* __END_DECLS */
 
@@ -90,7 +88,9 @@ struct iconv_module_depend {
 
 struct iconv_module;
 
-typedef int iconv_mod_event_t(struct iconv_module *, int);
+/* _tbl_simple.c table_load_ccs() calls iconv_mod_load(...ctx) */
+
+typedef int iconv_mod_event_t(struct iconv_module *, int, apr_pool_t *ctx );
 
 struct iconv_module_desc {
 	int		imd_type;
@@ -115,17 +115,17 @@ struct iconv_module {
 	const void *	im_args;
 };
 
-#define	ICONV_MOD_LOAD(mod)	(mod)->im_desc->imd_event(mod, ICMODEV_LOAD)
-#define	ICONV_MOD_UNLOAD(mod)	(mod)->im_desc->imd_event(mod, ICMODEV_UNLOAD)
-#define	ICONV_MOD_DYNDEPS(mod)	(mod)->im_desc->imd_event(mod, ICMODEV_DYNDEPS)
+#define	ICONV_MOD_LOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_LOAD,ctx)
+#define	ICONV_MOD_UNLOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_UNLOAD,ctx)
+#define	ICONV_MOD_DYNDEPS(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_DYNDEPS,ctx)
 
 /*
  * iconv converter definitions.
  */
-typedef int iconv_open_t(const char *, const char *, void **);
-typedef int iconv_close_t(void *);
-typedef size_t iconv_conv_t(void *, const unsigned char **, size_t *,
-	unsigned char **, size_t *);
+typedef int iconv_open_t(const char *, const char *, void **, apr_pool_t *);
+typedef int iconv_close_t(void *, apr_pool_t *);
+typedef apr_size_t iconv_conv_t(void *, const unsigned char **, apr_size_t *,
+	unsigned char **, apr_size_t *);
 
 struct iconv_converter_desc {
 	iconv_open_t *	icd_open;
@@ -244,7 +244,7 @@ iconv_ccs_convert_16bit(const iconv_ccs_convtable *table, ucs2_t ch)
  */
 struct iconv_ces;
 
-typedef int  iconv_ces_open_t(struct iconv_ces *);
+typedef int  iconv_ces_open_t(struct iconv_ces *, apr_pool_t *);
 typedef	int  iconv_ces_close_t(struct iconv_ces *);
 typedef	void iconv_ces_reset_t(struct iconv_ces *);
 typedef	const char * const *iconv_ces_names_t(struct iconv_ces *);
@@ -253,11 +253,11 @@ typedef	int  iconv_ces_nbytes_t(struct iconv_ces *);
 
 typedef ssize_t iconv_ces_convert_from_ucs_t
     (struct iconv_ces *data, ucs_t in,
-    unsigned char **outbuf, size_t *outbytesleft);
+    unsigned char **outbuf, apr_size_t *outbytesleft);
 
 typedef ucs_t iconv_ces_convert_to_ucs_t
     (struct iconv_ces *data,
-    const unsigned char **inbuf, size_t *inbytesleft);
+    const unsigned char **inbuf, apr_size_t *inbytesleft);
 
 struct iconv_ces_desc {
 	iconv_ces_open_t *	open;
@@ -277,8 +277,8 @@ struct iconv_ces {
 	struct iconv_module *	mod;
 };
 
-int  iconv_ces_open(const char *ces_name, struct iconv_ces **cespp);
-int  iconv_ces_close(struct iconv_ces *ces);
+int  iconv_ces_open(const char *ces_name, struct iconv_ces **cespp, apr_pool_t *ctx);
+int  iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx);
 int  iconv_ces_open_func(struct iconv_ces *ces);
 int  iconv_ces_close_func(struct iconv_ces *ces);
 void iconv_ces_reset_func(struct iconv_ces *ces);
@@ -289,7 +289,7 @@ int  iconv_ces_zero(struct iconv_ces *ces);
 
 #define iconv_char32bit(ch)	((ch) & 0xFFFF0000)
 
-#define	ICONV_CES_OPEN(ces)	(ces)->desc->open(ces)
+#define	ICONV_CES_OPEN(ces,ctx)	(ces)->desc->open(ces,ctx)
 #define	ICONV_CES_CLOSE(ces)	(ces)->desc->close(ces)
 #define ICONV_CES_RESET(ces)	(ces)->desc->reset(ces)
 #define ICONV_CES_CONVERT_FROM_UCS(cesd, in, outbuf, outbytes) \
@@ -313,7 +313,7 @@ int  iconv_ces_zero(struct iconv_ces *ces);
 
 typedef struct iconv_ces_euc_ccs {
 	const char	*prefix;
-	size_t		prefixlen;
+	apr_size_t		prefixlen;
 } iconv_ces_euc_ccs_t;
 
 ICONV_CES_DRIVER_DECL(euc);
@@ -326,7 +326,7 @@ enum { ICONV_SHIFT_SI = 0, ICONV_SHIFT_SO, ICONV_SHIFT_SS2, ICONV_SHIFT_SS3 };
 typedef struct iconv_ces_iso2022_ccs {
 	int		shift;
 	const char *	designator;
-	size_t		designatorlen;
+	apr_size_t		designatorlen;
 } iconv_ces_iso2022_ccs_t;
 
 typedef struct {
@@ -338,13 +338,13 @@ typedef struct {
 ICONV_CES_DRIVER_DECL(iso2022);
 
 
-int  iconv_mod_load(const char *, int, const void *, struct iconv_module **);
-int  iconv_mod_unload(struct iconv_module *);
+int  iconv_mod_load(const char *, int, const void *, struct iconv_module **, apr_pool_t *);
+int  iconv_mod_unload(struct iconv_module *,apr_pool_t *ctx);
 iconv_mod_event_t iconv_mod_noevent;
 
 iconv_mod_event_t iconv_ccs_event;
 
-int  iconv_malloc(size_t size, void **pp);
+int  iconv_malloc(apr_size_t size, void **pp);
 
 extern struct iconv_converter_desc iconv_uc_desc;
 

@@ -37,7 +37,7 @@
 #include <string.h>
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static struct iconv_converter_desc *converters[] = {
 	&iconv_uc_desc,		/* CS1-UNICODE-CS2 converter */
@@ -68,7 +68,7 @@ apr_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
 }
 
 iconv_t
-apr_iconv_open(const char *to, const char *from)
+apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx)
 {
 	struct iconv_converter_desc **idesc;
 	struct iconv_converter *icp;
@@ -80,7 +80,7 @@ apr_iconv_open(const char *to, const char *from)
 		return (iconv_t)(-1);
 	error = EINVAL;
 	for (idesc = converters; *idesc; idesc++) {
-		error = (*idesc)->icd_open(to, from, &data);
+		error = (*idesc)->icd_open(to, from, &data, ctx);
 		if (error == 0)
 			break;
 	}
@@ -95,7 +95,7 @@ apr_iconv_open(const char *to, const char *from)
 }
 
 int
-apr_iconv_close(iconv_t cd)
+apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	int error = 0;
@@ -105,7 +105,7 @@ apr_iconv_close(iconv_t cd)
 		return -1;
 	}
 	if (icp->ic_desc)
-		error = icp->ic_desc->icd_close(icp->ic_data);
+		error = icp->ic_desc->icd_close(icp->ic_data, ctx);
 		
 	free(icp);
 	return error;
@@ -116,7 +116,7 @@ apr_iconv_close(iconv_t cd)
 #include <iconv.h>
 
 iconv_t apr_iconv_open(const char *to_charset,
-            const char *from_charset)
+            const char *from_charset, apr_pool_t *ctx)
 {
 	return (iconv_open(to_charset, from_charset));
 }

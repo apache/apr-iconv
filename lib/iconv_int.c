@@ -37,7 +37,7 @@
 #include <string.h>	/* strdup, strlen */
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 int
 iconv_malloc(size_t size, void **pp)

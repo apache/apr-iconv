@@ -35,7 +35,7 @@
 #include <string.h>	/* memset, memcmp, memcpy */
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 typedef struct {
 	const char	*sequence;
@@ -68,7 +68,7 @@ typedef struct iconv_ces_iso2022_state {
 } iconv_ces_iso2022_state_t;
 
 int
-iconv_iso2022_open(struct iconv_ces *ces)
+iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	const iconv_ces_iso2022_ccs_t *ccsattr;
 	const struct iconv_ccs_desc *ccs;

@@ -1,10 +1,9 @@
-#include <err.h>
+#define ICONV_INTERNAL
+#include "iconv.h"
+
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-
-#define ICONV_INTERNAL
-#include <iconv.h>
 
 struct iconv_uc {
 	struct iconv_ces *	from;
@@ -24,7 +23,7 @@ struct iconv_converter_desc iconv_uc_desc = {
 };
 
 int
-iconv_uc_open(const char *to, const char *from, void **data)
+iconv_uc_open(const char *to, const char *from, void **data, apr_pool_t *ctx)
 {
 	struct iconv_uc *ic;
 	int error;
@@ -33,10 +32,10 @@ iconv_uc_open(const char *to, const char *from, void **data)
 	if (ic == NULL)
 		return ENOMEM;
 	memset(ic, 0, sizeof(*ic));
-	error = iconv_ces_open(from, &ic->from);
+	error = iconv_ces_open(from, &ic->from, ctx);
 	if (error)
 		goto bad;
-	error = iconv_ces_open(to, &ic->to);
+	error = iconv_ces_open(to, &ic->to, ctx);
 	if (error)
 		goto bad;
 	ic->ignore_ilseq = 0;
@@ -44,21 +43,21 @@ iconv_uc_open(const char *to, const char *from, void **data)
 	*data = (void*)ic;
 	return 0;
 bad:
-	iconv_uc_close(ic);
+	iconv_uc_close(ic,ctx);
 	return error;
 }
 
 int
-iconv_uc_close(void *data)
+iconv_uc_close(void *data, apr_pool_t *ctx)
 {
 	struct iconv_uc *ic = (struct iconv_uc *)data;
 
 	if (ic == NULL)
 		return EBADF;
 	if (ic->from)
-		iconv_ces_close(ic->from);
+		iconv_ces_close(ic->from, ctx);
 	if (ic->to)
-		iconv_ces_close(ic->to);
+		iconv_ces_close(ic->to, ctx);
 	free(ic);
 	return 0;
 }
