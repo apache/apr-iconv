@@ -111,3 +111,9 @@ install:
 	$(SILENT)copy $(OUTPUT_DIR)\*.so "$(INSTALL_DIR)" < <<
 A
 <<
+	@echo Copying apr-iconv debugging symbols from $(OUTPUT_DIR) to $(INSTALL_DIR)
+!IF "$(BUILD_MODE)" == "debug" || "$(BUILD_MODE)" == "Debug"
+	$(SILENT)copy $(OUTPUT_DIR)\*.pdb "$(INSTALL_DIR)" < <<
+A
+<<
+!ENDIF
