@@ -4,3 +4,5 @@ config.sub
 find_apr.m4
 install.sh
 mkdir.sh
+make_exports.awk
+make_var_export.awk
