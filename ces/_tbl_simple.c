@@ -72,13 +72,13 @@ ces_nbytes(struct iconv_ces *ces)
 	return res == 16 ? 0 : (res > 8 ? 2 : 1);
 }
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft)
+	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	struct iconv_ccs_desc *ccsd = ces->data;
 	ucs_t res;
-	size_t bytes;
+	apr_size_t bytes;
 
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
@@ -99,12 +99,12 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 
 static ucs_t
 convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
-	size_t *inbytesleft)
+	apr_size_t *inbytesleft)
 {
 	struct iconv_ccs_desc *ccsd = ces->data;
 	unsigned char byte = *(*inbuf);
 	ucs_t res = ICONV_CCS_CONVERT_TO_UCS(ccsd, byte);
-	size_t bytes = (res == UCS_CHAR_INVALID && table_nbits(ces) > 8) ? 2 : 1;
+	apr_size_t bytes = (res == UCS_CHAR_INVALID && table_nbits(ces) > 8) ? 2 : 1;
 
 	if (*inbytesleft < bytes)
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
