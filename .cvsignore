@@ -5,3 +5,8 @@ config.status
 configure
 libtool
 shlibtool
+Debug
+Release
+LibD
+LibR
+*.plg
