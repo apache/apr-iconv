@@ -128,6 +128,10 @@ SOURCE=.\lib\iconv_uc.c
 # PROP Default_Filter ".h"
 # Begin Source File
 
+SOURCE=.\include\api_version.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\apr_iconv.h
 # End Source File
 # Begin Source File
@@ -150,22 +154,24 @@ SOURCE=..\apr\build\win32ver.awk
 !IF  "$(CFG)" == "libapriconv - Win32 Release"
 
 # PROP Ignore_Default_Tool 1
+USERDEP__WIN32="./include/api_version.h"	
 # Begin Custom Build - Creating Version Resource
 InputPath=..\apr\build\win32ver.awk
 
 ".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ./include/api_version.h > .\libapriconv.rc
 
 # End Custom Build
 
 !ELSEIF  "$(CFG)" == "libapriconv - Win32 Debug"
 
 # PROP Ignore_Default_Tool 1
+USERDEP__WIN32="./include/api_version.h"	
 # Begin Custom Build - Creating Version Resource
 InputPath=..\apr\build\win32ver.awk
 
 ".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ./include/api_version.h > .\libapriconv.rc
 
 # End Custom Build
 
