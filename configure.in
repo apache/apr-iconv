@@ -7,6 +7,8 @@ AC_INIT(build/rules.mk.in)
 
 AC_CONFIG_AUX_DIR(../apr/build)
 AC_CONFIG_HEADER(lib/apr_iconv_private.h)
+AC_PREFIX_DEFAULT(/usr/local/apache2)
+test "$prefix" = "NONE" && prefix='/usr/local/apache2'
 
 AC_PROG_CC
 AC_PROG_AWK
