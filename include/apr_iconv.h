@@ -29,8 +29,8 @@
  *
  */
 
-#ifndef _ICONV_H_
-#define _ICONV_H_
+#ifndef APR_ICONV_H
+#define APR_ICONV_H
 
 #include "apr.h"
 #include "apr_pools.h"
@@ -99,16 +99,16 @@
 #endif
 
 /*
- * iconv_t:	charset conversion descriptor type
+ * apr_iconv_t:	charset conversion descriptor type
  */
-typedef void *iconv_t;
+typedef void *apr_iconv_t;
 
 /* __BEGIN_DECLS */
 
-API_DECLARE(apr_status_t) apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
-API_DECLARE(apr_status_t) apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
-API_DECLARE(apr_status_t) apr_iconv_close(iconv_t, apr_pool_t *);
+API_DECLARE(apr_status_t) apr_iconv_open(const char *, const char *, apr_pool_t *, apr_iconv_t *);
+API_DECLARE(apr_status_t) apr_iconv(apr_iconv_t, const char **, apr_size_t *, char **, apr_size_t *, apr_size_t *);
+API_DECLARE(apr_status_t) apr_iconv_close(apr_iconv_t, apr_pool_t *);
 
 /* __END_DECLS */
 
-#endif /* _ICONV_H_ */
+#endif /* APR_ICONV_H */
