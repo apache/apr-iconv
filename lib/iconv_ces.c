@@ -37,21 +37,21 @@
 #define ICONV_INTERNAL
 #include "iconv.h"	/* iconv_ccs_desc, iconv_ccs */
 
-apr_status_t
-iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)
 {
 	struct iconv_module *mod;
 	struct iconv_ces *ces;
 	apr_status_t error;
 
-	error = iconv_mod_load(cesname, ICMOD_UC_CES, NULL, &mod, ctx);
+	error = apr_iconv_mod_load(cesname, ICMOD_UC_CES, NULL, &mod, ctx);
 	if (APR_STATUS_IS_EFTYPE(error))
-		error = iconv_mod_load("_tbl_simple", ICMOD_UC_CES, cesname, &mod, ctx);
+		error = apr_iconv_mod_load("_tbl_simple", ICMOD_UC_CES, cesname, &mod, ctx);
 	if (error != APR_SUCCESS)
 		return (APR_STATUS_IS_EFTYPE(error)) ? APR_EINVAL : error;
 	ces = malloc(sizeof(*ces));
 	if (ces == NULL) {
-		iconv_mod_unload(mod, ctx);
+		apr_iconv_mod_unload(mod, ctx);
 		return APR_ENOMEM;
 	}
 	memset(ces,0, sizeof(*ces));
@@ -61,15 +61,15 @@ iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)
 	error = ICONV_CES_OPEN(ces,ctx);
 	if (error != APR_SUCCESS) {
 		free(ces);
-		iconv_mod_unload(mod, ctx);
+		apr_iconv_mod_unload(mod, ctx);
 		return error;
 	}
 	*cespp = ces;
 	return APR_SUCCESS;
 }
 
-int
-iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	int res;
 
@@ -77,50 +77,50 @@ iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx)
 		return -1;
 	res = ICONV_CES_CLOSE(ces);
 	if (ces->mod != NULL)
-		iconv_mod_unload(ces->mod, ctx);
+		apr_iconv_mod_unload(ces->mod, ctx);
 	free(ces);
 	return res;
 }
 
-int
-iconv_ces_open_func(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_open_func(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	return iconv_malloc(sizeof(int), &ces->data);
 }
 
-int
-iconv_ces_close_func(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_close_func(struct iconv_ces *ces)
 {
 	free(ces->data);
 	return 0;
 }
 
-void
-iconv_ces_reset_func(struct iconv_ces *ces)
+API_DECLARE_NONSTD(void)
+apr_iconv_ces_reset_func(struct iconv_ces *ces)
 {
 	memset(ces->data, 0, sizeof(int));
 }
 
 /*ARGSUSED*/
-void
-iconv_ces_no_func(struct iconv_ces *ces)
+API_DECLARE_NONSTD(void)
+apr_iconv_ces_no_func(struct iconv_ces *ces)
 {
 }
 
-int
-iconv_ces_nbits7(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_nbits7(struct iconv_ces *ces)
 {
 	return 7;
 }
 
-int
-iconv_ces_nbits8(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_nbits8(struct iconv_ces *ces)
 {
 	return 8;
 }
 
-int
-iconv_ces_zero(struct iconv_ces *ces)
+API_DECLARE_NONSTD(int)
+apr_iconv_ces_zero(struct iconv_ces *ces)
 {
 	return 0;
 }

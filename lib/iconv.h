@@ -47,44 +47,54 @@
 /* apr additions */
 
 /**
- * APR_DECLARE_EXPORT is defined when building the APR dynamic library,
- * so that all public symbols are exported.
+ * API_DECLARE_EXPORT is defined when building the libapriconv dynamic 
+ * library, so that all public symbols are exported.
  *
- * APR_DECLARE_STATIC is defined when including the APR public headers,
+ * API_DECLARE_STATIC is defined when including the apriconv public headers, 
  * to provide static linkage when the dynamic library may be unavailable.
  *
- * APR_DECLARE_STATIC and APR_DECLARE_EXPORT are left undefined when
- * including the APR public headers, to import and link the symbols from the 
- * dynamic APR library and assure appropriate indirection and calling 
- * conventions at compile time.
+ * API_DECLARE_STATIC and API_DECLARE_EXPORT are left undefined when
+ * including the apr-iconv public headers, to import and link the symbols 
+ * from the dynamic libapriconv library and assure appropriate indirection 
+ * and calling conventions at compile time.
  */
 
 #if !defined(WIN32)
 /**
- * The public APR functions are declared with APR_DECLARE(), so they may
- * use the most appropriate calling convention.  Public APR functions with 
- * variable arguments must use APR_DECLARE_NONSTD().
+ * The public apr-iconv functions are declared with API_DECLARE(), so they 
+ * use the most portable calling convention.  Public apr-iconv functions 
+ * with variable arguments must use API_DECLARE_NONSTD().
  *
- * @deffunc APR_DECLARE(rettype) apr_func(args);
+ * @deffunc API_DECLARE(rettype) apr_func(args);
  */
 #define API_DECLARE(type)            type
 /**
- * The public APR variables are declared with AP_MODULE_DECLARE_DATA.
+ * The private apr-iconv functions are declared with API_DECLARE_NONSTD(), 
+ * so they use the most optimal C language calling conventions.
+ *
+ * @deffunc API_DECLARE(rettype) apr_func(args);
+ */
+#define API_DECLARE_NONSTD(type)     type
+/**
+ * All exported apr-iconv variables are declared with API_DECLARE_DATA
  * This assures the appropriate indirection is invoked at compile time.
  *
- * @deffunc APR_DECLARE_DATA type apr_variable;
- * @tip extern APR_DECLARE_DATA type apr_variable; syntax is required for
+ * @deffunc API_DECLARE_DATA type apr_variable;
+ * @tip extern API_DECLARE_DATA type apr_variable; syntax is required for
  * declarations within headers to properly import the variable.
  */
 #define API_DECLARE_DATA
 #elif defined(API_DECLARE_STATIC)
 #define API_DECLARE(type)            type __stdcall
+#define API_DECLARE_NONSTD(type)     type
 #define API_DECLARE_DATA
 #elif defined(API_DECLARE_EXPORT)
 #define API_DECLARE(type)            __declspec(dllexport) type __stdcall
+#define API_DECLARE_NONSTD(type)     __declspec(dllexport) type
 #define API_DECLARE_DATA             __declspec(dllexport)
 #else
 #define API_DECLARE(type)            __declspec(dllimport) type __stdcall
+#define API_DECLARE_NONSTD(type)     __declspec(dllimport) type
 #define API_DECLARE_DATA             __declspec(dllimport)
 #endif
 
@@ -132,7 +142,7 @@ struct iconv_module_depend {
 
 struct iconv_module;
 
-/* _tbl_simple.c table_load_ccs() calls iconv_mod_load(...ctx) */
+/* _tbl_simple.c table_load_ccs() calls apr_iconv_mod_load(...ctx) */
 
 typedef int iconv_mod_event_t(struct iconv_module *, int, apr_pool_t *ctx);
 
@@ -142,6 +152,8 @@ struct iconv_module_desc {
 	const struct iconv_module_depend *imd_depend;
 	const void *	imd_data;
 };
+
+#define END_ICONV_MODULE_DEPEND  {0, NULL, NULL}
 
 #define	ICONV_MODULE(type,data)	struct iconv_module_desc iconv_module \
 				    {(type), (data)}
@@ -320,15 +332,20 @@ struct iconv_ces {
 	struct iconv_module *	mod;
 };
 
-int  iconv_ces_open(const char *ces_name, struct iconv_ces **cespp, apr_pool_t *ctx);
-int  iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx);
-int  iconv_ces_open_func(struct iconv_ces *ces);
-int  iconv_ces_close_func(struct iconv_ces *ces);
-void iconv_ces_reset_func(struct iconv_ces *ces);
-void iconv_ces_no_func(struct iconv_ces *ces);
-int  iconv_ces_nbits7(struct iconv_ces *ces);
-int  iconv_ces_nbits8(struct iconv_ces *ces);
-int  iconv_ces_zero(struct iconv_ces *ces);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_open(const char *ces_name, struct iconv_ces **cespp, apr_pool_t *ctx);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_close(struct iconv_ces *ces, apr_pool_t *ctx);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_open_func(struct iconv_ces *ces, apr_pool_t *ctx);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_close_func(struct iconv_ces *ces);
+API_DECLARE_NONSTD(void) apr_iconv_ces_reset_func(struct iconv_ces *ces);
+API_DECLARE_NONSTD(void) apr_iconv_ces_no_func(struct iconv_ces *ces);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_nbits7(struct iconv_ces *ces);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_nbits8(struct iconv_ces *ces);
+API_DECLARE_NONSTD(int)  apr_iconv_ces_zero(struct iconv_ces *ces);
+
+/* Safe for _NONSTD APIs since the C caller pops the stack and the
+ * apr_pool_t *cxt arg is simply ignored:
+ */
+#define apr_iconv_ces_open_zero (iconv_ces_open_t*)apr_iconv_ces_zero
 
 #define iconv_char32bit(ch)	((ch) & 0xFFFF0000)
 
@@ -381,15 +398,26 @@ typedef struct {
 ICONV_CES_DRIVER_DECL(iso2022);
 
 
-int  iconv_mod_load(const char *, int, const void *, struct iconv_module **, apr_pool_t *);
-int  iconv_mod_unload(struct iconv_module *,apr_pool_t *ctx);
-iconv_mod_event_t iconv_mod_noevent;
-
-iconv_mod_event_t iconv_ccs_event;
+API_DECLARE_NONSTD(int) apr_iconv_mod_load(const char *, int, const void *, struct iconv_module **, apr_pool_t *);
+API_DECLARE_NONSTD(int) apr_iconv_mod_unload(struct iconv_module *,apr_pool_t *ctx);
+API_DECLARE_NONSTD(int) apr_iconv_mod_noevent(struct iconv_module *mod, int event, apr_pool_t *ctx);
+API_DECLARE_NONSTD(int) apr_iconv_ccs_event(struct iconv_module *mod, int event, apr_pool_t *ctx);
 
 int  iconv_malloc(apr_size_t size, void **pp);
 
 extern struct iconv_converter_desc iconv_uc_desc;
+
+
+API_DECLARE_NONSTD(apr_status_t) apr_iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx);
+API_DECLARE_NONSTD(apr_status_t) apr_iconv_euc_close(struct iconv_ces *ces);
+API_DECLARE_NONSTD(apr_ssize_t)  apr_iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,	unsigned char **outbuf, apr_size_t *outbytesleft);
+API_DECLARE_NONSTD(ucs_t)  apr_iconv_euc_convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf, apr_size_t *inbytesleft);
+
+API_DECLARE_NONSTD(apr_status_t) apr_iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx);
+API_DECLARE_NONSTD(int) apr_iconv_iso2022_close(struct iconv_ces *ces);
+API_DECLARE_NONSTD(void) apr_iconv_iso2022_reset(struct iconv_ces *ces);
+API_DECLARE_NONSTD(apr_ssize_t) apr_iconv_iso2022_convert_from_ucs(struct iconv_ces *ces, ucs_t in, unsigned char **outbuf, apr_size_t *outbytesleft);
+API_DECLARE_NONSTD(ucs_t) apr_iconv_iso2022_convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf, apr_size_t *inbytesleft);
 
 #endif /* ICONV_INTERNAL */
 

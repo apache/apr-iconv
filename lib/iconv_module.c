@@ -104,8 +104,8 @@ iconv_dlopen(const char *name, const char *symbol, void **hpp, void **dpp, apr_p
 	return EINVAL;
 }
 
-int
-iconv_mod_load(const char *modname, int modtype, const void *args,
+API_DECLARE_NONSTD(int)
+apr_iconv_mod_load(const char *modname, int modtype, const void *args,
 	struct iconv_module **modpp, apr_pool_t *ctx)
 {
 	struct iconv_module_desc *mdesc;
@@ -137,7 +137,7 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 	depend = mdesc->imd_depend;
 	if (depend) {
 		while (depend->md_name) {
-			error = iconv_mod_load(depend->md_name, 
+			error = apr_iconv_mod_load(depend->md_name, 
 			    depend->md_type, NULL, &depmod, ctx);
 			if (error)
 				goto bad;
@@ -162,12 +162,12 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 	*modpp = mod;
 	return 0;
 bad:
-	iconv_mod_unload(mod,ctx);
+	apr_iconv_mod_unload(mod,ctx);
 	return error;
 }
 
-int
-iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
+API_DECLARE_NONSTD(int)
+apr_iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
 {
 	struct iconv_module *deplist, *tmp;
 	int error = 0;
@@ -179,7 +179,7 @@ iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
 	deplist = mod->im_deplist;
 	while (deplist) {
 		tmp = deplist->im_next;
-		iconv_mod_unload(deplist,ctx);
+		apr_iconv_mod_unload(deplist,ctx);
 		deplist = tmp;
 	}
 	if (mod->im_handle != NULL)
@@ -189,8 +189,8 @@ iconv_mod_unload(struct iconv_module *mod, apr_pool_t *ctx)
 	return error;
 }
 
-int
-iconv_mod_noevent(struct iconv_module *mod, int event, apr_pool_t *ctx)
+API_DECLARE_NONSTD(int)
+apr_iconv_mod_noevent(struct iconv_module *mod, int event, apr_pool_t *ctx)
 {
 	switch (event) {
 	    case ICMODEV_LOAD:
