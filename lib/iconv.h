@@ -66,7 +66,8 @@
  */
 #define	ICMODEV_LOAD	1	/* module load. after dependencies resolved */
 #define	ICMODEV_UNLOAD	2	/* module unload */
-#define	ICMODEV_DYNDEPS	3	/* load dynamic dependencies */
+#define ICMODEV_DYN_LOAD    3   /* load dynamic dependencies */
+#define ICMODEV_DYN_UNLOAD  4   /* unload dynamic dependencies */
 
 struct iconv_module_depend {
 	int		md_type;
@@ -103,11 +104,16 @@ struct iconv_module {
 	void *		im_data;
 	const void *	im_depdata;	/* data if module loaded from dependency */
 	const void *	im_args;
+
+        /* This is module-private data. Nothing outside the module
+           itself may touch it. */
+        void *im_private;
 };
 
 #define	ICONV_MOD_LOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_LOAD,ctx)
 #define	ICONV_MOD_UNLOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_UNLOAD,ctx)
-#define	ICONV_MOD_DYNDEPS(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_DYNDEPS,ctx)
+#define	ICONV_MOD_DYN_LOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_DYN_LOAD,ctx)
+#define	ICONV_MOD_DYN_UNLOAD(mod,ctx)	(mod)->im_desc->imd_event(mod, ICMODEV_DYN_UNLOAD,ctx)
 
 /*
  * iconv converter definitions.
