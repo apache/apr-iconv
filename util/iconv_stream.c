@@ -39,7 +39,7 @@
 
 #define buf_size 4096
 
-iconv_stream *iconv_stream_open(iconv_t cd, void *handle,
+iconv_stream *iconv_stream_open(apr_iconv_t cd, void *handle,
                                 iconv_stream_func method)
 {
     iconv_stream *res = malloc(sizeof(iconv_stream));
@@ -114,7 +114,7 @@ apr_ssize_t iconv_bwrite(void *handle, const void *buf, apr_size_t insize)
             if (left > size)
                 left = size;
             memcpy(stream->buf_ptr, buf, left);
-            (const char *)buf += left;
+            buf = ((const char *)buf) + left;
             size -= left;
             stream->buf_ptr += left;
             res = iconv_write(handle, stream->buffer,
@@ -141,7 +141,7 @@ apr_ssize_t iconv_bwrite(void *handle, const void *buf, apr_size_t insize)
                 return -1;
             res = 0;
         }
-        (const char *)buf += res;
+        buf = ((const char *)buf) + res;
         size -= res;
     } while (size && res);
     if (!size)
@@ -164,7 +164,7 @@ static apr_ssize_t fwrite_wrapper(void *handle, void *buf, apr_size_t size)
     return (res && !ferror((FILE *)handle)) ? res : -1;
 }
 
-iconv_stream *iconv_ostream_fopen(iconv_t cd, FILE *handle)
+iconv_stream *iconv_ostream_fopen(apr_iconv_t cd, FILE *handle)
 {
     return iconv_stream_open(cd, handle, fwrite_wrapper);
 }
