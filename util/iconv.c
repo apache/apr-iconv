@@ -86,6 +86,7 @@ main(int argc, char * const *argv)
 	char *from = NULL, *to = NULL, *input = NULL;
 	int opt;
 	apr_pool_t *ctx; 
+	apr_status_t status;
 
 	while ((opt = getopt(argc, argv, "f:s:t:")) > 0) {
 		switch (opt) {
@@ -117,8 +118,8 @@ main(int argc, char * const *argv)
 	}
 
 	/* Use it */
-	cd = apr_iconv_open(to, from,ctx);
-	if ((int)cd < 0) {
+	status = apr_iconv_open(to, from,ctx, &cd);
+	if (status) {
 		fprintf(stderr, "unable to open specified convertor\n");
 		exit(6);
 		}

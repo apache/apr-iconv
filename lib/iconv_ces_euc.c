@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
 
@@ -46,7 +45,7 @@ typedef struct {
 	const struct iconv_module *ccs[1];
 } iconv_ces_euc_state_t;
 
-int
+apr_status_t
 iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	struct iconv_module *depmod = ces->mod->im_deplist;
@@ -58,20 +57,20 @@ iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	    sizeof(struct iconv_module *) * (ces->mod->im_depcnt - 1);
 	state = (iconv_ces_euc_state_t *)malloc(stsz);
 	if (state == NULL)
-		return errno;
+		return APR_ENOMEM;
 	memset(state, 0, stsz);
 	state->nccs = ces->mod->im_depcnt;
 	for (i = ces->mod->im_depcnt; i; i--, depmod = depmod->im_next)
 		state->ccs[i - 1] = depmod;
 	CESTOSTATE(ces) = state;
-	return 0;
+	return APR_SUCCESS;
 }
 
-int
+apr_status_t
 iconv_euc_close(struct iconv_ces *ces)
 {
 	free(CESTOSTATE(ces));
-	return 0;
+	return APR_SUCCESS;
 }
 
 #define is_7_14bit(data) ((data)->nbits & 7)

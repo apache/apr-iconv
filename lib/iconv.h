@@ -38,10 +38,6 @@
 
 #include <stddef.h>
 
-/* To be processed by configure */
-#define APR_ICONV_EFTYPE -1234
-/* To be processed by configure */
-
 /* apr additions */
 #define issetugid() 0
 /* apr additions */
@@ -53,9 +49,9 @@ typedef void *iconv_t;
 
 /* __BEGIN_DECLS */
 
-iconv_t	apr_iconv_open(const char *, const char *, apr_pool_t *);
-apr_size_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *);
-int	apr_iconv_close(iconv_t, apr_pool_t *);
+apr_status_t	apr_iconv_open(const char *, const char *, apr_pool_t *, iconv_t *);
+apr_status_t	apr_iconv(iconv_t, const char **, apr_size_t *, char **, apr_size_t *, size_t *);
+apr_status_t	apr_iconv_close(iconv_t, apr_pool_t *);
 
 /* __END_DECLS */
 
@@ -126,8 +122,8 @@ struct iconv_module {
  */
 typedef int iconv_open_t(const char *, const char *, void **, apr_pool_t *);
 typedef int iconv_close_t(void *, apr_pool_t *);
-typedef apr_size_t iconv_conv_t(void *, const unsigned char **, apr_size_t *,
-	unsigned char **, apr_size_t *);
+typedef apr_status_t iconv_conv_t(void *, const unsigned char **, apr_size_t *,
+	unsigned char **, apr_size_t *, apr_size_t *);
 
 struct iconv_converter_desc {
 	iconv_open_t *	icd_open;

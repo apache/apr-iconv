@@ -30,14 +30,10 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>	/* errno */
-#include <stdlib.h>	/* free, malloc */
-#include <string.h>
-
 #define ICONV_INTERNAL
 #include "iconv.h"	/* iconv_ccs_desc, iconv_ccs_module */
 
-int
+apr_status_t
 iconv_ccs_event(struct iconv_module *mod, int event)
 {
 /*	struct iconv_ccs_desc *desc =
@@ -46,14 +42,14 @@ iconv_ccs_event(struct iconv_module *mod, int event)
 	switch (event) {
 	    case ICMODEV_LOAD:
 		if (mod->im_deplist == NULL)
-			return EINVAL;
+			return APR_EINVAL;
 		mod->im_methods = mod->im_deplist->im_desc->imd_data;
 		mod->im_data = mod->im_desc->imd_data;
 		break;
 	    case ICMODEV_UNLOAD:
 		break;
 	    default:
-		return EINVAL;
+		return APR_EINVAL;
 	}
-	return 0;
+	return APR_SUCCESS;
 }

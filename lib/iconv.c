@@ -32,7 +32,6 @@
 
 #ifndef HAVE_ICONV
 
-#include <errno.h>	/* errno */
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
 
@@ -45,65 +44,70 @@ static struct iconv_converter_desc *converters[] = {
 	NULL
 };
 
-size_t
+/* 
+ * size_t *result is what the iconv() returns but it is cleaner to return
+ * a status.
+ * APR_EBADF:   cd is not valid.
+ * APR_BADARG: The ouput arguments are not valid.
+ */
+
+apr_status_t
 apr_iconv(iconv_t cd, const char **inbuf, size_t *inbytesleft,
-	char **outbuf, size_t *outbytesleft)
+	char **outbuf, size_t *outbytesleft, size_t *result)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
-	ssize_t res = -1;
 
 	if (icp == NULL) {
-		errno = EBADF;
-		return (size_t)(-1);
+		*result = (size_t) -1;
+		return(APR_EBADF);
 	}
 	if (outbytesleft == NULL || *outbytesleft == 0 ||
 	    outbuf == NULL || *outbuf == 0) {
-		errno = E2BIG;
-		return (size_t)(-1);
+		*result = (size_t) -1;
+		return(APR_BADARG);
 	}
-	res = icp->ic_desc->icd_conv(icp->ic_data,
+	return ( icp->ic_desc->icd_conv(icp->ic_data,
 	    (const unsigned char**)inbuf, inbytesleft,
-	    (unsigned char**)outbuf, outbytesleft);
-	return (size_t)res;
+	    (unsigned char**)outbuf, outbytesleft, result));
 }
 
-iconv_t
-apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx)
+apr_status_t
+apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, iconv_t *res)
 {
 	struct iconv_converter_desc **idesc;
 	struct iconv_converter *icp;
 	void *data;
-	int error;
+	apr_status_t error;
 
+	*res = (iconv_t)-1;
 	icp = malloc(sizeof(*icp));
 	if (icp == NULL)
-		return (iconv_t)(-1);
-	error = EINVAL;
+		return (APR_ENOMEM);
+	error = APR_EINVAL;
 	for (idesc = converters; *idesc; idesc++) {
 		error = (*idesc)->icd_open(to, from, &data, ctx);
-		if (error == 0)
+		if (error == APR_SUCCESS)
 			break;
 	}
 	if (error) {
 		free(icp);
-		errno = error;
-		return (iconv_t)(-1);
+		return (error);
 	}
 	icp->ic_desc = *idesc;
 	icp->ic_data = data;
-	return (iconv_t)icp;
+	*res = icp;
+	return(APR_SUCCESS);
 }
 
-int
+apr_status_t
 apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	int error = 0;
 
-	if (icp == NULL) {
-		errno = EBADF;
-		return -1;
-	}
+	if (icp == NULL)
+		return(APR_EBADF);
+
 	if (icp->ic_desc)
 		error = icp->ic_desc->icd_close(icp->ic_data, ctx);
 		
@@ -115,21 +119,30 @@ apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
 
 #include <iconv.h>
 
-iconv_t apr_iconv_open(const char *to_charset,
-            const char *from_charset, apr_pool_t *ctx)
+apr_status_t apr_iconv_open(const char *to_charset,
+            const char *from_charset, apr_pool_t *ctx, iconv_t **res)
 {
-	return (iconv_open(to_charset, from_charset));
+	*res = iconv_open(to_charset, from_charset);
+	if (*res == (size_t) -1)
+		return apr_get_os_error();
+	return APR_SUCCESS;
 }
 
-size_t apr_iconv(iconv_t cd, const char **inbuf,
+apr_status_t apr_iconv(iconv_t cd, const char **inbuf,
             size_t *inbytesleft, char **outbuf,
-            size_t *outbytesleft)
+            size_t *outbytesleft, size_t *result)
 {
-	return (iconv(cd , inbuf, inbytesleft, outbuf, outbytesleft));
+	*result = iconv(cd , inbuf, inbytesleft, outbuf, outbytesleft);
+	if (*result == (size_t) -1)
+		return apr_get_os_error();
+	return APR_SUCCESS;
 }
-int apr_iconv_close(iconv_t cd)
+apr_status_t apr_iconv_close(iconv_t cd)
 {
-	return (iconv_close(cd));
+	int status;
+	if (iconv_close(cd))
+		return apr_get_os_error();
+	return APR_SUCCESS;
 }
 
 #endif /* !defined(HAVE_ICONV) */

@@ -30,7 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>	/* memset, memcmp, memcpy */
 
@@ -67,7 +66,7 @@ typedef struct iconv_ces_iso2022_state {
 	const struct iconv_module *ccsmod[1];
 } iconv_ces_iso2022_state_t;
 
-int
+apr_status_t
 iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	const iconv_ces_iso2022_ccs_t *ccsattr;
@@ -82,7 +81,7 @@ iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	    sizeof(struct iconv_module *) * (ces->mod->im_depcnt - 1);
 	state = (iconv_ces_iso2022_state_t *)malloc(stsz + shiftsz);
 	if (state == NULL)
-		return errno;
+		return APR_ENOMEM;
 	memset(state, 0, stsz + shiftsz);
 	ces->data = state;
 	state->shift_tab = (int*)((char*)state + stsz);
@@ -99,7 +98,7 @@ iconv_iso2022_open(struct iconv_ces *ces, apr_pool_t *ctx)
 		if (ccsattr->shift >= 0)
 			state->prefix[(int)(iso_shift[ccsattr->shift].sequence[0])] = 1;
 	}
-	return 0;
+	return APR_SUCCESS;
 }
 
 int
