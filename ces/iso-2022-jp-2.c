@@ -69,7 +69,7 @@ static const struct iconv_module_depend iconv_module_depend[] = {
 	{ICMOD_UC_CCS, "jis_x0212-1990", ccsattr + 6 },
 	{ICMOD_UC_CCS, "iso-8859-1",     ccsattr + 7 },
 	{ICMOD_UC_CCS, "iso-8859-7",     ccsattr + 8 },
-	{}
+	NULL
 };
 
 static const struct iconv_ces_desc iconv_ces_desc = {
