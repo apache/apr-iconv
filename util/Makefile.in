@@ -7,7 +7,7 @@ PROGRAMS = iconv
 all: $(PROGRAMS)
 
 iconv_OBJECTS = iconv.lo iconv_stream.lo
-# The -ldl is not OK...
-iconv_LDADD   = ../lib/libapriconv.la -ldl
+iconv_LDADD   = ../lib/libapriconv.la ../../apr/libapr.la
+
 iconv:	$(iconv_OBJECTS) $(iconv_LDADD)
-	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD)
+	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD) $(LIBS)
