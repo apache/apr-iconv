@@ -94,13 +94,16 @@ ALL_REBASE = -d -b $(REBASE_TOP)
 !ENDIF
 REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
 
-.c{$(OUTPUT_DIR)}.so:
+.c{$(OUTPUT_DIR)}.obj:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
-	$(SILENT)echo Compiling and linking $@...
-	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
-		/link $(ALL_LDFLAGS) /out:$@ \
-		"$(API_LIB_PFX)apriconv.lib" \
-		"$(APR_LIB_PFX)apr.lib" \
+	$(SILENT)echo Compiling $@...
+	$(SILENT)cl $(ALL_CFLAGS) /Fo"$@" /Fd"$*_src" $< \
+		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+
+{$(OUTPUT_DIR)}.obj{$(OUTPUT_DIR)}.so:
+	$(SILENT)echo Linking $@...
+	$(SILENT)link $(ALL_LDFLAGS) /out:$@ $< \
+		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
@@ -109,7 +112,9 @@ REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
 all: $(ALL_TARGETS) $(REBASE_STAMP)
 
 $(REBASE_STAMP): $(ALL_TARGETS) 
+	$(SILENT)echo Extracting .dbg symbols and rebasing all modules...
 	$(SILENT)rebase $(ALL_REBASE) $(ALL_TARGETS) >$(REBASE_STAMP)
+	$(SILENT)echo.
 
 clean:
 	-$(SILENT)if exist "$(OUTPUT_DIR)/$(NULL)" $(rmdir) $(OUTPUT_DIR)
@@ -120,9 +125,15 @@ install:
 	$(SILENT)copy $(OUTPUT_DIR)\*.so "$(INSTALL_DIR)" < <<
 A
 <<
-	@echo Copying apr-iconv debugging symbols from $(OUTPUT_DIR) to $(INSTALL_DIR)
-!IF "$(BUILD_MODE)" == "debug" || "$(BUILD_MODE)" == "Debug"
+
+symbols:
+	@echo Copying apr-iconv pdb debugging symbols from $(OUTPUT_DIR) to $(INSTALL_DIR)
 	$(SILENT)copy $(OUTPUT_DIR)\*.pdb "$(INSTALL_DIR)" < <<
+A
+<<
+!IF "$(SYMBOLS_DIR)x" != "x"
+	@echo Copying apr-iconv dbg debugging symbols from $(OUTPUT_DIR) to $(SYMBOLS_DIR)
+	$(SILENT)copy $(OUTPUT_DIR)\*.dbg "$(SYMBOLS_DIR)\so" < <<
 A
 <<
 !ENDIF
