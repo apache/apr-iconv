@@ -1,20 +1,19 @@
 #
 # Top-level Makefile for APRICONV
 #
-abs_srcdir=@abs_srcdir@
-abs_builddir=@abs_builddir@
+abs_srcdir=@api_srcdir@
+abs_builddir=@api_builddir@
 VPATH = @srcdir@
 
 # bring in rules.mk for standard functionality
 @INCLUDE_RULES@
 
-SUBDIRS = lib ccs ces
-CLEAN_SUBDIRS = . lib ccs ces
+SUBDIRS = lib ccs ces util
+CLEAN_SUBDIRS = . lib ccs ces util
 
-TARGET_LIB = lib/libapriconv.la
+TARGET_LIB = libapriconv.la
 
-CLEAN_TARGETS = $(TARGET_EXPORTS)
-DISTCLEAN_TARGETS = config.cache config.log config.status export_vars.sh
+DISTCLEAN_TARGETS = config.cache config.log config.status
 EXTRACLEAN_TARGETS = configure libtool aclocal.m4
 
 ### install location
@@ -26,26 +25,17 @@ includedir=@includedir@
 
 MKINSTALLDIRS=$(abs_srcdir)/build/mkdir.sh
 
-delete-lib:
-	@if test -f $(TARGET_LIB); then \
-	    objects="`find $(SUBDIRS) -name '*.lo' -a -newer $(TARGET_LIB)`" ; \
-	    if test -n "$$objects"; then \
-		echo Found newer objects. Will relink $(TARGET_LIB). ; \
-		echo $(RM) -f $(TARGET_LIB) ; \
-		$(RM) -f $(TARGET_LIB) ; \
-	    fi \
-	fi
-
-install: $(TARGET_LIB)
+install:
 	if [ ! -d $(includedir) ]; then \
 	    $(MKINSTALLDIRS) $(includedir); \
 	fi; \
+	cp -p $(abs_srcdir)/include/*.h $(includedir); \
 	cp -p $(abs_srcdir)/lib/*.h $(includedir); \
 	cp -p $(abs_builddir)/lib/*.h $(includedir); \
 	if [ ! -d $(lib_prefix) ]; then \
 	    $(MKINSTALLDIRS) $(lib_prefix); \
-	fi; \
-	$(LIBTOOL) --mode=install cp $(TARGET_LIB) $(lib_prefix)
+	fi;
+	(cd lib; $(LIBTOOL) --mode=install cp $(TARGET_LIB) $(lib_prefix))
 	if [ ! -d $(libdir) ]; then \
 	    $(MKINSTALLDIRS) $(libdir); \
 	fi; \
@@ -54,23 +44,10 @@ install: $(TARGET_LIB)
 	if [ ! -d $(exec_prefix) ]; then \
 	    $(MKINSTALLDIRS) $(exec_prefix); \
 	fi; \
-	(cd util/.libs; $(LIBTOOL) --mode=install cp iconv $(exec_prefix))
-
-delete-exports:
-	@if test -f $(TARGET_EXPORTS); then \
-	    headers="`find lib/*.h -newer $(TARGET_EXPORTS)`" ; \
-	    if test -n "$$headers"; then \
-		echo Found newer headers. Will rebuild $(TARGET_EXPORTS). ; \
-		echo $(RM) -f $(TARGET_EXPORTS) ; \
-		$(RM) -f $(TARGET_EXPORTS) ; \
-	    fi \
-	fi
-
-$(TARGET_EXPORTS):
-	$(AWK) -f @APR_SOURCE_DIR@/build/make_export.awk lib/*.h > $@ ;
+	(cd util; $(LIBTOOL) --mode=install cp iconv $(exec_prefix))
 
 docs:
 	mkdir ./docs
-	perl @APR_SOURCE_DIR@/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
+	perl $(abs_srcdir)/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
 
-.PHONY: delete-lib delete-exports
+.PHONY: delete-lib
