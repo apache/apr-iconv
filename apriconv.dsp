@@ -126,6 +126,10 @@ SOURCE=.\include\apr_iconv.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\lib\charset_alias.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\lib\iconv.h
 # End Source File
 # End Group

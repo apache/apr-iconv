@@ -37,6 +37,7 @@
 #include "apr_iconv.h"
 #ifdef WIN32
 #define ICONV_DEFAULT_PATH "iconv"
+#define API_USE_BUILTIN_ALIASES /* Use the built-in charset alias table */
 #else
 #include "apr_iconv_private.h" /* contains ICONV_DEFAULT_PATH */
 #endif
