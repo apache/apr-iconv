@@ -1,0 +1,31 @@
+APR-ICONV LIBRARY STATUS:
+Last modified at [$Date: 2000/12/10 18:34:56 $]
+
+Release:
+
+RELEASE SHOWSTOPPERS:
+
+    * Determine the package's relationship to apr/i18n/unix
+      and integrate into the apr build.
+
+RELEASE NON-SHOWSTOPPERS BUT WOULD BE REAL NICE TO WRAP THESE UP:
+
+    * Drop modules.c code and replace much functionality with the
+      apr dso methods, etc.
+
+Other bugs that need fixing:
+
+
+Other features that need writing:
+
+
+Documentation that needs writing:
+
+    * API documentation
+        Status:
+
+
+Available Patches:
+
+
+Open Issues:
