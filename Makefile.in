@@ -21,17 +21,10 @@ prefix=@prefix@
 exec_prefix=@prefix@/bin
 lib_prefix=@prefix@/lib
 libdir=@iconv_libdir@
-includedir=@includedir@
 
 MKINSTALLDIRS=$(abs_srcdir)/build/mkdir.sh
 
 install:
-	if [ ! -d $(DESTDIR)$(includedir) ]; then \
-	    $(MKINSTALLDIRS) $(DESTDIR)$(includedir); \
-	fi; \
-	cp -p $(abs_srcdir)/include/*.h $(DESTDIR)$(includedir); \
-	cp -p $(abs_srcdir)/lib/*.h $(DESTDIR)$(includedir); \
-	cp -p $(abs_builddir)/lib/*.h $(DESTDIR)$(includedir); \
 	if [ ! -d $(lib_prefix) ]; then \
 	    $(MKINSTALLDIRS) $(DESTDIR)$(lib_prefix); \
 	fi;
