@@ -36,8 +36,10 @@
 #include "apr_pools.h"
 #include "apr_iconv_private.h" /* contains ICONV_DEFAULT_PATH */
 
+#include <stddef.h>
+
 /* To be processed by configure */
-#define EFTYPE -1234
+#define APR_ICONV_EFTYPE -1234
 /* To be processed by configure */
 
 /* apr additions */
