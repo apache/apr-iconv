@@ -79,7 +79,7 @@ OUTPUT_DIR  = DynLibD
 
 APR_SOURCE   = ../../apr
 INT_CFLAGS   = /nologo $(INT_CFLAGS) /Fp"$(OUTPUT_DIR)/iconv.pch" /YX"iconv.h"
-INT_INCLUDES = /I ../lib /I $(APR_SOURCE)/include
+INT_INCLUDES = /I ../lib /I $(APR_SOURCE)/include /I ../include
 INT_DEFINES  = /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" $(INT_DEFINES)
 INT_LDFLAGS  = /nologo /dll /incremental:no /subsystem:windows /export:iconv_module,DATA
 
