@@ -40,6 +40,7 @@ RSC=rc.exe
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "Release"
 # PROP Intermediate_Dir "Release"
+# PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /FD /c
 # ADD CPP /nologo /MD /W3 /O2 /I "../apr/include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "API_DECLARE_EXPORT" /Fd"Release\apriconv" /FD /c
@@ -68,8 +69,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /MDd /W3 /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FD /c
-# ADD CPP /nologo /MDd /W3 /GX /ZI /Od /I "../apr/include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "API_DECLARE_EXPORT" /Fd"Debug\apriconv" /FD /c
+# ADD BASE CPP /nologo /MDd /W3 /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /FD /c
+# ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "../apr/include" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "API_DECLARE_EXPORT" /Fd"Debug\apriconv" /FD /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -131,5 +132,38 @@ SOURCE=.\lib\iconv_uc.c
 SOURCE=.\lib\iconv.h
 # End Source File
 # End Group
+# Begin Source File
+
+SOURCE=.\libapriconv.rc
+# End Source File
+# Begin Source File
+
+SOURCE=..\apr\build\win32ver.awk
+
+!IF  "$(CFG)" == "libapriconv - Win32 Release"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Creating Version Resource
+InputPath=..\apr\build\win32ver.awk
+
+".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	awk -f ../apr/build/win32ver.awk libapriconv "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+
+# End Custom Build
+
+!ELSEIF  "$(CFG)" == "libapriconv - Win32 Debug"
+
+# PROP Ignore_Default_Tool 1
+# Begin Custom Build - Creating Version Resource
+InputPath=..\apr\build\win32ver.awk
+
+".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+	awk -f ../apr/build/win32ver.awk libapriconv "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+
+# End Custom Build
+
+!ENDIF 
+
+# End Source File
 # End Target
 # End Project
