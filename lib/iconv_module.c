@@ -39,6 +39,7 @@
 #include "apr_strings.h"
 #include "apr_tables.h"
 #include "apr_lib.h"
+#include "api_version.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -48,6 +49,8 @@
 #ifdef API_USE_BUILTIN_ALIASES
 #include "charset_alias.h"
 #endif
+
+#define APR_ICONV_PATH "APR_ICONV" API_STRINGIFY(API_MAJOR_VERSION) "_PATH"
 
 static apr_status_t
 iconv_getpathname(char *buffer, const char *dir, const char *name, apr_pool_t *ctx)
@@ -93,7 +96,7 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
         while (0 != (*ptr++ = apr_tolower(*name++)))
             ;
 
-        if (!apr_env_get(&ptr, "APR_ICONV_PATH", subpool)
+        if (!apr_env_get(&ptr, APR_ICONV_PATH, subpool)
             && !apr_filepath_list_split(&pathelts, ptr, subpool))
         {
             int i;

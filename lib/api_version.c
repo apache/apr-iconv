@@ -13,8 +13,6 @@
  * limitations under the License.
  */
 
-#include "apr_general.h" /* for APR_STRINGIFY */
-
 #include "apr_iconv.h"
 #include "api_version.h"
 
