@@ -33,6 +33,7 @@
 #include "apr_file_io.h"
 #include "apr_pools.h"
 #include "apr_dso.h"
+#include "apr_strings.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -44,7 +45,7 @@ iconv_getpathname(char *buffer, const char *dir, const char *name)
 {
 	struct stat sb;
 
-	snprintf(buffer, APR_PATH_MAX, "%s/%s", dir, name);
+	apr_snprintf(buffer, APR_PATH_MAX, "%s/%s", dir, name);
 	return (stat(buffer, &sb) || ! S_ISREG(sb.st_mode)) ? EINVAL : 0;
 }
 
@@ -56,7 +57,7 @@ iconv_getpath(char *buf, const char *name)
 
 	if (tolower(name[0]) == 'x' && name[1] == '-')
 		name += 2;
-	snprintf(buffer, sizeof(buffer), "%s.so", name);
+	apr_snprintf(buffer, sizeof(buffer), "%s.so", name);
 	ptr = buffer + strlen(buffer) - 4 - strlen(name);
 	while (* ++ptr)
 		*ptr = tolower(*ptr);
