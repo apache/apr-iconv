@@ -1,0 +1,18 @@
+big5		csBig5
+cp775		IBM775 csPC775Baltic
+cp850		IBM850 850 csPC850Multilingual
+cp852		IBM852 852 csPCp852
+cp855		IBM855 855 csIBM855
+cp866		IBM866 866 csIBM866
+gb_2312-80	iso-ir-58 chinese
+iso-8859-1	ISO_8859-1:1987 iso-ir-100 ISO_8859-1 latin1 l1 IBM819 CP819 csISOLatin1
+iso-8859-2	ISO_8859-2:1987 iso-ir-101 ISO_8859-2 latin2 l2 csISOLatin2
+iso-8859-4	ISO_8859-4:1988 iso-ir-110 ISO_8859-4 latin4 l4 csISOLatin4
+iso-8859-5	ISO_8859-5:1988 iso-ir-144 ISO_8859-5 cyrillic csISOLatinCyrillic
+iso-8859-15	ISO_8859-15:1998 ISO_8859-15
+jis_x0201	X0201 csHalfWidthKatakana
+jis_x0208-1983	JIS_C6226-1983 iso-ir-87 x0208
+koi8-r		csKOI8R
+ksx1001		KS_X_1001
+shift_jis	MS_Kanji csShiftJIS
+us-ascii	ANSI_X3.4-1968 ANSI_X3.4-1986 ISO_646.irv:1991 ASCII ISO646-US us IBM367 cp367 csASCII

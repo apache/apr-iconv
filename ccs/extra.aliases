@@ -1,0 +1,55 @@
+adobe-stdenc
+adobe-symbol
+adobe-zdingbats
+cp037		IBM037 ebcdic-cp-us ebcdic-cp-ca ebcdic-cp-wt ebcdic-cp-nl cp037_IBMUSCanada
+cp424		IBM424 424 ebcdic-cp-he csIBM424
+cp437		IBM437 437 csPC8CodePage437
+cp500		IBM500 ebcdic-cp-be ebcdic-cp-ch csIBM500
+cp737		IBM737 cp737LatinGreek
+cp856		cp856_Hebrew_PC
+cp857		IBM857 857 csIBM857
+cp860		IBM860 860 csIBM860
+cp861		IBM861 861 cp-is csIBM861
+cp862		IBM862 862 csPC862LatinHebrew
+cp863		IBM863 863 csIBM863
+cp864		IBM864 csIBM864
+cp865		IBM865 865 csIBM865
+cp869		IBM869 869 cp-gr csIBM869
+cp874		IBM874
+cp875		cp875_IBMGreek
+cp1026		IBM1026 csIBM1026
+cp10000		cp10000_MacRoman
+cp10006		cp10006_MacGreek
+cp10007		cp10007_MacCyrillic
+cp10029		cp10029_MacLatin2
+cp10079		cp10079_MacIcelandic
+cp10081		cp10081_MacTurkish
+iso-8859-3	ISO_8859-3:1988 iso-ir-109 ISO_8859-3 latin3 l3 csISOLatin3
+iso-8859-6	ISO_8859-6:1987 iso-ir-127 ISO_8859-6 ECMA-114 ASMO-708 arabic csISOLatinArabic
+iso-8859-7	ISO_8859-7:1987 iso-ir-126 ISO_8859-7 ELOT_928 ECMA-118 greek greek8 csISOLatinGreek
+iso-8859-8	ISO_8859-8:1988 iso-ir-138 ISO_8859-8 hebrew csISOLatinHebrew
+iso-8859-9	ISO_8859-9:1989 iso-ir-148 ISO_8859-9 latin5 l5 csISOLatin5
+iso-8859-10	ISO_8859-10:1992 iso-ir-157 ISO_8859-10 latin6 l6 csISOLatin6
+iso-8859-13	ISO_8859-13:1998 ISO_8859-13
+iso-8859-14	ISO_8859-14:1998 ISO_8859-14
+koi8-ru
+mac-ce		macCentEuro
+mac-croatian	macCroatian
+mac-cyrillic	macCyrillic
+mac-dingbats	macDingbats
+mac-greek	macGreek
+mac-iceland	macIceland
+mac-roman	macRoman
+mac-romania	macRomania
+mac-thai	macThai
+mac-turkish	macTurkish
+mac-ukraine	macUkraine
+windows-1250	cp1250
+windows-1251	cp1251
+windows-1252	cp1252
+windows-1253	cp1253
+windows-1254	cp1254
+windows-1255	cp1255
+windows-1256	cp1256
+windows-1257	cp1257
+windows-1258	cp1258
