@@ -44,7 +44,7 @@ static void
 convert_stream(FILE *in, iconv_stream *out)
 {
 	static char buffer[4096];
-	size_t size;
+	apr_size_t size;
 
 	while ((size = fread(buffer, 1, sizeof(buffer), in))) {
     		if (iconv_bwrite(out, buffer, size) <= 0) {

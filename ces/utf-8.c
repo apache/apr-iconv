@@ -46,9 +46,9 @@ utf8_names(struct iconv_ces *ces)
 
 #define cont_byte(b) (((b) & 0x3F) | 0x80)
 
-static ssize_t
+static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft)
+	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	unsigned char *cp;
 	int n;
@@ -94,7 +94,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 
 static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
-	const unsigned char **inbuf, size_t *inbytesleft)
+	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	const unsigned char *in = *inbuf;
 	unsigned char byte = *in++;
