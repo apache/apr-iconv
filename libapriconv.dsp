@@ -154,7 +154,7 @@ SOURCE=..\apr\build\win32ver.awk
 InputPath=..\apr\build\win32ver.awk
 
 ".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
 
 # End Custom Build
 
@@ -165,7 +165,7 @@ InputPath=..\apr\build\win32ver.awk
 InputPath=..\apr\build\win32ver.awk
 
 ".\libapriconv.rc" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
-	awk -f ../apr/build/win32ver.awk libapriconv "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
+	awk -f ../apr/build/win32ver.awk libapriconv.dll "Apache APR I18N Conversion Library"  ../../include/ap_release.h > .\libapriconv.rc
 
 # End Custom Build
 
