@@ -101,6 +101,7 @@ typedef void *apr_iconv_t;
  * @param from name of charset of the input bytes.
  * @param pool pool to alloc memory.
  * @param cd conversion descriptor created in pool.
+ */
 API_DECLARE(apr_status_t) apr_iconv_open(const char *to, const char *from,
                                          apr_pool_t *pool, apr_iconv_t *cd);
 /**
