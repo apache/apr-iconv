@@ -127,7 +127,7 @@ symbols:
 	$(SILENT)copy $(OUTPUT_DIR)\*.pdb "$(INSTALL_DIR)" < <<
 A
 <<
-!IF "$(SYMBOLS_DIR)x" != "x"
+!IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
 	@echo Copying apr-iconv dbg debugging symbols from $(OUTPUT_DIR) to $(SYMBOLS_DIR)
 	$(SILENT)copy $(OUTPUT_DIR)\*.dbg "$(SYMBOLS_DIR)\so" < <<
 A
