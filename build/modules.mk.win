@@ -8,8 +8,27 @@ NULL=nul
 SILENT=@
 
 # Default build type: Release, static APR, static APR-iconv
-BUILD_TYPE = RSS
+BUILD_TYPE = RDD
 
+!IF "$(BUILD_TYPE)" == "RDD"
+# Release: dynamic APR, dynamic APR-iconv
+APR_LIB_PFX = Release/lib
+API_LIB_PFX = Release/lib
+INT_CFLAGS  = /MD /O2
+INT_DEFINES = /D "NDEBUG"
+OUTPUT_DIR  = Release
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "DDD"
+# Debug: dynamic APR, dynamic APR-iconv
+APR_LIB_PFX = Debug/lib
+API_LIB_PFX = Debug/lib
+INT_CFLAGS  = /MDd /Zi /Od
+INT_DEFINES = /D "_DEBUG"
+INT_LDFLAGS = /DEBUG
+OUTPUT_DIR  = Debug
+
+!ELSE
 !IF "$(BUILD_TYPE)" == "RSS"
 # Release: static APR, static APR-iconv
 APR_LIB_PFX = LibR/
@@ -23,27 +42,9 @@ OUTPUT_DIR  = LibR
 # Debug: static APR, static APR-iconv
 APR_LIB_PFX = LibD/
 API_LIB_PFX = LibD/
-INT_CFLAGS  = /MDd /ZI /Od
-INT_DEFINES = /D "_DEBUG" /D "APR_DECLARE_STATIC"
+INT_CFLAGS  = /MDd /Zi /Od
+INT_DEFINES = /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
 OUTPUT_DIR  = LibD
-
-!ELSE
-!IF "$(BUILD_TYPE)" == "RDD"
-# Release: dynamic APR, dynamic APR-iconv
-APR_LIB_PFX = Release/lib
-API_LIB_PFX = Release/lib
-INT_CFLAGS  = /MD /O2
-INT_DEFINES = /D "NDEBUG"
-OUTPUT_DIR  = Release
-
-!ELSE
-!IF "$(BUILD_TYPE)" == "DDD"
-# Debug: dynamic APR, cynamic APR-iconv
-APR_LIB_PFX = Debug/lib
-API_LIB_PFX = Debug/lib
-INT_CFLAGS  = /MDd /ZI /Od
-INT_DEFINES = /D "_DEBUG"
-OUTPUT_DIR  = Debug
 
 !ELSE
 !IF "$(BUILD_TYPE)" == "RDS"
@@ -51,7 +52,7 @@ OUTPUT_DIR  = Debug
 APR_LIB_PFX = Release/lib
 API_LIB_PFX = DynLibR/
 INT_CFLAGS  = /MD /O2
-INT_DEFINES = /D "NDEBUG"
+INT_DEFINES = /D "NDEBUG" /D "API_DECLARE_STATIC"
 OUTPUT_DIR  = DynLibR
 
 !ELSE
@@ -59,12 +60,12 @@ OUTPUT_DIR  = DynLibR
 # Debug: dynamic APR, static APR-iconv
 APR_LIB_PFX = Debug/lib
 API_LIB_PFX = DynLibD/
-INT_CFLAGS  = /MDd /ZI /Od
-INT_DEFINES = /D "_DEBUG"
+INT_CFLAGS  = /MDd /Zi /Od
+INT_DEFINES = /D "_DEBUG" /D "API_DECLARE_STATIC"
 OUTPUT_DIR  = DynLibD
 
 !ELSE
-wups, unknown build type!
+!ERROR Wups, unknown build type!
 
 !ENDIF
 !ENDIF
@@ -75,10 +76,10 @@ wups, unknown build type!
 
 
 APR_SOURCE   = ../../apr
-INT_CFLAGS   = /nologo /GX /FD $(INT_CFLAGS)
+INT_CFLAGS   = /nologo $(INT_CFLAGS) /Fp"$(OUTPUT_DIR)/iconv.pch" /YX"iconv.h"
 INT_INCLUDES = /I ../lib /I $(APR_SOURCE)/include
 INT_DEFINES  = /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" $(INT_DEFINES)
-INT_LDFLAGS  = /nologo /dll /subsystem:windows /export:iconv_module,DATA
+INT_LDFLAGS  = /nologo /dll /incremental:no /subsystem:windows /export:iconv_module,DATA
 
 CFLAGS       = /W3
 ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
@@ -86,13 +87,17 @@ ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
 LDFLAGS      = /WARN:0
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
-
 .c{$(OUTPUT_DIR)}.so:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)/$(NULL)" mkdir "$(OUTPUT_DIR)"
-	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj $< \
-	/link $(ALL_LDFLAGS) /out:$@ \
-	../$(API_LIB_PFX)apriconv.lib $(APR_SOURCE)/$(APR_LIB_PFX)apr.lib \
-	kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+	$(SILENT)echo Compiling and linking $@...
+	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*" $< \
+		/link $(ALL_LDFLAGS) /out:$@ \
+		../$(API_LIB_PFX)apriconv.lib \
+		$(APR_SOURCE)/$(APR_LIB_PFX)apr.lib \
+		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+	$(SILENT)echo.
+	$(SILENT)del "$*.exp"
+	$(SILENT)del "$*.lib"
 
 all: $(ALL_TARGETS)
 
