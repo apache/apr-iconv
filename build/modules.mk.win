@@ -18,8 +18,9 @@ BIND_MODE  = shared
 # release shared
 APR_LIB_PFX = $(APR_SOURCE)\Release\lib
 API_LIB_PFX = $(API_SOURCE)\Release\lib
-CFG_CFLAGS  = /MD /O2
+CFG_CFLAGS  = /MD /Zi /O2
 CFG_DEFINES = /D "NDEBUG"
+CFG_LDFLAGS = /debug /debugtype:both /pdbtype:sept 
 CFG_OUTPUT  = Release\iconv
 
 !ELSE
@@ -27,8 +28,9 @@ CFG_OUTPUT  = Release\iconv
 # release static
 APR_LIB_PFX = $(APR_SOURCE)\LibR\	# no line continuation
 API_LIB_PFX = $(API_SOURCE)\LibR\	# no line continuation
-CFG_CFLAGS  = /MD /O2
+CFG_CFLAGS  = /MD /Zi /O2
 CFG_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
+CFG_LDFLAGS = /debug /debugtype:both /pdbtype:sept 
 CFG_OUTPUT  = LibR\iconv
 
 !ELSE
@@ -85,10 +87,17 @@ ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
 LDFLAGS      = /WARN:0
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
+!IF "$(BUILD_MODE)" == "release" || "$(BUILD_MODE)" == "Release"
+ALL_REBASE = -d -b $(REBASE_TOP) -x $(OUTPUT_DIR)
+!ELSE
+ALL_REBASE = -d -b $(REBASE_TOP)
+!ENDIF
+REBASE_STAMP = $(OUTPUT_DIR)\rebased.$(REBASE_TOP).log
+
 .c{$(OUTPUT_DIR)}.so:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 	$(SILENT)echo Compiling and linking $@...
-	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*" $< \
+	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
 		/link $(ALL_LDFLAGS) /out:$@ \
 		"$(API_LIB_PFX)apriconv.lib" \
 		"$(APR_LIB_PFX)apr.lib" \
@@ -97,10 +106,10 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 	$(SILENT)del "$*.exp"
 	$(SILENT)del "$*.lib"
 
-all: $(ALL_TARGETS) rebase
+all: $(ALL_TARGETS) $(REBASE_STAMP)
 
-rebase:
-	$(SILENT)rebase -d -b $(REBASE_TOP) -q $(ALL_TARGETS)
+$(REBASE_STAMP): $(ALL_TARGETS) 
+	$(SILENT)rebase $(ALL_REBASE) $(ALL_TARGETS) >$(REBASE_STAMP)
 
 clean:
 	-$(SILENT)if exist "$(OUTPUT_DIR)/$(NULL)" $(rmdir) $(OUTPUT_DIR)
