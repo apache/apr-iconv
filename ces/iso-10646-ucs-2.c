@@ -115,12 +115,12 @@ convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf,
 }
 
 static const struct iconv_ces_desc iconv_ces_desc = {
-	iconv_ces_open_func,
-	iconv_ces_close_func,
-	iconv_ces_reset_func,
+	apr_iconv_ces_open_func,
+	apr_iconv_ces_close_func,
+	apr_iconv_ces_reset_func,
 	ucs2_names,
-	iconv_ces_nbits8,
-	iconv_ces_zero,
+	apr_iconv_ces_nbits8,
+	apr_iconv_ces_zero,
 	convert_from_ucs,
 	convert_to_ucs,
 	NULL
@@ -128,7 +128,7 @@ static const struct iconv_ces_desc iconv_ces_desc = {
 
 struct iconv_module_desc iconv_module = {
 	ICMOD_UC_CES,
-	iconv_mod_noevent,
+	apr_iconv_mod_noevent,
 	NULL,
 	&iconv_ces_desc
 };

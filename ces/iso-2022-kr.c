@@ -53,24 +53,25 @@ static const struct iconv_ces_iso2022_ccs ccsattr[] = {
 
 static const struct iconv_module_depend iconv_module_depend[] = {
 	{ICMOD_UC_CCS, "us-ascii", ccsattr + 0},
-	{ICMOD_UC_CCS, "ksx1001", ccsattr + 1}
+	{ICMOD_UC_CCS, "ksx1001", ccsattr + 1},
+        END_ICONV_MODULE_DEPEND
 };
 
 static const struct iconv_ces_desc iconv_ces_desc = {
-	iconv_iso2022_open,
-	iconv_iso2022_close,
-	iconv_iso2022_reset,
+	apr_iconv_iso2022_open,
+	apr_iconv_iso2022_close,
+	apr_iconv_iso2022_reset,
 	iso_names,
-	iconv_ces_nbits7,
-	iconv_ces_zero,
-	iconv_iso2022_convert_from_ucs,
-	iconv_iso2022_convert_to_ucs,
+	apr_iconv_ces_nbits7,
+	apr_iconv_ces_zero,
+	apr_iconv_iso2022_convert_from_ucs,
+	apr_iconv_iso2022_convert_to_ucs,
 	shift_tab
 };
 
 struct iconv_module_desc iconv_module = {
 	ICMOD_UC_CES,
-	iconv_mod_noevent,
+	apr_iconv_mod_noevent,
 	iconv_module_depend,
 	&iconv_ces_desc
 };

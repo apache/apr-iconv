@@ -5171,7 +5171,7 @@ static const struct iconv_ccs_desc iconv_ccs_desc = {
 
 struct iconv_module_desc iconv_module = {
 	ICMOD_UC_CCS,
-	iconv_mod_noevent,
+	apr_iconv_mod_noevent,
 	NULL,
 	&iconv_ccs_desc
 };

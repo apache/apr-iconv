@@ -58,23 +58,23 @@ static const struct iconv_module_depend iconv_module_depend[] = {
 	{ICMOD_UC_CCS, "jis_x0208-1983", ccsattr + 1},
 	{ICMOD_UC_CCS, "jis_x0201", ccsattr + 2},
 	{ICMOD_UC_CCS, "jis_x0212-1990", ccsattr + 3},
-	NULL
+        END_ICONV_MODULE_DEPEND
 };
 
 static const struct iconv_ces_desc iconv_ces_desc = {
-	iconv_euc_open,
-	iconv_euc_close,
-	iconv_ces_no_func,
+	apr_iconv_euc_open,
+	apr_iconv_euc_close,
+	apr_iconv_ces_no_func,
 	euc_names,
-	iconv_ces_nbits8,
-	iconv_ces_zero,
-	iconv_euc_convert_from_ucs,
-	iconv_euc_convert_to_ucs,
+	apr_iconv_ces_nbits8,
+	apr_iconv_ces_zero,
+	apr_iconv_euc_convert_from_ucs,
+	apr_iconv_euc_convert_to_ucs,
 };
 
 struct iconv_module_desc iconv_module = {
 	ICMOD_UC_CES,
-	iconv_mod_noevent,
+	apr_iconv_mod_noevent,
 	iconv_module_depend,
 	&iconv_ces_desc
 };
