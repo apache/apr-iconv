@@ -58,7 +58,7 @@
  * The Patch Level never includes API changes, simply bug fixes.
  * Reset to 0 when upgrading API_MINOR_VERSION
  */
-#define API_PATCH_VERSION       1
+#define API_PATCH_VERSION       2
 
 /** 
  * The symbol API_IS_DEV_VERSION is only defined for internal,
