@@ -1,0 +1,4 @@
+Changes with APR-ICONV a9
+
+  *) Source moved from the apr library into it's own repository
+     due to size concerns.  Still requires portability overhaul.
