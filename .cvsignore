@@ -1,5 +1,6 @@
 apriconv.vcproj
 libapriconv.vcproj
+libapriconv.rc
 config.cache
 config.log
 config.nice
