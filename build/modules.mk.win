@@ -1,0 +1,100 @@
+# -*- Makefile -*-
+!IF "$(OS)" == "Windows_NT"
+NULL=
+!ELSE
+NULL=nul
+!ENDIF
+
+SILENT=@
+
+# Default build type: Release, static APR, static APR-iconv
+BUILD_TYPE = RSS
+
+!IF "$(BUILD_TYPE)" == "RSS"
+# Release: static APR, static APR-iconv
+APR_LIB_PFX = LibR/
+API_LIB_PFX = LibR/
+INT_CFLAGS  = /MD /O2
+INT_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC"
+OUTPUT_DIR  = LibR
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "DSS"
+# Debug: static APR, static APR-iconv
+APR_LIB_PFX = LibD/
+API_LIB_PFX = LibD/
+INT_CFLAGS  = /MDd /ZI /Od
+INT_DEFINES = /D "_DEBUG" /D "APR_DECLARE_STATIC"
+OUTPUT_DIR  = LibD
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "RDD"
+# Release: dynamic APR, dynamic APR-iconv
+APR_LIB_PFX = Release/lib
+API_LIB_PFX = Release/lib
+INT_CFLAGS  = /MD /O2
+INT_DEFINES = /D "NDEBUG"
+OUTPUT_DIR  = Release
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "DDD"
+# Debug: dynamic APR, cynamic APR-iconv
+APR_LIB_PFX = Debug/lib
+API_LIB_PFX = Debug/lib
+INT_CFLAGS  = /MDd /ZI /Od
+INT_DEFINES = /D "_DEBUG"
+OUTPUT_DIR  = Debug
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "RDS"
+# Release: dynamic APR, static APR-iconv
+APR_LIB_PFX = Release/lib
+API_LIB_PFX = DynLibR/
+INT_CFLAGS  = /MD /O2
+INT_DEFINES = /D "NDEBUG"
+OUTPUT_DIR  = DynLibR
+
+!ELSE
+!IF "$(BUILD_TYPE)" == "DDS"
+# Debug: dynamic APR, static APR-iconv
+APR_LIB_PFX = Debug/lib
+API_LIB_PFX = DynLibD/
+INT_CFLAGS  = /MDd /ZI /Od
+INT_DEFINES = /D "_DEBUG"
+OUTPUT_DIR  = DynLibD
+
+!ELSE
+wups, unknown build type!
+
+!ENDIF
+!ENDIF
+!ENDIF
+!ENDIF
+!ENDIF
+!ENDIF
+
+
+APR_SOURCE   = ../../apr
+INT_CFLAGS   = /nologo /GX /FD $(INT_CFLAGS)
+INT_INCLUDES = /I ../lib /I $(APR_SOURCE)/include
+INT_DEFINES  = /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" $(INT_DEFINES)
+INT_LDFLAGS  = /nologo /dll /subsystem:windows /export:iconv_module,DATA
+
+CFLAGS       = /W3
+ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
+
+LDFLAGS      = /WARN:0
+ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
+
+
+.c{$(OUTPUT_DIR)}.so:
+	-$(SILENT)if not exist "$(OUTPUT_DIR)/$(NULL)" mkdir "$(OUTPUT_DIR)"
+	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj $< \
+	/link $(ALL_LDFLAGS) /out:$@ \
+	../$(API_LIB_PFX)apriconv.lib $(APR_SOURCE)/$(APR_LIB_PFX)apr.lib \
+	kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+
+all: $(ALL_TARGETS)
+
+clean:
+	-$(SILENT)del *.exp *.lib *.obj *.so
