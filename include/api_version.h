@@ -63,13 +63,13 @@ extern "C" {
 #define API_MINOR_VERSION       0
 
 /** patch level */
-#define API_PATCH_VERSION       1
+#define API_PATCH_VERSION       2
 
 /** 
  *  This symbol is defined for internal, "development" copies of API. This
  *  symbol will be #undef'd for releases. 
  */
-/* #define API_IS_DEV_VERSION */
+#define API_IS_DEV_VERSION
 
 
 /** The formatted string of API's version */
