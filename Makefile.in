@@ -39,6 +39,12 @@ install:
 	fi; \
 	(cd util; $(LIBTOOL) --mode=install cp iconv $(DESTDIR)$(exec_prefix))
 
+all:
+	(cd lib;  $(MAKE))
+	(cd ccs;  $(MAKE))
+	(cd ces;  $(MAKE))
+	(cd util; $(MAKE))
+
 docs:
 	mkdir ./docs
 	perl $(abs_srcdir)/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
