@@ -34,17 +34,7 @@
 
 #include "apr.h"
 #include "apr_pools.h"
-#ifdef WIN32
-#define ICONV_DEFAULT_PATH "iconv"
-#else
-#include "apr_iconv_private.h" /* contains ICONV_DEFAULT_PATH */
-#endif
-
 #include <stddef.h>
-
-/* apr additions */
-#define issetugid() 0
-/* apr additions */
 
 /**
  * API_DECLARE_EXPORT is defined when building the libapriconv dynamic 
