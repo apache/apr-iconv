@@ -8,7 +8,8 @@ TARGETS  = $(PROGRAMS)
 @INCLUDE_RULES@
 
 iconv_OBJECTS = iconv.lo iconv_stream.lo
-iconv_LDADD   = ../lib/libapriconv.la @APR_LIBS@
+iconv_LDADD   = ../lib/libapriconv.la
+APR_LIBS      = @APR_LIBS@
 
 iconv:	$(iconv_OBJECTS) $(iconv_LDADD)
-	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD) $(LIBS)
+	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD) $(LIBS) $(APR_LIBS)
