@@ -1,20 +1,20 @@
 #
 # Top-level Makefile for APRICONV
 #
-TARGET_LIB = lib/libapriconv.la
-TARGET_EXPORTS = lib/apriconv.exports
-
-TARGETS = delete-lib $(TARGET_LIB) delete-exports $(TARGET_EXPORTS)
+abs_srcdir=@abs_srcdir@
+abs_builddir=@abs_builddir@
+VPATH = @srcdir@
 
 # bring in rules.mk for standard functionality
 @INCLUDE_RULES@
 
-SUBDIRS = lib ccs ces util
-CLEAN_SUBDIRS = . lib ccs ces util
+SUBDIRS = lib ccs ces
+CLEAN_SUBDIRS = . lib ccs ces
+
+TARGET_LIB = lib/libapriconv.la
 
 CLEAN_TARGETS = $(TARGET_EXPORTS)
-DISTCLEAN_TARGETS = config.cache config.log config.status \
-	export_vars.sh
+DISTCLEAN_TARGETS = config.cache config.log config.status export_vars.sh
 EXTRACLEAN_TARGETS = configure libtool aclocal.m4
 
 ### install location
@@ -24,6 +24,7 @@ lib_prefix=@prefix@/lib
 libdir=@iconv_libdir@
 includedir=@includedir@
 
+MKINSTALLDIRS=$(abs_srcdir)/build/mkdir.sh
 
 delete-lib:
 	@if test -f $(TARGET_LIB); then \
@@ -37,25 +38,23 @@ delete-lib:
 
 install: $(TARGET_LIB)
 	if [ ! -d $(includedir) ]; then \
-	    @APR_SOURCE_DIR@/build/mkdir.sh $(includedir); \
+	    $(MKINSTALLDIRS) $(includedir); \
 	fi; \
-	cp lib/*.h $(includedir); \
+	cp -p $(abs_srcdir)/lib/*.h $(includedir); \
+	cp -p $(abs_builddir)/lib/*.h $(includedir); \
 	if [ ! -d $(lib_prefix) ]; then \
-	    @APR_SOURCE_DIR@/build/mkdir.sh $(lib_prefix); \
+	    $(MKINSTALLDIRS) $(lib_prefix); \
 	fi; \
 	$(LIBTOOL) --mode=install cp $(TARGET_LIB) $(lib_prefix)
 	if [ ! -d $(libdir) ]; then \
-	    @APR_SOURCE_DIR@/build/mkdir.sh $(libdir); \
+	    $(MKINSTALLDIRS) $(libdir); \
 	fi; \
-	(cd ccs; $(LIBTOOL) --mode=install cp *.la $(libdir))
-	(cd ces; $(LIBTOOL) --mode=install cp *.la $(libdir))
+	(cd ccs; for i in *.la; do $(LIBTOOL) --mode=install cp $$i $(libdir); done)
+	(cd ces; for i in *.la; do $(LIBTOOL) --mode=install cp $$i $(libdir); done)
 	if [ ! -d $(exec_prefix) ]; then \
-	    @APR_SOURCE_DIR@/build/mkdir.sh $(exec_prefix); \
+	    $(MKINSTALLDIRS) $(exec_prefix); \
 	fi; \
 	(cd util/.libs; $(LIBTOOL) --mode=install cp iconv $(exec_prefix))
-
-$(TARGET_LIB):
-	(cd lib; make)
 
 delete-exports:
 	@if test -f $(TARGET_EXPORTS); then \
@@ -73,6 +72,5 @@ $(TARGET_EXPORTS):
 docs:
 	mkdir ./docs
 	perl @APR_SOURCE_DIR@/build/scandoc.pl -i./build/default.pl -p./docs/ ./lib/*.h
-
 
 .PHONY: delete-lib delete-exports

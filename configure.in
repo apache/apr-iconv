@@ -3,64 +3,54 @@ dnl Process this file with autoconf to produce a configure script
 dnl
 
 AC_PREREQ(2.13)
-AC_INIT(build/rules.mk.in)
+AC_INIT(Makefile.in)
 
-AC_CONFIG_AUX_DIR(../apr/build)
+AC_CONFIG_AUX_DIR(build)
 AC_CONFIG_HEADER(lib/apr_iconv_private.h)
 AC_PREFIX_DEFAULT(/usr/local/apache2)
-#test "$prefix" = "NONE" && prefix='/usr/local/apache2'
 
-AC_PROG_CC
+sinclude(build/apr-iconv.m4)
+sinclude(build/apr_common.m4)
+sinclude(build/find_apr.m4)
+
+dnl This is required by autoconf!
 AC_PROG_AWK
-AC_CHECK_PROG(RM, rm, rm)
 
-dnl
 dnl compute the top directory of the build
-dnl note: this is needed for LIBTOOL
-dnl
-top_builddir="`cd $srcdir ; pwd`"
+abs_srcdir=`(cd $srcdir && pwd)`
+abs_builddir=`pwd`
+top_builddir="$abs_builddir"
+
+AC_SUBST(abs_srcdir)
+AC_SUBST(abs_builddir)
 AC_SUBST(top_builddir)
 
+if test "$abs_builddir" != "$abs_srcdir"; then
+  USE_VPATH=1
+fi
+
 dnl check for APR
-APU_FIND_APR
-aprbuild=$APR_SOURCE_DIR/build
+API_FIND_APR
+
+dnl copy apr's rules.mk into our build directory.
+if test ! -d $abs_builddir/build ; then
+  mkdir $abs_builddir/build
+fi
+cp $APR_BUILD_DIR/apr_rules.mk $abs_builddir/build/rules.mk
 
 dnl
 dnl set up the compilation flags and stuff
 dnl
-INCLUDES="$INCLUDES -I\$(top_builddir)/lib"
+API_INCLUDES="-I$abs_builddir/lib -I$abs_builddir/include"
+if test -n "$USE_VPATH"; then
+  API_INCLUDES="$API_INCLUDES -I$abs_srcdir/lib -I$abs_srcdir/include"
+fi
 
-INCLUDES="$INCLUDES -I$APR_INCLUDES"
+AC_SUBST(API_INCLUDES)
 
-dnl
-dnl prep libtool
-dnl
-echo "performing libtool configuration..."
-AC_PROG_LIBTOOL
+AC_SUBST(APR_SO_EXT)
 
-$SHELL $aprbuild/ltconfig --output=shlibtool --disable-static --srcdir=$aprbuild --cache-file=./config.cache $aprbuild/ltmain.sh
-dnl
-dnl grab flags from APR.
-dnl ### APR doesn't have "nice" names for its exports (yet), but it isn't
-dnl ### a problem to deal with them right here
-dnl
-
-. "$APR_SOURCE_DIR/APRVARS"
-APR_EXPORT_CPPFLAGS="$EXTRA_CPPFLAGS"
-APR_EXPORT_CFLAGS="$EXTRA_CFLAGS"
-APR_EXPORT_LIBS="$EXTRA_LIBS"
-
-dnl
-dnl Prep all the flags and stuff for compilation and export to other builds
-dnl
-CFLAGS="$CFLAGS $INCLUDES $APR_EXPORT_CFLAGS $APR_EXPORT_CPPFLAGS"
-LIBS="$LIBS $APR_EXPORT_LIBS"
-
-AC_SUBST(APRUTIL_EXPORT_LIBS)
-
-dnl
 dnl Adds in config *.h file
-dnl
 AC_DEFINE_UNQUOTED(ICONV_DEFAULT_PATH,"$prefix/lib/iconv",
 	[ Directory where the *.so tables are stored ] )
 iconv_libdir=$prefix/lib/iconv
@@ -71,10 +61,10 @@ dnl BSD/OS (BSDi) needs to use a different include syntax in the Makefiles
 dnl
 case "$host_alias" in
 *bsdi*)
-    INCLUDE_RULES=".include \"$top_builddir/build/rules.mk\""
+    INCLUDE_RULES=".include \"$abs_builddir/build/rules.mk\""
     ;;
 *)
-    INCLUDE_RULES="include $top_builddir/build/rules.mk"
+    INCLUDE_RULES="include $abs_builddir/build/rules.mk"
     ;;
 esac
 AC_SUBST(INCLUDE_RULES)
@@ -87,5 +77,4 @@ AC_OUTPUT([
 	ces/Makefile
 	lib/Makefile
 	util/Makefile
-	build/rules.mk
 	])

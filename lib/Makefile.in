@@ -1,14 +1,22 @@
 # Generated automatically from Makefile.in by configure.
-libdir = /usr/local/lib
+VPATH = @srcdir@
+
+INCLUDES = @API_INCLUDES@ @APR_INCLUDES@
+
 TARGET_LIB = libapriconv.la
-TARGET_EXPORTS = apriconv.exports
-OBJECTS=        iconv_module.lo iconv.lo iconv_int.lo iconv_uc.lo \
-                iconv_ces.lo iconv_ces_euc.lo iconv_ces_iso2022.lo
+SUBDIRS = .
 
-$(TARGET_LIB):	$(OBJECTS)
-	$(LINK) -rpath $(libdir) $(OBJECTS)                                     
+# May need to do something for apriconv.exports
+TARGETS = iconv_module.lo iconv.lo iconv_int.lo iconv_uc.lo \
+	iconv_ces.lo iconv_ces_euc.lo iconv_ces_iso2022.lo $(TARGET_LIB)
 
-all:		$(TARGET_LIB)
- 
-# bring in rules.mk for standard functionality                                  
+#OBJECTS=
+
+# bring in rules.mk for standard functionality
 @INCLUDE_RULES@
+
+$(TARGET_LIB):
+	@objects="`find $(SUBDIRS) -name '*.@APR_SO_EXT@' -print`"; \
+	tmpcmd="$(LINK) @APR_LIB_TARGET@"; \
+	echo $$tmpcmd; \
+	$$tmpcmd && touch $@
