@@ -94,9 +94,9 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
 
         /* FIXME: Should use apr_env_get instead, to get correct path
                   encoding on Windows. */
-        status = apr_filepath_list_split(&pathelts, getenv("APR_ICONV_PATH"),
-                                         subpool);
-        if (!status)
+        ptr = getenv("APR_ICONV_PATH");
+        if (ptr != NULL
+            && !apr_filepath_list_split(&pathelts, ptr, subpool))
         {
             int i;
             char **elts = (char **)pathelts->elts;
