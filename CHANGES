@@ -1,4 +1,8 @@
-Changes with APR-ICONV a15
+Changes with APR-ICONV 0.9.3
+
+
+
+Changes with APR-ICONV 0.9.2
 
   *) A second pass at a working build system - now builds on linux,
      some namespace protection added.
@@ -9,8 +13,6 @@ Changes with APR-ICONV a15
 
   *) First set of changes for APR compatibility (eliminated __inline).
      [jean-frederic clere <jfrederic.clere@fujitsu-siemens.com>]
-
-Changes with APR-ICONV a9
 
   *) Source moved from the apr library into it's own repository
      due to size concerns.  Still requires portability overhaul.
