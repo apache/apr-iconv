@@ -93,16 +93,16 @@ extern "C" {
  * programs such as structure size changes.  No binary compatibility is
  * possible across a change in the major version.
  */
-#define API_MAJOR_VERSION       0
+#define API_MAJOR_VERSION       1
 
 /** 
  * Minor API changes that do not cause binary compatibility problems.
  * Should be reset to 0 when upgrading API_MAJOR_VERSION
  */
-#define API_MINOR_VERSION       9
+#define API_MINOR_VERSION       0
 
 /** patch level */
-#define API_PATCH_VERSION       4
+#define API_PATCH_VERSION       0
 
 /** 
  *  This symbol is defined for internal, "development" copies of API. This
