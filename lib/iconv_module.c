@@ -41,17 +41,20 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-static int
-iconv_getpathname(char *buffer, const char *dir, const char *name)
+static apr_status_t
+iconv_getpathname(char *buffer, const char *dir, const char *name, apr_pool_t *ctx)
 {
-	struct stat sb;
+        apr_status_t rv;
+	apr_finfo_t sb;
 
 	apr_snprintf(buffer, APR_PATH_MAX, "%s/%s", dir, name);
-	return (stat(buffer, &sb) || ! S_ISREG(sb.st_mode)) ? EINVAL : 0;
+        if (rv = apr_stat(&sb, buffer, APR_FINFO_TYPE, ctx))
+            return rv;
+	return ((sb.filetype != APR_REG) ? APR_EINVAL : 0);
 }
 
-static int
-iconv_getpath(char *buf, const char *name)
+static apr_status_t
+iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
 {
 	char buffer[APR_PATH_MAX];
 	char *ptr;
@@ -70,7 +73,7 @@ iconv_getpath(char *buf, const char *name)
 			if (p == NULL)
 				return ENOMEM;
 			for (ptr = p; (dir = strtok(p, ":")); p = NULL) {
-				if (iconv_getpathname(buf, dir, buffer) == 0) {
+				if (iconv_getpathname(buf, dir, buffer, ctx) == 0) {
 					free(ptr);
 					return 0;
 				}
@@ -78,7 +81,7 @@ iconv_getpath(char *buf, const char *name)
 			free(ptr); /* otherwise memory leak */
 		}
 	}
-	return iconv_getpathname(buf, ICONV_DEFAULT_PATH, buffer);
+	return iconv_getpathname(buf, ICONV_DEFAULT_PATH, buffer, ctx);
 }
 
 static int
@@ -112,7 +115,7 @@ iconv_mod_load(const char *modname, int modtype, const void *args,
 	void *handle;
 	int error;
 
-	if (iconv_getpath(buffer, modname) != 0)
+	if (iconv_getpath(buffer, modname, ctx) != 0)
 		return EINVAL;
 
 	error = iconv_dlopen(buffer, "iconv_module", &handle, (void**)&mdesc, ctx);

@@ -39,7 +39,7 @@
 #include "iconv.h"
 
 apr_status_t
-iconv_malloc(size_t size, void **pp)
+iconv_malloc(apr_size_t size, void **pp)
 {
 	void *p = malloc(size);
 
