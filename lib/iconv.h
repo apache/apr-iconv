@@ -34,9 +34,9 @@
 
 #include "apr.h"
 #include "apr_pools.h"
+#include "apr_iconv_private.h" /* contains ICONV_DEFAULT_PATH */
 
 /* To be processed by configure */
-#define ICONV_DEFAULT_PATH "/usr/local/lib/iconv"
 #define EFTYPE -1234
 /* To be processed by configure */
 
