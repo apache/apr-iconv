@@ -52,7 +52,7 @@ static struct iconv_converter_desc *converters[] = {
  */
 
 API_DECLARE(apr_status_t)
-apr_iconv(iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
+apr_iconv(apr_iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
 	char **outbuf, apr_size_t *outbytesleft, apr_size_t *result)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
@@ -72,14 +72,14 @@ apr_iconv(iconv_t cd, const char **inbuf, apr_size_t *inbytesleft,
 }
 
 API_DECLARE(apr_status_t)
-apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, iconv_t *res)
+apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, apr_iconv_t *res)
 {
 	struct iconv_converter_desc **idesc;
 	struct iconv_converter *icp;
 	void *data;
 	apr_status_t error;
 
-	*res = (iconv_t)-1;
+	*res = (apr_iconv_t)-1;
 	icp = malloc(sizeof(*icp));
 	if (icp == NULL)
 		return (APR_ENOMEM);
@@ -100,7 +100,7 @@ apr_iconv_open(const char *to, const char *from, apr_pool_t *ctx, iconv_t *res)
 }
 
 API_DECLARE(apr_status_t)
-apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
+apr_iconv_close(apr_iconv_t *cd, apr_pool_t *ctx)
 {
 	struct iconv_converter *icp = (struct iconv_converter *)cd;
 	int error = 0;
@@ -120,7 +120,7 @@ apr_iconv_close(iconv_t cd, apr_pool_t *ctx)
 #include <iconv.h>
 
 apr_status_t apr_iconv_open(const char *to_charset,
-            const char *from_charset, apr_pool_t *ctx, iconv_t **res)
+            const char *from_charset, apr_pool_t *ctx, apr_iconv_t **res)
 {
 	*res = iconv_open(to_charset, from_charset);
 	if (*res == (apr_size_t) -1)
@@ -128,7 +128,7 @@ apr_status_t apr_iconv_open(const char *to_charset,
 	return APR_SUCCESS;
 }
 
-apr_status_t apr_iconv(iconv_t cd, const char **inbuf,
+apr_status_t apr_iconv(apr_iconv_t cd, const char **inbuf,
             apr_size_t *inbytesleft, char **outbuf,
             apr_size_t *outbytesleft, apr_size_t *result)
 {
@@ -137,7 +137,7 @@ apr_status_t apr_iconv(iconv_t cd, const char **inbuf,
 		return apr_get_os_error();
 	return APR_SUCCESS;
 }
-apr_status_t apr_iconv_close(iconv_t cd)
+apr_status_t apr_iconv_close(apr_iconv_t cd, apr_pool_t *ctx)
 {
 	int status;
 	if (iconv_close(cd))
