@@ -35,11 +35,16 @@
 #include "apr_pools.h"
 #include "apr_dso.h"
 #include "apr_strings.h"
+#include "apr_lib.h"
 
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+
+#ifdef API_USE_BUILTIN_ALIASES
+#include "charset_alias.h"
+#endif
 
 static apr_status_t
 iconv_getpathname(char *buffer, const char *dir, const char *name, apr_pool_t *ctx)
@@ -47,10 +52,23 @@ iconv_getpathname(char *buffer, const char *dir, const char *name, apr_pool_t *c
         apr_status_t rv;
 	apr_finfo_t sb;
 
-	apr_snprintf(buffer, APR_PATH_MAX, "%s/%s", dir, name);
-        if (rv = apr_stat(&sb, buffer, APR_FINFO_TYPE, ctx))
-            return rv;
-	return ((sb.filetype != APR_REG) ? APR_EINVAL : 0);
+	apr_snprintf(buffer, APR_PATH_MAX, "%s/%s.so", dir, name);
+        rv = apr_stat(&sb, buffer, APR_FINFO_TYPE, ctx);
+#ifdef API_HAVE_CHARSET_ALIAS_TABLE
+        /* If we didn't find the file, try again after looking in
+           the charset alias mapping table. */
+        if (rv || sb.filetype != APR_REG) {
+            const char *alias = charset_alias_find(name);
+            if (alias) {
+                apr_snprintf(buffer, APR_PATH_MAX, "%s/%s.so", dir, alias);
+                rv = apr_stat(&sb, buffer, APR_FINFO_TYPE, ctx);
+            }
+        }
+#endif /* API_HAVE_CHARSET_ALIAS_TABLE */
+        if (!rv && sb.filetype != APR_REG)
+            rv = APR_EINVAL;
+
+        return rv;
 }
 
 static apr_status_t
@@ -59,12 +77,11 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
 	char buffer[APR_PATH_MAX];
 	char *ptr;
 
-	if (tolower(name[0]) == 'x' && name[1] == '-')
+	if (apr_tolower(name[0]) == 'x' && name[1] == '-')
 		name += 2;
-	apr_snprintf(buffer, sizeof(buffer), "%s.so", name);
-	ptr = buffer + strlen(buffer) - 4 - strlen(name);
-	while (* ++ptr)
-		*ptr = tolower(*ptr);
+        ptr = buffer;
+        while (0 != (*ptr++ = apr_tolower(*name++)))
+            ;
 	if(!issetugid()) {
 		char *dir, *p;
 		ptr = getenv("ICONV_PATH");
