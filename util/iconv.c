@@ -31,6 +31,9 @@
  */
 
 #include "apr.h"
+#include "apr_getopt.h"
+
+#include "api_version.h"
 
 #include <stdarg.h>	/* va_end, va_list, va_start */
 #include <stdio.h>	/* FILE, fclose, ferror, fopen, fread, stdin,
@@ -79,31 +82,55 @@ static void closeapr(void)
 }
 
 int
-main(int argc, char * const *argv)
+main(int argc, const char **argv)
 {
 	apr_iconv_t cd;
 	iconv_stream *is;
-	char *from = NULL, *to = NULL, *input = NULL;
-	int opt;
+	const char *from = NULL, *to = NULL, *input = NULL;
+	char opt;
 	apr_pool_t *ctx; 
 	apr_status_t status;
+    apr_getopt_t *options;
+    const char *opt_arg;
 
-	while ((opt = getopt(argc, argv, "f:s:t:")) > 0) {
-		switch (opt) {
-		    case 'f':
-			from = optarg;
-			break;
-		    case 't':
-			to = optarg;
-			break;
-		    case 's':
-			input = optarg;
-			break;
-		    default:
-			fprintf(stderr, "Usage: iconv -f <name> -t <name> [-s <input>]\n");
-			exit(3);
-		}
-	}
+    /* Initialize APR */
+    apr_initialize();
+    atexit(closeapr);
+    if (apr_pool_create(&ctx, NULL) != APR_SUCCESS) {
+        fprintf(stderr, "Couldn't allocate context.\n");
+        exit(-1);
+    }
+
+    apr_getopt_init(&options, ctx, argc, argv);
+
+    status = apr_getopt(options, "f:s:t:v", &opt, &opt_arg);
+
+    while (status == APR_SUCCESS) {
+        switch (opt) {
+        case 'f':
+            from = opt_arg;
+            break;
+        case 't':
+            to = opt_arg;
+            break;
+        case 's':
+            input = opt_arg;
+            break;
+        case 'v':
+            fprintf(stderr, "APR-iconv version " API_VERSION_STRING "\n");
+            exit(0);
+        default:
+            fprintf(stderr, "Usage: iconv -f <name> -t <name> [-s <input>]\n");
+            exit(3);
+        }
+
+        status = apr_getopt(options, "f:s:t:v",&opt, &opt_arg);
+    }
+
+    if (status == APR_BADCH || status == APR_BADARG) {
+        fprintf(stderr, "Usage: iconv -f <name> -t <name> [-s <input>]\n");
+        exit(3);
+    }
 	if (from == NULL) {
 		fprintf(stderr, "missing source charset (-f <name>)\n");
 		exit(4);
@@ -111,14 +138,6 @@ main(int argc, char * const *argv)
 	if (to == NULL) {
 		fprintf(stderr, "missing destination charset (-t <name>)\n");
 		exit(5);
-	}
-
-	/* Initialize APR */
-	apr_initialize();
-	atexit(closeapr);
-	if (apr_pool_create(&ctx, NULL) != APR_SUCCESS) {
-		fprintf(stderr, "Couldn't allocate context.\n");
-		exit(-1);
 	}
 
 	/* Use it */
