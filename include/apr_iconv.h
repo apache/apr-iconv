@@ -49,7 +49,7 @@
  * and calling conventions at compile time.
  */
 
-#if !defined(WIN32)
+#if defined(DOXYGEN) || !defined(WIN32)
 /**
  * The public apr-iconv functions are declared with API_DECLARE(), so they 
  * use the most portable calling convention.  Public apr-iconv functions 
@@ -76,15 +76,15 @@
 #define API_DECLARE_DATA
 #elif defined(API_DECLARE_STATIC)
 #define API_DECLARE(type)            type __stdcall
-#define API_DECLARE_NONSTD(type)     type
+#define API_DECLARE_NONSTD(type)     type __cdecl
 #define API_DECLARE_DATA
 #elif defined(API_DECLARE_EXPORT)
 #define API_DECLARE(type)            __declspec(dllexport) type __stdcall
-#define API_DECLARE_NONSTD(type)     __declspec(dllexport) type
+#define API_DECLARE_NONSTD(type)     __declspec(dllexport) type __cdecl
 #define API_DECLARE_DATA             __declspec(dllexport)
 #else
 #define API_DECLARE(type)            __declspec(dllimport) type __stdcall
-#define API_DECLARE_NONSTD(type)     __declspec(dllimport) type
+#define API_DECLARE_NONSTD(type)     __declspec(dllimport) type __cdecl
 #define API_DECLARE_DATA             __declspec(dllimport)
 #endif
 
