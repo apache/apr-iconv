@@ -38,10 +38,8 @@
 #ifdef WIN32
 #define ICONV_DEFAULT_PATH "iconv"
 #define API_USE_BUILTIN_ALIASES /* Use the built-in charset alias table */
-#define API_PATH_SEPARATOR ";"
 #else
-/* contains ICONV_DEFAULT_PATH, API_PATH_SEPARATOR */
-#include "apr_iconv_private.h"
+#include "apr_iconv_private.h"  /* contains ICONV_DEFAULT_PATH */
 #endif
 
 #include <stddef.h>
