@@ -1,0 +1,12 @@
+TARGETS  =
+PROGRAMS = iconv
+
+# bring in rules.mk for standard functionality                                  
+@INCLUDE_RULES@
+
+all: $(PROGRAMS)
+
+iconv_OBJECTS = iconv.lo iconv_stream.lo
+iconv_LDADD   = ../liblibiconv.la
+iconv:	$(iconv_OBJECTS) $(iconv_LDADD)
+	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD)
