@@ -60,5 +60,8 @@ TARGETS =          ${CHARSETS_ALL} ${EXTRA_ALL} ${RFC1345_ALL}
 # bring in rules.mk for standard functionality
 @INCLUDE_RULES@
 
-%.la: %.lo
+.SUFFIXES:
+.SUFFIXES: .c .lo .o .la
+
+.lo.la:
 	$(LIBTOOL) --mode=link $(COMPILE) -module -avoid-version -rpath @iconv_libdir@ $(LT_LDFLAGS) $(ALL_LDFLAGS) -o $@ $<
