@@ -73,6 +73,7 @@ CFG_OUTPUT  = LibD\iconv
 APR_SOURCE   = ..\..\apr
 API_SOURCE   = ..
 OUTPUT_DIR   = $(API_SOURCE)\$(CFG_OUTPUT)
+OBJ_DIR   = $(OUTPUT_DIR)\objs
 
 INT_CFLAGS   = /nologo $(CFG_CFLAGS) /Fp"$(OUTPUT_DIR)\iconv.pch" /YX"iconv.h"
 INT_INCLUDES = /I "$(API_SOURCE)\include" /I "$(API_SOURCE)\lib" \
@@ -89,9 +90,12 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
 .c{$(OUTPUT_DIR)}.so:
 	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
-	$(SILENT)echo Compiling $@...
-	$(SILENT)cl $(ALL_CFLAGS) /Fo"$*.obj" /Fd"$*_src" $< \
-		/link $(ALL_LDFLAGS) /out:$@ /base:@"..\build\BaseAddr.ref",$(@F) \
+	-$(SILENT)if not exist "$(OBJ_DIR)\$(NULL)" mkdir "$(OBJ_DIR)"
+	$(SILENT)echo Compiling $<... via $(OBJ_DIR)\$(@B).obj to $@
+	$(SILENT)cl $(ALL_CFLAGS) /Fo"$(OBJ_DIR)\$(@B).obj" \
+		/Fd"$(OBJ_DIR)\$(@B)_src" $< \
+		/link $(ALL_LDFLAGS) /out:$@ \
+		/base:@"..\build\BaseAddr.ref",$(@F) \
 		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 	$(SILENT)echo.
