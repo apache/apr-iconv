@@ -75,30 +75,38 @@ static apr_status_t
 iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
 {
 	char buffer[APR_PATH_MAX];
+        apr_pool_t *subpool;
+        apr_status_t status;
 	char *ptr;
+
+        status = apr_pool_create(&subpool, ctx);
+        if (status)
+            return status;
 
 	if (apr_tolower(name[0]) == 'x' && name[1] == '-')
 		name += 2;
         ptr = buffer;
         while (0 != (*ptr++ = apr_tolower(*name++)))
             ;
-	if(!issetugid()) {
-		char *dir, *p;
-		ptr = getenv("ICONV_PATH");
-		if (ptr != NULL) {
-			p = strdup(ptr);
-			if (p == NULL)
-				return ENOMEM;
-			for (ptr = p; (dir = strtok(p, ":")); p = NULL) {
-				if (iconv_getpathname(buf, dir, buffer, ctx) == 0) {
-					free(ptr);
-					return 0;
-				}
-			}
-			free(ptr); /* otherwise memory leak */
-		}
-	}
-	return iconv_getpathname(buf, ICONV_DEFAULT_PATH, buffer, ctx);
+        ptr = getenv("APR_ICONV_PATH");
+        if (ptr != NULL)
+        {
+            char *dir, *last;
+            for (ptr = apr_pstrdup(subpool, ptr);
+                 (dir = apr_strtok(ptr, API_PATH_SEPARATOR, &last));
+                 ptr = NULL)
+            {
+                if (iconv_getpathname(buf, dir, buffer, subpool) == 0)
+                {
+                    apr_pool_destroy(subpool);
+                    return APR_SUCCESS;
+                }
+            }
+        }
+
+        status = iconv_getpathname(buf, ICONV_DEFAULT_PATH, buffer, subpool);
+        apr_pool_destroy(subpool);
+        return status;
 }
 
 static int

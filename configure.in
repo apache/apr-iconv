@@ -58,12 +58,18 @@ LIBS="$LIBS $APR_EXPORT_LIBS"
 
 AC_SUBST(APRUTIL_EXPORT_LIBS)
 
-#
-# Adds in config *.h file
+dnl
+dnl Adds in config *.h file
+dnl
 AC_DEFINE_UNQUOTED(ICONV_DEFAULT_PATH,"$prefix/lib/iconv",
 	[ Directory where the *.so tables are stored ] )
 iconv_libdir=$prefix/lib/iconv
 AC_SUBST(iconv_libdir)
+
+dnl
+dnl The path separator character, for APR_ICONV_PATH
+dnl
+AC_DEFINE_UNQUOTED(API_PATH_SEPARATOR,":",[ Separator in APR_ICONV_PATH ])
 
 dnl
 dnl BSD/OS (BSDi) needs to use a different include syntax in the Makefiles
