@@ -29,7 +29,7 @@ TARGETS = iconv_module.lo iconv.lo iconv_int.lo iconv_uc.lo \
 
 $(TARGET_LIB):
 	@objects="`find $(SUBDIRS) -name '*.@APR_SO_EXT@' -print`"; \
-	tmpcmd="$(LINK) @APR_LIB_TARGET@"; \
+	tmpcmd="$(LINK) @APR_LIB_TARGET@ $$objects"; \
 	echo $$tmpcmd; \
 	$$tmpcmd && touch $@
 
