@@ -30,12 +30,11 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <errno.h>
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 #define	CESTOSTATE(ces)		((iconv_ces_euc_state_t *)(ces)->data)
 #define	MODTOCCS(mod)		((struct iconv_ccs_desc *)(mod)->im_desc->imd_data)
@@ -46,46 +45,46 @@ typedef struct {
 	const struct iconv_module *ccs[1];
 } iconv_ces_euc_state_t;
 
-int
-iconv_euc_open(struct iconv_ces *ces)
+apr_status_t
+iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 {
 	struct iconv_module *depmod = ces->mod->im_deplist;
 	iconv_ces_euc_state_t *state;
-	size_t stsz;
+	apr_size_t stsz;
 	int i;
 
 	stsz = sizeof(iconv_ces_euc_state_t) +
 	    sizeof(struct iconv_module *) * (ces->mod->im_depcnt - 1);
 	state = (iconv_ces_euc_state_t *)malloc(stsz);
 	if (state == NULL)
-		return errno;
-	bzero(state, stsz);
+		return APR_ENOMEM;
+	memset(state, 0, stsz);
 	state->nccs = ces->mod->im_depcnt;
 	for (i = ces->mod->im_depcnt; i; i--, depmod = depmod->im_next)
 		state->ccs[i - 1] = depmod;
 	CESTOSTATE(ces) = state;
-	return 0;
+	return APR_SUCCESS;
 }
 
-int
+apr_status_t
 iconv_euc_close(struct iconv_ces *ces)
 {
 	free(CESTOSTATE(ces));
-	return 0;
+	return APR_SUCCESS;
 }
 
 #define is_7_14bit(data) ((data)->nbits & 7)
 #define is_7bit(data) ((data)->nbits & 1)
 
-ssize_t
+apr_ssize_t
 iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,
-	unsigned char **outbuf, size_t *outbytesleft)
+	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	iconv_ces_euc_state_t *euc_state = CESTOSTATE(ces);
 	const iconv_ces_euc_ccs_t *ccsattr;
 	const struct iconv_ccs_desc *ccs;
 	ucs_t res;
-	size_t bytes;
+	apr_size_t bytes;
 	int i;
 
 	if (in == UCS_CHAR_NONE)
@@ -124,9 +123,9 @@ iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 
 static ucs_t
 cvt2ucs(const struct iconv_ccs_desc *ccs, const unsigned char *inbuf,
-	size_t inbytesleft, int hi_plane, const unsigned char **bufptr)
+	apr_size_t inbytesleft, int hi_plane, const unsigned char **bufptr)
 {
-	size_t bytes = ccs->nbits > 8 ? 2 : 1;
+	apr_size_t bytes = ccs->nbits > 8 ? 2 : 1;
 	ucs_t ch = *(const unsigned char *)inbuf++;
 
 	if (inbytesleft < bytes)
@@ -146,7 +145,7 @@ cvt2ucs(const struct iconv_ccs_desc *ccs, const unsigned char *inbuf,
 
 ucs_t
 iconv_euc_convert_to_ucs(struct iconv_ces *ces,
-	const unsigned char **inbuf, size_t *inbytesleft)
+	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 	iconv_ces_euc_state_t *euc_state = CESTOSTATE(ces);
 	const iconv_ces_euc_ccs_t *ccsattr;
