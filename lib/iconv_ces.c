@@ -46,10 +46,10 @@ iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)
 	int error;
 
 	error = iconv_mod_load(cesname, ICMOD_UC_CES, NULL, &mod, ctx);
-	if (error == EFTYPE)
+	if (error == APR_ICONV_EFTYPE)
 		error = iconv_mod_load("_tbl_simple", ICMOD_UC_CES, cesname, &mod, ctx);
 	if (error)
-		return (error == EFTYPE) ? EINVAL : error;
+		return (error == APR_ICONV_EFTYPE) ? EINVAL : error;
 	ces = malloc(sizeof(*ces));
 	if (ces == NULL) {
 		iconv_mod_unload(mod, ctx);
