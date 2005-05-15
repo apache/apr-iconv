@@ -18,7 +18,7 @@ BIND_MODE  = shared
 # release shared
 APR_LIB_PFX = $(APR_SOURCE)\Release\lib
 API_LIB_PFX = $(API_SOURCE)\Release\lib
-CFG_CFLAGS  = /MD /Zi /O2
+CFG_CFLAGS  = /MD /O2 /Oy- /Zi
 CFG_DEFINES = /D "NDEBUG"
 CFG_LDFLAGS = /debug /opt:ref
 CFG_OUTPUT  = Release\iconv
@@ -28,7 +28,7 @@ CFG_OUTPUT  = Release\iconv
 # release static
 APR_LIB_PFX = $(APR_SOURCE)\LibR\	# no line continuation
 API_LIB_PFX = $(API_SOURCE)\LibR\	# no line continuation
-CFG_CFLAGS  = /MD /Zi /O2
+CFG_CFLAGS  = /MD /O2 /Oy- /Zi
 CFG_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
 CFG_LDFLAGS = /debug /opt:ref
 CFG_OUTPUT  = LibR\iconv
