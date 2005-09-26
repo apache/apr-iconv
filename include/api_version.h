@@ -69,7 +69,7 @@ extern "C" {
  *  This symbol is defined for internal, "development" copies of API. This
  *  symbol will be #undef'd for releases. 
  */
-#define API_IS_DEV_VERSION
+/* #define API_IS_DEV_VERSION */
 
 
 /** The formatted string of API's version */

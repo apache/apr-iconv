@@ -1,4 +1,6 @@
-Changes with APR-ICONV 0.9.5
+Changes with APR-ICONV 0.9.7
+
+  *) Fixed build .rc version resource for Win32. [Will Rowe]
 
 Changes with APR-ICONV 0.9.4
 
