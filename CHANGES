@@ -4,6 +4,9 @@ Changes with APR-ICONV 1.2.0-dev
 
 Changes with APR-ICONV 1.1.0
 
+  *) Correctly resolve to APR-1.0, never APR-0.9 in ./buildconf
+     [William Rowe]
+
   *) APR_ICONV1_PATH distinguishes between our apr-iconv 0.9 and 1.x
      flavors (the pool arguments to several internal functions changed
      in 1.0, so the loadable charset modules are not binary compatible.)
