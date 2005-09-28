@@ -96,7 +96,11 @@ iconv_getpath(char *buf, const char *name, apr_pool_t *ctx)
         while (0 != (*ptr++ = apr_tolower(*name++)))
             ;
 
-        if (!apr_env_get(&ptr, APR_ICONV_PATH, subpool)
+        /* Fall back on APR_ICONV_PATH if APR_ICONVn_PATH isn't set...
+         * TODO: Drop support for "APR_ICONV_PATH" in apr-iconv 2.0
+         */
+        if ((!apr_env_get(&ptr, APR_ICONV_PATH, subpool)
+             || (!apr_env_get(&ptr, "APR_ICONV_PATH", subpool))
             && !apr_filepath_list_split(&pathelts, ptr, subpool))
         {
             int i;
