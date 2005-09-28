@@ -52,7 +52,7 @@
  * Minor API changes that do not cause binary compatibility problems.
  * Reset to 0 when upgrading API_MAJOR_VERSION
  */
-#define API_MINOR_VERSION       1
+#define API_MINOR_VERSION       2
 
 /** patch level 
  * The Patch Level never includes API changes, simply bug fixes.
