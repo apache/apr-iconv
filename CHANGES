@@ -1,4 +1,4 @@
-Changes with APR-ICONV 1.1
+Changes with APR-ICONV 1.1.0
 
   *) APR_ICONV1_PATH distinguishes between our apr-iconv 0.9 and 1.x
      flavors (the pool arguments to several internal functions changed
