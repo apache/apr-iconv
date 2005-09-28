@@ -1,9 +1,13 @@
 Changes with APR-ICONV 1.1
 
   *) APR_ICONV1_PATH distinguishes between our apr-iconv 0.9 and 1.x
-     flavors (changed pool arguments to several internal functions, so the
-     loadable charset modules are not binary compatible.)  The older 0.9
-     flavor APR_ICONV_PATH won't be searched.  [William Rowe]
+     flavors (the pool arguments to several internal functions changed
+     in 1.0, so the loadable charset modules are not binary compatible.)
+     To maintain APR-iconv 1.0 compatibility, first APR_ICONV1 is used,
+     if it is set then the older 0.9 flavor APR_ICONV_PATH won't be 
+     searched.  apr-iconv 0.9 and 1.0 will only coexist if both the
+     APR_ICONV1_PATH and APR_ICONV_PATH variables are both set to their
+     respective charset directories.  [William Rowe]
 
 Changes with APR-ICONV 1.0.2
 
