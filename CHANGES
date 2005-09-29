@@ -1,6 +1,6 @@
-Changes with APR-ICONV 1.1.1-dev
+Changes with APR-ICONV 1.1.1
 
-
+  *) Fix syntax error in 1.1.0 candidate.  [Paul Querna] 
 
 Changes with APR-ICONV 1.1.0
 
