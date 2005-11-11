@@ -25,7 +25,7 @@ libdir=@iconv_libdir@
 MKINSTALLDIRS=$(abs_srcdir)/build/mkdir.sh
 
 install:
-	if [ ! -d $(lib_prefix) ]; then \
+	if [ ! -d $(DESTDIR)$(lib_prefix) ]; then \
 	    $(MKINSTALLDIRS) $(DESTDIR)$(lib_prefix); \
 	fi;
 	(cd lib; $(LIBTOOL) --mode=install cp $(TARGET_LIB) $(DESTDIR)$(lib_prefix))
