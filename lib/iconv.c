@@ -123,7 +123,7 @@ apr_status_t apr_iconv_open(const char *to_charset,
             const char *from_charset, apr_pool_t *ctx, apr_iconv_t **res)
 {
 	*res = iconv_open(to_charset, from_charset);
-	if (*res == (apr_size_t) -1)
+	if (*res == (apr_iconv_t *) -1)
 		return apr_get_os_error();
 	return APR_SUCCESS;
 }
