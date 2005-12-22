@@ -62,7 +62,7 @@ apr_iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx)
 	state->nccs = ces->mod->im_depcnt;
 	for (i = ces->mod->im_depcnt; i; i--, depmod = depmod->im_next)
 		state->ccs[i - 1] = depmod;
-	CESTOSTATE(ces) = state;
+	ces->data = state;
 	return APR_SUCCESS;
 }
 
