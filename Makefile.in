@@ -11,7 +11,7 @@ VPATH = @srcdir@
 SUBDIRS = lib ccs ces util
 CLEAN_SUBDIRS = . lib ccs ces util
 
-TARGET_LIB = libapriconv.la
+TARGET_LIB = libapriconv-1.la
 
 DISTCLEAN_TARGETS = config.cache config.log config.status
 EXTRACLEAN_TARGETS = configure libtool aclocal.m4
