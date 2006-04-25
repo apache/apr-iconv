@@ -53,11 +53,13 @@ static apr_ssize_t
 convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
+	ucs4_t *ptr = (ucs4_t*) *outbuf;
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
 	if (*outbytesleft < sizeof(ucs4_t))
 		return 0;	/* No space in the output buffer */
-	*((ucs4_t *)(*outbuf))++ = in;
+	*ptr = (ucs4_t) in;
+	*outbuf += sizeof(ucs4_t);
 	(*outbytesleft) -= sizeof(ucs4_t);
 	return 1;
 }
@@ -66,10 +68,12 @@ static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
 	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
+	ucs4_t *ret = *inbuf;
 	if (*inbytesleft < sizeof(ucs4_t))
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
 	(*inbytesleft) -= sizeof(ucs4_t);
-	return *((const ucs4_t *)(*inbuf))++;
+	*inbuf += sizeof(ucs4_t);
+	return *ret;
 }
 
 static const struct iconv_ces_desc iconv_ces_desc = {

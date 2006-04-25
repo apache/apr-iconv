@@ -232,6 +232,7 @@ static ucs_t convert_to_ucs(struct iconv_ces *module,
                             const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
 #define utf7_state ((char *)(module->data))
+    ucs_t ret;
     int ch = char_type(*(unsigned char *)*inbuf), needbytes = 0;
     if (ch == utf7_encoded)
         return lackofbytes(1, inbytesleft) ? UCS_CHAR_NONE
@@ -242,7 +243,8 @@ static ucs_t convert_to_ucs(struct iconv_ces *module,
             if (*inbytesleft < 2)
                 return UCS_CHAR_NONE;
             needbytes = 1;
-            ch = char_type(*(++((unsigned char *)*inbuf)));
+            (*inbuf) ++;
+            ch = char_type(*(unsigned char *)*inbuf);
             (*inbytesleft) --;
         case utf7_printable:
             utf7_state[0] = 0;
@@ -258,7 +260,8 @@ static ucs_t convert_to_ucs(struct iconv_ces *module,
             (*inbytesleft) += needbytes;
             return UCS_CHAR_NONE;
         }
-        switch (char_type(*(++(unsigned char *)*inbuf))) {
+        (*inbuf) ++;
+        switch (char_type(*(unsigned char *)*inbuf)) {
         case utf7_shift_out:
             (*inbuf) ++;
             (*inbytesleft) -= 2;
@@ -276,7 +279,9 @@ static ucs_t convert_to_ucs(struct iconv_ces *module,
         return UCS_CHAR_INVALID;
     }
     (*inbytesleft) --;
-    return *((unsigned char *)*inbuf) ++;
+    ret = *((unsigned char *)*inbuf);
+    (*inbuf) ++;
+    return ret;
 #undef utf7_state
 }
 
