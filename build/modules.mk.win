@@ -85,7 +85,7 @@ INT_LDFLAGS  = /nologo /dll /incremental:no /subsystem:windows \
 CFLAGS       = /W3
 ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
 
-LDFLAGS      = /WARN:0
+LDFLAGS      = 
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
 .c{$(OUTPUT_DIR)}.so:
