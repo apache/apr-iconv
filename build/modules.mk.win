@@ -98,6 +98,7 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 		/base:@"..\build\BaseAddr.ref",$(@F) \
 		"$(API_LIB_PFX)apriconv.lib" "$(APR_LIB_PFX)apr.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
 	$(SILENT)del "$*.lib"

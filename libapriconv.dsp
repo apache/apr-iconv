@@ -54,6 +54,12 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /debug /machine:I386 /opt:ref
 # ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /debug /machine:I386 /opt:ref
+# Begin Special Build Tool
+OutDir=.\Release
+SOURCE="$(InputPath)"
+PostBuild_Desc=Embed .manifest
+PostBuild_Cmds=if exist $(OUTDIR)\libapriconv.dll.manifest mt.exe -manifest $(OUTDIR)\libapriconv.dll.manifest -outputresource:$(OUTDIR)\libapriconv.dll;2
+# End Special Build Tool
 
 !ELSEIF  "$(CFG)" == "libapriconv - Win32 Debug"
 
@@ -80,6 +86,12 @@ BSC32=bscmake.exe
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /debug /machine:I386
 # ADD LINK32 kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /debug /machine:I386
+# Begin Special Build Tool
+OutDir=.\Release
+SOURCE="$(InputPath)"
+PostBuild_Desc=Embed .manifest
+PostBuild_Cmds=if exist $(OUTDIR)\libapriconv.dll.manifest mt.exe -manifest $(OUTDIR)\libapriconv.dll.manifest -outputresource:$(OUTDIR)\libapriconv.dll;2
+# End Special Build Tool
 
 !ENDIF 
 
