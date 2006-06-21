@@ -30,7 +30,7 @@ APR_LIB_PFX = $(APR_SOURCE)\LibR\	# no line continuation
 API_LIB_PFX = $(API_SOURCE)\LibR\	# no line continuation
 CFG_CFLAGS  = /MD /O2 /Oy- /Zi
 CFG_DEFINES = /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /opt:ref
+CFG_LDFLAGS = /debug /incremental:no /opt:ref
 CFG_OUTPUT  = LibR\iconv
 
 !ELSE
@@ -98,6 +98,7 @@ ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 		/base:@"..\build\BaseAddr.ref",$(@F) \
 		"$(API_LIB_PFX)apriconv-1.lib" "$(APR_LIB_PFX)apr-1.lib" \
 		kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
+	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
 	$(SILENT)echo.
 	$(SILENT)del "$*.exp"
 	$(SILENT)del "$*.lib"
