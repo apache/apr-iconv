@@ -32,9 +32,24 @@
 #ifndef APR_ICONV_H
 #define APR_ICONV_H
 
+/**
+ * @file apr_iconv.h
+ * @brief APR-iconv substitute iconv library implementation 
+ */
+
 #include "apr.h"
 #include "apr_pools.h"
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
+
+/**
+ * @defgroup apr_iconv substitute iconv implementation
+ * @ingroup APR-iconv
+ * @{
+ */
 
 /**
  * API_DECLARE_EXPORT is defined when building the libapriconv dynamic 
@@ -125,5 +140,11 @@ API_DECLARE(apr_status_t) apr_iconv(apr_iconv_t cd,
 API_DECLARE(apr_status_t) apr_iconv_close(apr_iconv_t cd, apr_pool_t *pool);
 
 /* __END_DECLS */
+
+/** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* APR_ICONV_H */
