@@ -1,10 +1,9 @@
-APR-ICONV LIBRARY STATUS:
+APACHE PORTABLE RUNTIME ICONV (APR-iconv) LIBRARY STATUS:	-*-text-*-
 Last modified at [$Date$]
 
-Release:
-
+Releases:
     1.2.0   : in development
-    1.1.1   : tagged September 29, 2005
+    1.1.1   : released November 23, 2005
     1.1.0   : not released
     1.0.1   : released November 19, 2004
     1.0.0   : released September 1, 2004
