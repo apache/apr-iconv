@@ -49,7 +49,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 {
 	unsigned char *cp;
 	int *state = (int *)ces->data;
-	int bytes;
+	apr_size_t bytes;
 
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
@@ -147,7 +147,7 @@ static const struct iconv_ces_desc iconv_ces_desc = {
 	NULL
 };
 
-struct iconv_module_desc iconv_module = {
+API_DECLARE_MODULE(utf_16) = {
 	ICMOD_UC_CES,
 	apr_iconv_mod_noevent,
 	NULL,

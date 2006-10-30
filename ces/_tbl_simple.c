@@ -178,7 +178,7 @@ static const struct iconv_ces_desc iconv_ces_desc = {
 	NULL
 };
 
-struct iconv_module_desc iconv_module = {
+API_DECLARE_MODULE(_tbl_simple) = {
 	ICMOD_UC_CES,
 	table_event,
 	NULL,

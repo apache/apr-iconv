@@ -296,7 +296,7 @@ static const struct iconv_ces_desc iconv_ces_desc = {
 	convert_to_ucs, NULL
 };
 
-struct iconv_module_desc iconv_module = {
+API_DECLARE_MODULE(unicode_1_1_utf_7) = {
 	ICMOD_UC_CES,
 	apr_iconv_mod_noevent,
 	NULL,

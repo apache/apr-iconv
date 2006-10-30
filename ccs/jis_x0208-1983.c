@@ -4796,7 +4796,7 @@ static const struct iconv_ccs_desc iconv_ccs_desc = {
 	convert_from_ucs, convert_to_ucs,
 };
 
-struct iconv_module_desc iconv_module = {
+API_DECLARE_MODULE(jis_x0208_1983) = {
 	ICMOD_UC_CCS,
 	apr_iconv_mod_noevent,
 	NULL,

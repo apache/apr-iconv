@@ -84,7 +84,7 @@ static const struct iconv_ces_desc iconv_ces_desc = {
 	shift_tab
 };
 
-struct iconv_module_desc iconv_module = {
+API_DECLARE_MODULE(iso_2022_jp_2) = {
 	ICMOD_UC_CES,
 	apr_iconv_mod_noevent,
 	iconv_module_depend,
