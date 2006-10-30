@@ -531,9 +531,17 @@ static int
 iconv_smopen(const char *name, void **dpp)
 {
 
-    iconv_module_desc_t *module = static_iconv_module_find(name);
+    char buffer[APR_PATH_MAX];
+    char *ptr;
+    iconv_module_desc_t *module;
+
+    if (apr_tolower(name[0]) == 'x' && name[1] == '-')
+        name += 2;
+    ptr = buffer;
+    while (0 != (*ptr++ = apr_tolower(*name++)))
+    module = static_iconv_module_find(buffer);
     if (!module) {
-        const char *alias = charset_alias_find(name);
+        const char *alias = charset_alias_find(buffer);
         if (alias) {
             if ((module = static_iconv_module_find(alias))) {
                 *dpp = module;
@@ -649,7 +657,7 @@ apr_iconv_mod_load(const char *modname, int modtype, const void *args,
 	int error;
 	
 	/* Try to load the built-in modules first */
-	error = iconv_smopen(buffer, (void**)&mdesc);
+	error = iconv_smopen(modname, (void**)&mdesc);
 	if (error) {
 		if (iconv_getpath(buffer, modname, ctx) != 0)
 			return EINVAL;
