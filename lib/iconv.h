@@ -130,6 +130,8 @@ struct iconv_converter_desc {
 	iconv_conv_t *	icd_conv;
 };
 
+typedef struct iconv_module_desc iconv_module_desc_t;
+
 struct iconv_converter {
 	struct iconv_converter_desc *ic_desc;
 	void *		ic_data;
@@ -348,7 +350,6 @@ int  iconv_malloc(apr_size_t size, void **pp);
 
 extern struct iconv_converter_desc iconv_uc_desc;
 
-
 API_DECLARE_NONSTD(apr_status_t) apr_iconv_euc_open(struct iconv_ces *ces, apr_pool_t *ctx);
 API_DECLARE_NONSTD(apr_status_t) apr_iconv_euc_close(struct iconv_ces *ces);
 API_DECLARE_NONSTD(apr_ssize_t)  apr_iconv_euc_convert_from_ucs(struct iconv_ces *ces, ucs_t in,	unsigned char **outbuf, apr_size_t *outbytesleft);
@@ -360,6 +361,16 @@ API_DECLARE_NONSTD(void) apr_iconv_iso2022_reset(struct iconv_ces *ces);
 API_DECLARE_NONSTD(apr_ssize_t) apr_iconv_iso2022_convert_from_ucs(struct iconv_ces *ces, ucs_t in, unsigned char **outbuf, apr_size_t *outbytesleft);
 API_DECLARE_NONSTD(ucs_t) apr_iconv_iso2022_convert_to_ucs(struct iconv_ces *ces, const unsigned char **inbuf, apr_size_t *inbytesleft);
 
-#endif /* ICONV_INTERNAL */
+#ifdef API_MODULE_STATIC
+#define API_DECLARE_MODULE(M) iconv_module_desc_t M##_iconv_module
+#define API_IMPORT_MODULE(M)  extern iconv_module_desc_t M##_iconv_module
+#define API_USE_MODULE(M)     1, &M##_iconv_module
+#else
+#define API_DECLARE_MODULE(M) iconv_module_desc_t iconv_module
+#define API_IMPORT_MODULE(M)
+#define API_USE_MODULE(M)     0, NULL
 
+#endif
+
+#endif /* ICONV_INTERNAL */
 #endif /* _ICONV_H_ */
