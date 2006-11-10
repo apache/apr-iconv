@@ -59,7 +59,7 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	bytes = *state ? 2 : 4;
 	if (*outbytesleft < bytes)
 		return 0;	/* No space in the output buffer */
-	if (*state) {
+	if (*state == 0) {
 		*(*outbuf)++ = 0xFE;
 		*(*outbuf)++ = 0xFF;
 		*state = 1;
