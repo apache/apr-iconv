@@ -51,7 +51,8 @@ convert_from_ucs(struct iconv_ces *ces, ucs_t in,
 	unsigned char **outbuf, apr_size_t *outbytesleft)
 {
 	unsigned char *cp;
-	int n;
+	apr_size_t n;
+
 	if (in == UCS_CHAR_NONE)
 		return 1;	/* No state reinitialization for table charsets */
 	if (in < 0x80) {

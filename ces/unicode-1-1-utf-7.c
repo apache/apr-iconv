@@ -48,7 +48,7 @@ utf7_names(struct iconv_ces *ces)
 }
 
 static APR_INLINE int
-lackofbytes(int bytes, apr_size_t *bytesleft)
+lackofbytes(apr_size_t bytes, apr_size_t *bytesleft)
 {
 	if (bytes > *bytesleft)
 	    return 1;
