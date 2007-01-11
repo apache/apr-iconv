@@ -30,12 +30,12 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
+#define ICONV_INTERNAL
+#include "iconv.h"	/* iconv_ccs_desc, iconv_ccs */
+
 #include <limits.h>	/* PATH_MAX */
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
-
-#define ICONV_INTERNAL
-#include "iconv.h"	/* iconv_ccs_desc, iconv_ccs */
 
 API_DECLARE_NONSTD(int)
 apr_iconv_ces_open(const char *cesname, struct iconv_ces **cespp, apr_pool_t *ctx)

@@ -30,11 +30,11 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <stdlib.h>	/* free, malloc */
-#include <string.h>	/* memset, memcmp, memcpy */
-
 #define ICONV_INTERNAL
 #include "iconv.h"
+
+#include <stdlib.h>	/* free, malloc */
+#include <string.h>	/* memset, memcmp, memcpy */
 
 typedef struct {
 	const char	*sequence;
