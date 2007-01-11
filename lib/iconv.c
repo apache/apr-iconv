@@ -30,13 +30,13 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
+#define ICONV_INTERNAL
+#include "iconv.h"
+
 #ifndef HAVE_ICONV
 
 #include <stdlib.h>	/* free, malloc */
 #include <string.h>
-
-#define ICONV_INTERNAL
-#include "iconv.h"
 
 static struct iconv_converter_desc *converters[] = {
 	&iconv_uc_desc,		/* CS1-UNICODE-CS2 converter */
@@ -116,8 +116,6 @@ apr_iconv_close(apr_iconv_t cd, apr_pool_t *ctx)
 }
 
 #else
-
-#include <iconv.h>
 
 apr_status_t apr_iconv_open(const char *to_charset,
             const char *from_charset, apr_pool_t *ctx, apr_iconv_t **res)

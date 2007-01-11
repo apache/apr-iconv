@@ -30,13 +30,13 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
+#define ICONV_INTERNAL
+#include "iconv.h"
+
 #include <ctype.h>	/* tolower */
 #include <stdio.h>	/* snprintf */
 #include <stdlib.h>
 #include <string.h>	/* strdup, strlen */
-
-#define ICONV_INTERNAL
-#include "iconv.h"
 
 apr_status_t
 iconv_malloc(apr_size_t size, void **pp)

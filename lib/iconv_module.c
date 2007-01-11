@@ -29,8 +29,8 @@
  */
 
 #define ICONV_INTERNAL
-
 #include "iconv.h"
+
 #include "apr_file_io.h"
 #include "apr_file_info.h"
 #include "apr_pools.h"

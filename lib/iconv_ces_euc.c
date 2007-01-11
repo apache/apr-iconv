@@ -30,11 +30,11 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <stdlib.h>	/* free, malloc */
-#include <string.h>
-
 #define ICONV_INTERNAL
 #include "iconv.h"
+
+#include <stdlib.h>	/* free, malloc */
+#include <string.h>
 
 #define	CESTOSTATE(ces)		((iconv_ces_euc_state_t *)(ces)->data)
 #define	MODTOCCS(mod)		((struct iconv_ccs_desc *)(mod)->im_desc->imd_data)
