@@ -70,7 +70,7 @@ static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
 	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
-	const ucs2_t *ret = *inbuf;
+	const ucs2_t *ret = (const ucs2_t *)*inbuf;
 	if (*inbytesleft < sizeof(ucs2_t))
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
 	(*inbytesleft) -= sizeof(ucs2_t);

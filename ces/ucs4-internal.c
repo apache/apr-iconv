@@ -68,7 +68,7 @@ static ucs_t
 convert_to_ucs(struct iconv_ces *ces,
 	const unsigned char **inbuf, apr_size_t *inbytesleft)
 {
-	const ucs4_t *ret = *inbuf;
+	const ucs4_t *ret = (const ucs4_t *)*inbuf;
 	if (*inbytesleft < sizeof(ucs4_t))
 		return UCS_CHAR_NONE;	/* Not enough bytes in the input buffer */
 	(*inbytesleft) -= sizeof(ucs4_t);
