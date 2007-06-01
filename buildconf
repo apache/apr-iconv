@@ -36,11 +36,13 @@ fi
 # Remove some files, then copy them from apr source tree
 rm -f build/apr_common.m4 build/find_apr.m4 build/install.sh \
       build/config.guess build/config.sub build/mkdir.sh \
-      build/make_exports.awk build/make_var_export.awk
+      build/make_exports.awk build/make_var_export.awk \
+      build/get-version.sh
 cp $apr_src_dir/build/apr_common.m4 $apr_src_dir/build/find_apr.m4 \
    $apr_src_dir/build/install.sh $apr_src_dir/build/config.guess  \
    $apr_src_dir/build/config.sub $apr_src_dir/build/mkdir.sh \
    $apr_src_dir/build/make_exports.awk $apr_src_dir/build/make_var_export.awk \
+   $apr_src_dir/build/get-version.sh \
    build
 
 # Remove aclocal.m4 as it'll break some builds...
