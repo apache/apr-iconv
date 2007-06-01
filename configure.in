@@ -15,6 +15,7 @@ sinclude(build/find_apr.m4)
 
 dnl This is required by autoconf!
 AC_PROG_AWK
+AC_PROG_INSTALL
 
 dnl compute the top directory of the build
 # Absolute source/build directory
@@ -66,6 +67,26 @@ case "$host_alias" in
     ;;
 esac
 AC_SUBST(INCLUDE_RULES)
+
+dnl supportes MinGW
+case "$host_alias" in
+*mingw*)
+    API_CPPFLAGS="-DAPI_DECLARE_EXPORT"
+    ;;
+esac
+AC_SUBST(API_CPPFLAGS)
+
+dnl Absolute source/build directory
+abs_srcdir=`(cd $srcdir && pwd)`
+
+dnl get our version information
+get_version="$abs_srcdir/build/get-version.sh"
+version_hdr="$abs_srcdir/include/api_version.h"
+API_MAJOR_VERSION="`$get_version major $version_hdr API`"
+API_LIBNAME="apriconv-${API_MAJOR_VERSION}"
+AC_SUBST(API_LIBNAME)
+API_INCPATH="apr-${API_MAJOR_VERSION}"
+AC_SUBST(API_INCPATH)
 
 dnl
 dnl everthing is done. 
