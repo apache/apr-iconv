@@ -1,4 +1,14 @@
-Changes with APR-ICONV 1.2.0-dev
+Changes with APR-ICONV 1.2.0
+
+  *) Install 'iconv' utility as bin/apriconv to avoid colliding with
+     system provided iconv, install public headers to include/apr-1/
+     per convention.  [William Rowe]
+
+  *) Fixes for Mingw builds and normalize to the APR conventions (e.g.
+     apriconv-1.so library name).  [Kouhei Sutou <kou cozmixng.org>]
+
+  *) Fix compiler emits for char <-> 2byte unicode pointer assignments.
+     [William Rowe]
 
   *) Correct from_ucs zero width joiner/byte order mark to be injected
      only at the *start* of stream (when state is still 0).  
