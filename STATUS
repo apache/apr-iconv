@@ -2,7 +2,7 @@ APACHE PORTABLE RUNTIME ICONV (APR-iconv) LIBRARY STATUS:	-*-text-*-
 Last modified at [$Date$]
 
 Releases:
-    1.2.0   : in development
+    1.2.0   : tagged June 4, 2007
     1.1.1   : released November 23, 2005
     1.1.0   : not released
     1.0.1   : released November 19, 2004
@@ -16,15 +16,6 @@ Releases:
 
 RELEASE SHOWSTOPPERS:
 
-    * Determine the package's relationship to apr/i18n/unix
-      and integrate into the apr build.
-
-    * The resulting .so must be libapriconv-1.so corresponding to
-      all other apr 1.x loadable modules, on unix.
-
-    * build\modules.mk.win includes /YX"iconv.h", which must be
-      split up to have one module precompile the header, the rest
-      to consume the precompiled header (/Yc"iconv, /Yu"iconv")
 
 RELEASE NON-SHOWSTOPPERS BUT WOULD BE REAL NICE TO WRAP THESE UP:
 
