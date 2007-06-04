@@ -58,14 +58,14 @@
  * The Patch Level never includes API changes, simply bug fixes.
  * Reset to 0 when upgrading API_MINOR_VERSION
  */
-#define API_PATCH_VERSION       0
+#define API_PATCH_VERSION       1
 
 /** 
  * The symbol API_IS_DEV_VERSION is only defined for internal,
  * "development" copies of API.  It is undefined for released versions
  * of API.
  */
-/* #undef API_IS_DEV_VERSION */
+#define API_IS_DEV_VERSION
 
 
 #if defined(API_IS_DEV_VERSION) || defined(DOXYGEN)
