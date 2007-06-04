@@ -65,7 +65,7 @@
  * "development" copies of API.  It is undefined for released versions
  * of API.
  */
-#define API_IS_DEV_VERSION
+/* #undef API_IS_DEV_VERSION */
 
 
 #if defined(API_IS_DEV_VERSION) || defined(DOXYGEN)
