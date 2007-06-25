@@ -1,4 +1,4 @@
-Changes with APR-ICONV 0.9.8-dev
+Changes with APR-ICONV 0.9.8
 
   *) Correct from_ucs zero width joiner/byte order mark to be injected
      only at the *start* of stream (when state is still 0).  
