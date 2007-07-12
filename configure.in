@@ -27,6 +27,9 @@ if test "$api_builddir" != "$api_srcdir"; then
   USE_VPATH=1
 fi
 
+dnl Default prefix path if none was specified
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+
 dnl check for APR
 API_FIND_APR
 
