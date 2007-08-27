@@ -1,3 +1,4 @@
+                                                     -*- coding: utf-8 -*-
 Changes with APR-ICONV 0.9.8
 
   *) Correct from_ucs zero width joiner/byte order mark to be injected
