@@ -32,85 +32,85 @@ CFG=apriconv_ccs_modules - Win32 Debug
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "LibR"
-# PROP BASE Intermediate_Dir "..\LibR\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Output_Dir "..\LibR\iconv"
+# PROP BASE Intermediate_Dir "LibR"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ccs_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ccs_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "LibR"
-# PROP Intermediate_Dir "..\LibR\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Output_Dir "..\LibR\iconv"
+# PROP Intermediate_Dir "LibR"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "LibR"
+# PROP Target_File "Buildmark.ccs"
 # PROP Bsc_Name ""
-# PROP Target_Dir ""
+# PROP Target_Dir "..\LibR\iconv"
 
 !ELSEIF  "$(CFG)" == "apriconv_ccs_modules - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "LibD"
-# PROP BASE Intermediate_Dir "..\LibD\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Output_Dir "..\LibD\iconv"
+# PROP BASE Intermediate_Dir "LibD"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ccs_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ccs_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "LibD"
-# PROP Intermediate_Dir "..\LibD\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Output_Dir "..\LibD\iconv"
+# PROP Intermediate_Dir "LibD"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "LibD"
+# PROP Target_File "Buildmark.ccs"
 # PROP Bsc_Name ""
-# PROP Target_Dir ""
+# PROP Target_Dir "..\LibD\iconv"
 
 !ELSEIF  "$(CFG)" == "apriconv_ccs_modules - Win32 ReleaseNT"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "LibR"
-# PROP BASE Intermediate_Dir "..\LibR\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Output_Dir "..\LibR\iconv"
+# PROP BASE Intermediate_Dir "LibRNT"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ccs_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ccs_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "LibR"
-# PROP Intermediate_Dir "..\LibR\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Output_Dir "..\LibR\iconv"
+# PROP Intermediate_Dir "LibRNT"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "LibR"
+# PROP Target_File "Buildmark.ccs"
 # PROP Bsc_Name ""
-# PROP Target_Dir ""
+# PROP Target_Dir "..\LibR\iconv"
 
 !ELSEIF  "$(CFG)" == "apriconv_ccs_modules - Win32 DebugNT"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "LibD"
-# PROP BASE Intermediate_Dir "..\LibD\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Output_Dir "..\LibD\iconv"
+# PROP BASE Intermediate_Dir "LibDNT"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ccs_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ccs_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "LibD"
-# PROP Intermediate_Dir "..\LibD\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Output_Dir "..\LibD\iconv"
+# PROP Intermediate_Dir "LibDNT"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "LibD"
+# PROP Target_File "Buildmark.ccs"
 # PROP Bsc_Name ""
-# PROP Target_Dir ""
+# PROP Target_Dir "..\LibD\iconv"
 
 !ENDIF 
 
