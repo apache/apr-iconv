@@ -19,6 +19,8 @@ CFG=apriconv_ces_modules - Win32 Debug
 !MESSAGE 
 !MESSAGE "apriconv_ces_modules - Win32 Release" (based on "Win32 (x86) External Target")
 !MESSAGE "apriconv_ces_modules - Win32 Debug" (based on "Win32 (x86) External Target")
+!MESSAGE "apriconv_ces_modules - Win32 ReleaseNT" (based on "Win32 (x86) External Target")
+!MESSAGE "apriconv_ces_modules - Win32 DebugNT" (based on "Win32 (x86) External Target")
 !MESSAGE 
 
 # Begin Project
@@ -30,20 +32,20 @@ CFG=apriconv_ces_modules - Win32 Debug
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\Release\iconv"
-# PROP BASE Intermediate_Dir "..\Release\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
+# PROP BASE Output_Dir "LibR"
+# PROP BASE Intermediate_Dir "..\LibR\iconv"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ces_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\Release\iconv"
-# PROP Intermediate_Dir "..\Release\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
+# PROP Output_Dir "LibR"
+# PROP Intermediate_Dir "..\LibR\iconv"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Release"
+# PROP Target_File "LibR"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
 
@@ -51,20 +53,62 @@ CFG=apriconv_ces_modules - Win32 Debug
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\Debug\iconv"
-# PROP BASE Intermediate_Dir "..\Debug\iconv"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
+# PROP BASE Output_Dir "LibD"
+# PROP BASE Intermediate_Dir "..\LibD\iconv"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ces_modules.exe"
 # PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\Debug\iconv"
-# PROP Intermediate_Dir "..\Debug\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
+# PROP Output_Dir "LibD"
+# PROP Intermediate_Dir "..\LibD\iconv"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Debug"
+# PROP Target_File "LibD"
+# PROP Bsc_Name ""
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 ReleaseNT"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "LibR"
+# PROP BASE Intermediate_Dir "..\LibR\iconv"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Rebuild_Opt "/a"
+# PROP BASE Target_File "apriconv_ces_modules.exe"
+# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "LibR"
+# PROP Intermediate_Dir "..\LibR\iconv"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Rebuild_Opt "/a"
+# PROP Target_File "LibR"
+# PROP Bsc_Name ""
+# PROP Target_Dir ""
+
+!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 DebugNT"
+
+# PROP BASE Use_MFC 0
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "LibD"
+# PROP BASE Intermediate_Dir "..\LibD\iconv"
+# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP BASE Rebuild_Opt "/a"
+# PROP BASE Target_File "apriconv_ces_modules.exe"
+# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 0
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "LibD"
+# PROP Intermediate_Dir "..\LibD\iconv"
+# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static API_LIBS="..\..\apr\$(OutDir)NT\apr-1.lib ..\$(OutDir)\apriconv-1.lib" CFG_OUTPUT="$(IntDir)" OUTPUT_DIR="..\$(IntDir)""
+# PROP Rebuild_Opt "/a"
+# PROP Target_File "LibD"
 # PROP Bsc_Name ""
 # PROP Target_Dir ""
 
@@ -74,12 +118,8 @@ CFG=apriconv_ces_modules - Win32 Debug
 
 # Name "apriconv_ces_modules - Win32 Release"
 # Name "apriconv_ces_modules - Win32 Debug"
-
-!IF  "$(CFG)" == "apriconv_ces_modules - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 Debug"
-
-!ENDIF 
+# Name "apriconv_ces_modules - Win32 ReleaseNT"
+# Name "apriconv_ces_modules - Win32 DebugNT"
 
 # Begin Group "Source Files"
 
