@@ -19,8 +19,6 @@ CFG=apriconv_ces_modules - Win32 Debug
 !MESSAGE 
 !MESSAGE "apriconv_ces_modules - Win32 Release" (based on "Win32 (x86) External Target")
 !MESSAGE "apriconv_ces_modules - Win32 Debug" (based on "Win32 (x86) External Target")
-!MESSAGE "apriconv_ces_modules - Win32 ReleaseNT" (based on "Win32 (x86) External Target")
-!MESSAGE "apriconv_ces_modules - Win32 DebugNT" (based on "Win32 (x86) External Target")
 !MESSAGE 
 
 # Begin Project
@@ -32,8 +30,8 @@ CFG=apriconv_ces_modules - Win32 Debug
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\LibR\iconv"
-# PROP BASE Intermediate_Dir "LibR"
+# PROP BASE Output_Dir "..\Release\iconv"
+# PROP BASE Intermediate_Dir "..\Release\iconv"
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ces_modules.exe"
@@ -41,20 +39,20 @@ CFG=apriconv_ces_modules - Win32 Debug
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\LibR\iconv"
-# PROP Intermediate_Dir "LibR"
+# PROP Output_Dir "..\Release\iconv"
+# PROP Intermediate_Dir "..\Release\iconv"
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ces"
+# PROP Target_File "Release"
 # PROP Bsc_Name ""
-# PROP Target_Dir "..\LibR\iconv"
+# PROP Target_Dir ""
 
 !ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\LibD\iconv"
-# PROP BASE Intermediate_Dir "LibD"
+# PROP BASE Output_Dir "..\Debug\iconv"
+# PROP BASE Intermediate_Dir "..\Debug\iconv"
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "apriconv_ces_modules.exe"
@@ -62,55 +60,13 @@ CFG=apriconv_ces_modules - Win32 Debug
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\LibD\iconv"
-# PROP Intermediate_Dir "LibD"
+# PROP Output_Dir "..\Debug\iconv"
+# PROP Intermediate_Dir "..\Debug\iconv"
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ces"
+# PROP Target_File "Debug"
 # PROP Bsc_Name ""
-# PROP Target_Dir "..\LibD\iconv"
-
-!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 ReleaseNT"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\LibR\iconv"
-# PROP BASE Intermediate_Dir "LibRNT"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "apriconv_ces_modules.exe"
-# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\LibR\iconv"
-# PROP Intermediate_Dir "LibRNT"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
-# PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ces"
-# PROP Bsc_Name ""
-# PROP Target_Dir "..\LibR\iconv"
-
-!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 DebugNT"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\LibD\iconv"
-# PROP BASE Intermediate_Dir "LibDNT"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "apriconv_ces_modules.exe"
-# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\LibD\iconv"
-# PROP Intermediate_Dir "..\LibD\iconv"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
-# PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ces"
-# PROP Bsc_Name ""
-# PROP Target_Dir "..\LibD\iconv"
+# PROP Target_Dir ""
 
 !ENDIF 
 
@@ -118,8 +74,12 @@ CFG=apriconv_ces_modules - Win32 Debug
 
 # Name "apriconv_ces_modules - Win32 Release"
 # Name "apriconv_ces_modules - Win32 Debug"
-# Name "apriconv_ces_modules - Win32 ReleaseNT"
-# Name "apriconv_ces_modules - Win32 DebugNT"
+
+!IF  "$(CFG)" == "apriconv_ces_modules - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "apriconv_ces_modules - Win32 Debug"
+
+!ENDIF 
 
 # Begin Group "Source Files"
 
