@@ -19,8 +19,6 @@ CFG=libapriconv_ccs_modules - Win32 Debug
 !MESSAGE 
 !MESSAGE "libapriconv_ccs_modules - Win32 Release" (based on "Win32 (x86) External Target")
 !MESSAGE "libapriconv_ccs_modules - Win32 Debug" (based on "Win32 (x86) External Target")
-!MESSAGE "libapriconv_ccs_modules - Win32 ReleaseNT" (based on "Win32 (x86) External Target")
-!MESSAGE "libapriconv_ccs_modules - Win32 DebugNT" (based on "Win32 (x86) External Target")
 !MESSAGE 
 
 # Begin Project
@@ -33,7 +31,7 @@ CFG=libapriconv_ccs_modules - Win32 Debug
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
 # PROP BASE Output_Dir "..\Release\iconv"
-# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Intermediate_Dir "..\Release\iconv"
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "libapriconv_ccs_modules.exe"
@@ -42,19 +40,19 @@ CFG=libapriconv_ccs_modules - Win32 Debug
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
 # PROP Output_Dir "..\Release\iconv"
-# PROP Intermediate_Dir "Release"
+# PROP Intermediate_Dir "..\Release\iconv"
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ccs"
+# PROP Target_File "Release"
 # PROP Bsc_Name ""
-# PROP Target_Dir "..\Release\iconv"
+# PROP Target_Dir ""
 
 !ELSEIF  "$(CFG)" == "libapriconv_ccs_modules - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
 # PROP BASE Output_Dir "..\Debug\iconv"
-# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Intermediate_Dir "..\Debug\iconv"
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "libapriconv_ccs_modules.exe"
@@ -63,54 +61,12 @@ CFG=libapriconv_ccs_modules - Win32 Debug
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
 # PROP Output_Dir "..\Debug\iconv"
-# PROP Intermediate_Dir "Debug"
+# PROP Intermediate_Dir "..\Debug\iconv"
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
 # PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ccs"
+# PROP Target_File "Debug"
 # PROP Bsc_Name ""
-# PROP Target_Dir "..\Debug\iconv"
-
-!ELSEIF  "$(CFG)" == "libapriconv_ccs_modules - Win32 ReleaseNT"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\Release\iconv"
-# PROP BASE Intermediate_Dir "ReleaseNT"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "libapriconv_ccs_modules.exe"
-# PROP BASE Bsc_Name "libapriconv_ccs_modules.bsc"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\Release\iconv"
-# PROP Intermediate_Dir "ReleaseNT"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
-# PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ccs"
-# PROP Bsc_Name ""
-# PROP Target_Dir "..\Release\iconv"
-
-!ELSEIF  "$(CFG)" == "libapriconv_ccs_modules - Win32 DebugNT"
-
-# PROP BASE Use_MFC 0
-# PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\Debug\iconv"
-# PROP BASE Intermediate_Dir "DebugNT"
-# PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
-# PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File "libapriconv_ccs_modules.exe"
-# PROP BASE Bsc_Name "libapriconv_ccs_modules.bsc"
-# PROP BASE Target_Dir ""
-# PROP Use_MFC 0
-# PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\Debug\iconv"
-# PROP Intermediate_Dir "DebugNT"
-# PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
-# PROP Rebuild_Opt "/a"
-# PROP Target_File "Buildmark.ccs"
-# PROP Bsc_Name ""
-# PROP Target_Dir "..\Debug\iconv"
+# PROP Target_Dir ""
 
 !ENDIF 
 
@@ -118,8 +74,12 @@ CFG=libapriconv_ccs_modules - Win32 Debug
 
 # Name "libapriconv_ccs_modules - Win32 Release"
 # Name "libapriconv_ccs_modules - Win32 Debug"
-# Name "libapriconv_ccs_modules - Win32 ReleaseNT"
-# Name "libapriconv_ccs_modules - Win32 DebugNT"
+
+!IF  "$(CFG)" == "libapriconv_ccs_modules - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "libapriconv_ccs_modules - Win32 Debug"
+
+!ENDIF 
 
 # Begin Group "Source Files"
 
