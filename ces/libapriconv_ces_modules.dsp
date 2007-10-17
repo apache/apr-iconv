@@ -28,19 +28,19 @@ CFG=libapriconv_ces_modules - Win32 Debug
 
 !IF  "$(CFG)" == "libapriconv_ces_modules - Win32 Release"
 
-# PROP BASE Use_MFC
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
-# PROP BASE Output_Dir "..\Release\iconv"
-# PROP BASE Intermediate_Dir "..\Release\iconv"
+# PROP BASE Output_Dir ""
+# PROP BASE Intermediate_Dir ""
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "libapriconv_ces_modules.exe"
 # PROP BASE Bsc_Name "libapriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
-# PROP Output_Dir "..\Release\iconv"
-# PROP Intermediate_Dir "..\Release\iconv"
+# PROP Output_Dir ""
+# PROP Intermediate_Dir ""
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=shared"
 # PROP Rebuild_Opt "/a"
 # PROP Target_File "Release"
@@ -49,19 +49,19 @@ CFG=libapriconv_ces_modules - Win32 Debug
 
 !ELSEIF  "$(CFG)" == "libapriconv_ces_modules - Win32 Debug"
 
-# PROP BASE Use_MFC
+# PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
-# PROP BASE Output_Dir "..\Debug\iconv"
-# PROP BASE Intermediate_Dir "..\Debug\iconv"
+# PROP BASE Output_Dir ""
+# PROP BASE Intermediate_Dir ""
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
 # PROP BASE Rebuild_Opt "/a"
 # PROP BASE Target_File "libapriconv_ces_modules.exe"
 # PROP BASE Bsc_Name "libapriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
-# PROP Use_MFC
+# PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
-# PROP Output_Dir "..\Debug\iconv"
-# PROP Intermediate_Dir "..\Debug\iconv"
+# PROP Output_Dir ""
+# PROP Intermediate_Dir ""
 # PROP Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=shared"
 # PROP Rebuild_Opt "/a"
 # PROP Target_File "Debug"
@@ -74,13 +74,6 @@ CFG=libapriconv_ces_modules - Win32 Debug
 
 # Name "libapriconv_ces_modules - Win32 Release"
 # Name "libapriconv_ces_modules - Win32 Debug"
-
-!IF  "$(CFG)" == "libapriconv_ces_modules - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "libapriconv_ces_modules - Win32 Debug"
-
-!ENDIF 
-
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
