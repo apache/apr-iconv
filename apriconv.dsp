@@ -174,6 +174,10 @@ SOURCE=.\lib\iconv_uc.c
 # PROP Default_Filter ".h"
 # Begin Source File
 
+SOURCE=.\include\api_version.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\include\apr_iconv.h
 # End Source File
 # Begin Source File
