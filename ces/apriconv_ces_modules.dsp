@@ -34,8 +34,8 @@ CFG=apriconv_ces_modules - Win32 Debug
 # PROP BASE Intermediate_Dir ""
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=release BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File ""
-# PROP BASE Bsc_Name ""
+# PROP BASE Target_File "apriconv_ces_modules.exe"
+# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 0
@@ -55,8 +55,8 @@ CFG=apriconv_ces_modules - Win32 Debug
 # PROP BASE Intermediate_Dir ""
 # PROP BASE Cmd_Line "NMAKE /nologo /f Makefile.win BUILD_MODE=debug BIND_MODE=static"
 # PROP BASE Rebuild_Opt "/a"
-# PROP BASE Target_File ""
-# PROP BASE Bsc_Name ""
+# PROP BASE Target_File "apriconv_ces_modules.exe"
+# PROP BASE Bsc_Name "apriconv_ces_modules.bsc"
 # PROP BASE Target_Dir ""
 # PROP Use_MFC 0
 # PROP Use_Debug_Libraries 1
