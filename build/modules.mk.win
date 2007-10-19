@@ -221,7 +221,8 @@ $(MODRES).pch:
 	$(SILENT)link $(ALL_LDFLAGS) $*.obj $(API_LIBS) /out:$@ \
 		/base:@"..\build\BaseAddr.ref",$(@F)
 	$(SILENT)if exist $@.manifest \
-		$(SILENT)mt -nologo -manifest $@.manifest -outputresource:$@;2
+		$(SILENT)mt -nologo -manifest $@.manifest -outputresource:$@;2 \
+		& del "$@.manifest"
 	$(SILENT)del "$*.exp" & del "$*.lib"
 
 # The rebase target below is used only to *regenerate* the BaseAddr.ref file
