@@ -212,8 +212,8 @@ $(OUTPUT_DIR):
 	$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
 
 $(MODRES).pch:
-        echo #define ICONV_INTERNAL > $*.c
-        echo #include "iconv.h" >> $*.c
+        $(SILENT)echo #define ICONV_INTERNAL > $*.c
+        $(SILENT)echo #include "iconv.h" >> $*.c
 	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj /Yciconv.h /c $*.c
 
 .c{$(OUTPUT_DIR)}.so:
