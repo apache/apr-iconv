@@ -193,8 +193,7 @@ APR_SOURCE   = ..\..\apr
 API_SOURCE   = ..
 OUTPUT_DIR   = $(API_SOURCE)\$(CFG_OUTPUT)
 
-INT_CFLAGS   = /nologo $(CFG_CFLAGS) /Fd"$(OUTPUT_DIR)\iconv_src" \
-		/Fp"$(PCH)" \
+INT_CFLAGS   = /nologo $(CFG_CFLAGS) /Fd$(MODRES).pdb /Fp$(MODRES).pch \
 		/I "$(API_SOURCE)\include" /I "$(API_SOURCE)\lib" \
 		/I "$(APR_SOURCE)\include" \
 		/D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL"
@@ -207,23 +206,23 @@ ALL_CFLAGS   = $(INT_CFLAGS) $(INT_INCLUDES) $(INT_DEFINES) $(CFLAGS)
 LDFLAGS      = 
 ALL_LDFLAGS  = $(INT_LDFLAGS) $(LDFLAGS)
 
-all: $(OUTPUT_DIR) $(ALL_TARGETS)
+all: $(OUTPUT_DIR) $(MODRES).pch $(ALL_TARGETS)
 
 $(OUTPUT_DIR):
-	-$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
+	$(SILENT)if not exist "$(OUTPUT_DIR)\$(NULL)" mkdir "$(OUTPUT_DIR)"
+
+$(MODRES).pch:
+        echo #define ICONV_INTERNAL > $*.c
+        echo #include "iconv.h" >> $*.c
+	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj /Yciconv.h /c $*.c
 
 .c{$(OUTPUT_DIR)}.so:
-        $(SILENT)if not exist "$(OUTPUT_DIR)\iconv.pch" ( \
-	  echo Precompiling iconv.pch from iconv.h & \
-	  cl $(ALL_CFLAGS) /Yc"iconv.h" /Fo"$*.obj" /c $< \
-	) else ( \
-	  cl $(ALL_CFLAGS) /Yu"iconv.h" /Fo"$*.obj" /c $< \
-	)
+	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj /Yuiconv.h /c $<
 	$(SILENT)link $(ALL_LDFLAGS) $*.obj $(API_LIBS) /out:$@ \
-		/base:@"..\build\BaseAddr.ref",$(@F) & \
-	( if exist $@.manifest \
-		mt -manifest $@.manifest -outputresource:$@;2 ) & \
-	del "$*.exp" & del "$*.lib"
+		/base:@"..\build\BaseAddr.ref",$(@F)
+	$(SILENT)if exist $@.manifest \
+		$(SILENT)mt -nologo -manifest $@.manifest -outputresource:$@;2
+	$(SILENT)del "$*.exp" & del "$*.lib"
 
 # The rebase target below is used only to *regenerate* the BaseAddr.ref file
 # if the module list or sizes change considerably.  Use the rebase target to
