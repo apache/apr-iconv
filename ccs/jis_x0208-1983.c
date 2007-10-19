@@ -1,5 +1,5 @@
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const iconv_ccs_convtable_7bit to_ucs_21 = { {
 	0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE, 0xFFFE,

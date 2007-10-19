@@ -1,5 +1,5 @@
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const iconv_ccs_convtable_8bit to_ucs_00 = { {
 	0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007,
