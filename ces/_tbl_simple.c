@@ -30,8 +30,6 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include "apr.h"
-
 #define ICONV_INTERNAL
 #include "iconv.h"
 

@@ -30,9 +30,8 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-/*#define ICONV_DEBUG*/
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const char * const names[] = {
     "utf-8", "iso-10646-utf-8", "utf8", NULL

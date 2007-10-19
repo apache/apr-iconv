@@ -31,7 +31,7 @@
  */
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const char * const names[] = {
 	"iso-2022-jp-2",

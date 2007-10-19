@@ -30,10 +30,9 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <stdlib.h>	/* free, malloc */
-
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
+#include <stdlib.h>	/* free, malloc */
 
 static const char * const names[] = {
 	"iso-10646-ucs-2", "csUnicode", "ucs-2", NULL

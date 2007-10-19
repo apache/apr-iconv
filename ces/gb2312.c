@@ -31,7 +31,7 @@
  */
 
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const char * const names[] = {
 	"gb2312", "euc-cn", "csGB2312", NULL

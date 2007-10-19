@@ -30,10 +30,9 @@
  *	iconv (Charset Conversion Library) v1.0
  */
 
-#include <stdlib.h>
-
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
+#include <stdlib.h>
 
 static const char * const names[] = {
 	"unicode-1-1-utf-7",
