@@ -10,7 +10,7 @@
  * Author: Martin Kraemer  <martin.at.apache.org>
  */
 #define ICONV_INTERNAL
-#include <iconv.h>
+#include "iconv.h"
 
 static const iconv_ccs_convtable_8bit to_ucs = { {
 	0x0000, 0x0001, 0x0002, 0x0003, 0x0085, 0x0009, 0x0086, 0x007f,
