@@ -194,7 +194,7 @@ API_SOURCE   = ..
 OUTPUT_DIR   = $(API_SOURCE)\$(CFG_OUTPUT)
 
 INT_CFLAGS   = /nologo $(CFG_CFLAGS) /Fd"$(OUTPUT_DIR)\iconv_src" \
-		/Fp"$(OUTPUT_DIR)\iconv.pch" /Yu"iconv.h" \
+		/Fp"$(PCH)" \
 		/I "$(API_SOURCE)\include" /I "$(API_SOURCE)\lib" \
 		/I "$(APR_SOURCE)\include" \
 		/D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL"
@@ -217,7 +217,7 @@ $(OUTPUT_DIR):
 	  echo Precompiling iconv.pch from iconv.h & \
 	  cl $(ALL_CFLAGS) /Yc"iconv.h" /Fo"$*.obj" /c $< \
 	) else ( \
-	  cl $(ALL_CFLAGS) /Fo"$*.obj" /c $< \
+	  cl $(ALL_CFLAGS) /Yu"iconv.h" /Fo"$*.obj" /c $< \
 	)
 	$(SILENT)link $(ALL_LDFLAGS) $*.obj $(API_LIBS) /out:$@ \
 		/base:@"..\build\BaseAddr.ref",$(@F) & \
