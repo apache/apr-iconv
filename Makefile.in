@@ -43,7 +43,7 @@ install:
 	    $(MKINSTALLDIRS) $(DESTDIR)$(include_prefix); \
 	fi;
 	$(INSTALL_DATA) $(abs_srcdir)/include/api_version.h $(DESTDIR)$(include_prefix)
-	$(INSTALL_DATA) $(abs_srcdir)/nclude/apr_iconv.h $(DESTDIR)$(include_prefix)
+	$(INSTALL_DATA) $(abs_srcdir)/include/apr_iconv.h $(DESTDIR)$(include_prefix)
 	if [ ! -d $(DESTDIR)$(exec_prefix) ]; then \
 	    $(MKINSTALLDIRS) $(DESTDIR)$(exec_prefix); \
 	fi; \
