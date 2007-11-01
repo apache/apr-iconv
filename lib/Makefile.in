@@ -24,6 +24,7 @@ OBJECTS_all = iconv_module.lo iconv.lo iconv_int.lo iconv_uc.lo \
         iconv_ces.lo iconv_ces_euc.lo iconv_ces_iso2022.lo api_version.lo \
         iconv_ccs.lo exports.lo
 
+LT_VERSION = @LT_VERSION@
 # bring in rules.mk for standard functionality
 @INCLUDE_RULES@
 # replace build-outputs.mk
