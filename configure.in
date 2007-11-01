@@ -90,6 +90,8 @@ API_LIBNAME="apriconv-${API_MAJOR_VERSION}"
 AC_SUBST(API_LIBNAME)
 API_INCPATH="apr-${API_MAJOR_VERSION}"
 AC_SUBST(API_INCPATH)
+LT_VERSION="-version-info `$get_version libtool $version_hdr API`"
+AC_SUBST(LT_VERSION)
 
 dnl
 dnl everthing is done. 
