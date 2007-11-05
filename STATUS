@@ -25,6 +25,11 @@ RELEASE NON-SHOWSTOPPERS BUT WOULD BE REAL NICE TO WRAP THESE UP:
 
 Other bugs that need fixing:
 
+    * APR-util ./testall demonstrates that on finalization (when the
+      users calls with NULL inbuf and their target outbuf) that the
+      utf-7 converter doesn't exit the shift-state.  Not certain that
+      this is in fact a bug in the code, an unimplemented feature or
+      a mistaken assumption in the apr-util/test/testxlate.c code.
 
 Other features that need writing:
 
