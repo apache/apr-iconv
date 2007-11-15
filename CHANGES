@@ -1,7 +1,11 @@
                                                      -*- coding: utf-8 -*-
 Changes with APR-ICONV 1.2.1
 
+  *) Build schema fixes for win32 including VC8 precompiled header files,
+     NT and 9x specific builds, and x86_64 P64 model.  [William Rowe]
 
+  *) Build schema fixes for unix including default --prefix, vpath builds,  
+     and decorated lib name.  [Davi Arnaut, William Rowe, Henry Jen]
 
 Changes with APR-ICONV 1.2.0
 
