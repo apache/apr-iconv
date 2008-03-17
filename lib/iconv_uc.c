@@ -111,7 +111,7 @@ iconv_uc_conv(void *data, const unsigned char **inbuf, apr_size_t *inbytesleft,
 			size = ICONV_CES_CONVERT_FROM_UCS(ic->to, ic->missing,
 			    outbuf, outbytesleft);
 			if (size)
-				*res ++;
+				(*res)++;
 		}
 		if (!size) {		 /* No space to write to */
 			*inbytesleft += *inbuf - ptr;
