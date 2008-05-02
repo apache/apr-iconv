@@ -12,4 +12,4 @@ iconv_LDADD   = ../lib/lib@API_LIBNAME@.la
 APR_LIBS      = @APR_LIBS@
 
 apriconv:	$(iconv_OBJECTS) $(iconv_LDADD)
-	$(LINK) -o $@ $(iconv_OBJECTS) $(iconv_LDADD) $(LIBS) $(APR_LIBS)
+	$(LINK) $(iconv_OBJECTS) $(iconv_LDADD) $(LIBS) $(APR_LIBS)
