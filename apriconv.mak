@@ -35,21 +35,10 @@ INTDIR=.\LibR
 OutDir=.\LibR
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\apriconv-1.lib"
 
-!ELSE 
 
-ALL : "apr - Win32 Release" "$(OUTDIR)\apriconv-1.lib"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"apr - Win32 ReleaseCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\apriconv-1.idb"
 	-@erase "$(INTDIR)\apriconv-1.pdb"
 	-@erase "$(INTDIR)\apriconv.pch"
@@ -112,8 +101,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\iconv_ces_iso2022.obj" \
 	"$(INTDIR)\iconv_int.obj" \
 	"$(INTDIR)\iconv_module.obj" \
-	"$(INTDIR)\iconv_uc.obj" \
-	"..\apr\LibR\apr-1.lib"
+	"$(INTDIR)\iconv_uc.obj"
 
 "$(OUTDIR)\apriconv-1.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -128,21 +116,10 @@ INTDIR=.\LibD
 OutDir=.\LibD
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\apriconv-1.lib"
 
-!ELSE 
 
-ALL : "apr - Win32 Debug" "$(OUTDIR)\apriconv-1.lib"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"apr - Win32 DebugCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\apriconv-1.idb"
 	-@erase "$(INTDIR)\apriconv-1.pdb"
 	-@erase "$(INTDIR)\apriconv.pch"
@@ -205,8 +182,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\iconv_ces_iso2022.obj" \
 	"$(INTDIR)\iconv_int.obj" \
 	"$(INTDIR)\iconv_module.obj" \
-	"$(INTDIR)\iconv_uc.obj" \
-	"..\apr\LibD\apr-1.lib"
+	"$(INTDIR)\iconv_uc.obj"
 
 "$(OUTDIR)\apriconv-1.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -221,21 +197,10 @@ INTDIR=.\x64\LibR
 OutDir=.\x64\LibR
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\apriconv-1.lib"
 
-!ELSE 
 
-ALL : "apr - x64 Release" "$(OUTDIR)\apriconv-1.lib"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"apr - x64 ReleaseCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\apriconv-1.idb"
 	-@erase "$(INTDIR)\apriconv-1.pdb"
 	-@erase "$(INTDIR)\apriconv.pch"
@@ -298,8 +263,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\iconv_ces_iso2022.obj" \
 	"$(INTDIR)\iconv_int.obj" \
 	"$(INTDIR)\iconv_module.obj" \
-	"$(INTDIR)\iconv_uc.obj" \
-	"..\apr\x64\LibR\apr-1.lib"
+	"$(INTDIR)\iconv_uc.obj"
 
 "$(OUTDIR)\apriconv-1.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -314,21 +278,10 @@ INTDIR=.\x64\LibD
 OutDir=.\x64\LibD
 # End Custom Macros
 
-!IF "$(RECURSE)" == "0" 
-
 ALL : "$(OUTDIR)\apriconv-1.lib"
 
-!ELSE 
 
-ALL : "apr - x64 Debug" "$(OUTDIR)\apriconv-1.lib"
-
-!ENDIF 
-
-!IF "$(RECURSE)" == "1" 
-CLEAN :"apr - x64 DebugCLEAN" 
-!ELSE 
 CLEAN :
-!ENDIF 
 	-@erase "$(INTDIR)\apriconv-1.idb"
 	-@erase "$(INTDIR)\apriconv-1.pdb"
 	-@erase "$(INTDIR)\apriconv.pch"
@@ -391,8 +344,7 @@ LIB32_OBJS= \
 	"$(INTDIR)\iconv_ces_iso2022.obj" \
 	"$(INTDIR)\iconv_int.obj" \
 	"$(INTDIR)\iconv_module.obj" \
-	"$(INTDIR)\iconv_uc.obj" \
-	"..\apr\x64\LibD\apr-1.lib"
+	"$(INTDIR)\iconv_uc.obj"
 
 "$(OUTDIR)\apriconv-1.lib" : "$(OUTDIR)" $(DEF_FILE) $(LIB32_OBJS)
     $(LIB32) @<<
@@ -491,56 +443,6 @@ SOURCE=.\lib\iconv_uc.c
 "$(INTDIR)\iconv_uc.obj" : $(SOURCE) "$(INTDIR)" "$(INTDIR)\apriconv.pch"
 	$(CPP) $(CPP_PROJ) $(SOURCE)
 
-
-!IF  "$(CFG)" == "apriconv - Win32 Release"
-
-"apr - Win32 Release" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - Win32 Release" 
-   cd "..\apr-iconv"
-
-"apr - Win32 ReleaseCLEAN" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - Win32 Release" RECURSE=1 CLEAN 
-   cd "..\apr-iconv"
-
-!ELSEIF  "$(CFG)" == "apriconv - Win32 Debug"
-
-"apr - Win32 Debug" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - Win32 Debug" 
-   cd "..\apr-iconv"
-
-"apr - Win32 DebugCLEAN" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - Win32 Debug" RECURSE=1 CLEAN 
-   cd "..\apr-iconv"
-
-!ELSEIF  "$(CFG)" == "apriconv - x64 Release"
-
-"apr - x64 Release" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - x64 Release" 
-   cd "..\apr-iconv"
-
-"apr - x64 ReleaseCLEAN" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - x64 Release" RECURSE=1 CLEAN 
-   cd "..\apr-iconv"
-
-!ELSEIF  "$(CFG)" == "apriconv - x64 Debug"
-
-"apr - x64 Debug" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - x64 Debug" 
-   cd "..\apr-iconv"
-
-"apr - x64 DebugCLEAN" : 
-   cd ".\..\apr"
-   $(MAKE) /$(MAKEFLAGS) /F ".\apr.mak" CFG="apr - x64 Debug" RECURSE=1 CLEAN 
-   cd "..\apr-iconv"
-
-!ENDIF 
 
 
 !ENDIF 
