@@ -21,7 +21,7 @@ BIND_MODE  = shared
 API_LIBS = $(APR_SOURCE)\Release\libapr-1.lib \
 	   $(API_SOURCE)\Release\libapriconv-1.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = Release\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -29,7 +29,7 @@ API_LIBS = $(APR_SOURCE)\LibR\apr-1.lib \
 	   $(API_SOURCE)\LibR\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = LibR\iconv
 
 !ELSE
@@ -43,7 +43,7 @@ CFG_OUTPUT  = LibR\iconv
 API_LIBS = $(APR_SOURCE)\Debug\libapr-1.lib \
 	   $(API_SOURCE)\Debug\libapriconv-1.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = Debug\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -51,7 +51,7 @@ APR_LIB = $(APR_SOURCE)\LibD\apr-1.lib \
 	  $(API_SOURCE)\LibD\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = LibD\iconv
 
 !ELSE
@@ -64,7 +64,7 @@ CFG_OUTPUT  = LibD\iconv
 API_LIBS = $(APR_SOURCE)\9x\Release\libapr-1.lib \
 	   $(API_SOURCE)\Release\libapriconv-1.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = Release\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -72,7 +72,7 @@ API_LIBS = $(APR_SOURCE)\9x\LibR\apr-1.lib \
 	   $(API_SOURCE)\LibR\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = LibR\iconv
 
 !ELSE
@@ -85,7 +85,7 @@ CFG_OUTPUT  = LibR\iconv
 API_LIBS = $(APR_SOURCE)\9x\Debug\libapr-1.lib \
 	   $(API_SOURCE)\Debug\libapriconv-1.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = Debug\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -93,7 +93,7 @@ APR_LIB = $(APR_SOURCE)\9x\LibD\apr-1.lib \
 	  $(API_SOURCE)\LibD\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = LibD\iconv
 
 !ELSE
@@ -106,7 +106,7 @@ CFG_OUTPUT  = LibD\iconv
 API_LIBS = $(APR_SOURCE)\NT\Release\libapr-1.lib \
 	   $(API_SOURCE)\Release\libapriconv-1.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = Release\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -114,7 +114,7 @@ API_LIBS = $(APR_SOURCE)\NT\LibR\apr-1.lib \
 	   $(API_SOURCE)\LibR\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = LibR\iconv
 
 !ELSE
@@ -127,7 +127,7 @@ CFG_OUTPUT  = LibR\iconv
 API_LIBS = $(APR_SOURCE)\NT\Debug\libapr-1.lib \
 	   $(API_SOURCE)\Debug\libapriconv-1.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = Debug\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -135,7 +135,7 @@ APR_LIB = $(APR_SOURCE)\NT\LibD\apr-1.lib \
 	  $(API_SOURCE)\LibD\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /incremental:no /machine:X86
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = LibD\iconv
 
 !ELSE
@@ -148,7 +148,7 @@ CFG_OUTPUT  = LibD\iconv
 API_LIBS = $(APR_SOURCE)\x64\Release\libapr-1.lib \
 	   $(API_SOURCE)\x64\Release\libapriconv-1.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X64
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = x64\Release\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -156,7 +156,7 @@ API_LIBS = $(APR_SOURCE)\x64\LibR\apr-1.lib \
 	   $(API_SOURCE)\x64\LibR\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MD /Zi /O2 /Oy- /D "NDEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /opt:ref /incremental:no /machine:X64
+CFG_LDFLAGS = /debug /opt:ref /incremental:no
 CFG_OUTPUT  = x64\LibR\iconv
 
 !ELSE
@@ -169,7 +169,7 @@ CFG_OUTPUT  = x64\LibR\iconv
 API_LIBS = $(APR_SOURCE)\x64\Debug\libapr-1.lib \
 	   $(API_SOURCE)\Debug\libapriconv-1.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG"
-CFG_LDFLAGS = /debug /incremental:no /machine:X64
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = Debug\iconv
 
 !ELSEIF "$(BIND_MODE)" == "static"
@@ -177,7 +177,7 @@ APR_LIB = $(APR_SOURCE)\x64\LibD\apr-1.lib \
 	  $(API_SOURCE)\x64\LibD\apriconv-1.lib \
 	  kernel32.lib advapi32.lib ws2_32.lib mswsock.lib
 CFG_CFLAGS  = /MDd /Zi /Od /EHsc /D "_DEBUG" /D "APR_DECLARE_STATIC" /D "API_DECLARE_STATIC"
-CFG_LDFLAGS = /debug /incremental:no /machine:X64
+CFG_LDFLAGS = /debug /incremental:no
 CFG_OUTPUT  = x64\LibD\iconv
 
 !ELSE
