@@ -218,7 +218,7 @@ $(MODRES).pch:
 
 .c{$(OUTPUT_DIR)}.so:
 	$(SILENT)cl $(ALL_CFLAGS) /Fo$*.obj /Yuiconv.h /c $<
-	$(SILENT)link $(ALL_LDFLAGS) $*.obj $(API_LIBS) /out:$@ \
+	$(SILENT)link $(ALL_LDFLAGS) $*.obj $(MODRES).obj $(API_LIBS) /out:$@ \
 		/base:@"..\build\BaseAddr.ref",$(@F)
 	$(SILENT)if exist $@.manifest \
 		$(SILENT)mt -nologo -manifest $@.manifest -outputresource:$@;2 \
