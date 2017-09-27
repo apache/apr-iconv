@@ -112,7 +112,7 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\libapriconv.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\libapriconv-1.pdb" /debug /out:"$(OUTDIR)\libapriconv-1.dll" /implib:"$(OUTDIR)\libapriconv-1.lib" /MACHINE:X86 /opt:ref 
+LINK32_FLAGS=kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\libapriconv-1.pdb" /debug /out:"$(OUTDIR)\libapriconv-1.dll" /implib:"$(OUTDIR)\libapriconv-1.lib" /opt:ref 
 LINK32_OBJS= \
 	"$(INTDIR)\iconv.obj" \
 	"$(INTDIR)\iconv_ces.obj" \
@@ -227,7 +227,7 @@ BSC32_FLAGS=/nologo /o"$(OUTDIR)\libapriconv.bsc"
 BSC32_SBRS= \
 	
 LINK32=link.exe
-LINK32_FLAGS=kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\libapriconv-1.pdb" /debug /out:"$(OUTDIR)\libapriconv-1.dll" /implib:"$(OUTDIR)\libapriconv-1.lib" /MACHINE:X86 
+LINK32_FLAGS=kernel32.lib advapi32.lib /nologo /base:"0x6EE50000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\libapriconv-1.pdb" /debug /out:"$(OUTDIR)\libapriconv-1.dll" /implib:"$(OUTDIR)\libapriconv-1.lib" 
 LINK32_OBJS= \
 	"$(INTDIR)\iconv.obj" \
 	"$(INTDIR)\iconv_ces.obj" \
