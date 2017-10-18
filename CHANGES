@@ -1,7 +1,10 @@
                                                      -*- coding: utf-8 -*-
 Changes with APR-ICONV 1.2.2
 
-
+  *) Win32: Resolve build issues with modern Visual Studio toolchains.
+     Specifically changed the handling of precompiled headers; the .obj
+     file which contains a traceable flavor of the intrinsic functions
+     is now required.  [William Rowe]
 
 Changes with APR-ICONV 1.2.1
 
