@@ -1,4 +1,8 @@
                                                      -*- coding: utf-8 -*-
+Changes with APR-ICONV 1.2.3
+
+
+
 Changes with APR-ICONV 1.2.2
 
   *) Win32: Resolve build issues with modern Visual Studio toolchains.
